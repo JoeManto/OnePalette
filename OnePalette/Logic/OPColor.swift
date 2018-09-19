@@ -102,9 +102,6 @@ class OPColor: NSObject,NSCoding{
     required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
         fatalError("init(pasteboardPropertyList:ofType:) has not been implemented")
     }
-
-
-
 }
 
 extension NSColor{

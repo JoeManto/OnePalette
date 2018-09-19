@@ -63,6 +63,8 @@ class Palette: NSManagedObject {
                         //print(self.paletteKey[index])
                     }
                 }
+
+                
                 if let nestDictionary = dictionary["weights"] as? [String: Any]
                 {
                     let weights:NSArray = nestDictionary["values"] as! NSArray
@@ -76,14 +78,23 @@ class Palette: NSManagedObject {
                     if let nestDictionary = dictionary[palKey] as? [String: Any]
                     {
                         let colorGroup:NSArray = nestDictionary["values"] as! NSArray
-                        self.paletteData![palKey] = OPColorGroup.init(name: palKey)
+                        self.paletteData![palKey] = OPColorGroup.init(id: palKey)
                         for (index, i) in colorGroup.enumerated(){
                             self.paletteData![palKey]?.addColor(color: OPColor.init(hexString: i as! String, alpha: 1.0, weight: self.paletteWeights![index]))
                         }
                         self.paletteData![palKey]?.findHeaderColor()
+                        
                        // print(self.paletteData![palKey]?.getColorArray().count as Any ," ",self.paletteData![palKey]?.getName() as Any)
                     }
                 }
+                
+                if let nestDictionary = dictionary["Names"] as? [String:Any]{
+                    let names:NSArray = nestDictionary["values"] as! NSArray
+                    for (index, i) in (self.paletteKey?.enumerated())!{
+                        self.paletteData?[i]?.setName(name: names[index] as! String)
+                    }
+                }
+                
             }
         } catch {
             print("Error parsing Json")
@@ -93,29 +104,32 @@ class Palette: NSManagedObject {
     //----------------Group Methodds-------------------------
     /*adds a colorgroup to the palatte data*/
     func addColorGroup(group:OPColorGroup) {
-        paletteData![group.getName().lowercased()] = group
+        paletteData![group.getIdentifier()] = group
         //print(paletteData![group.getName().lowercased()])
         //print(paletteData)
         print("added colorGroup")
     }
     
     /*Adds an empty color group to the palette data with a name*/
-    func addEmptyGroup(with name:String) {
+    func addEmptyGroup(with groupID:String) {
         print("added empty group")
-        paletteData![name] = OPColorGroup(name: name)
+        paletteData![groupID] = OPColorGroup(id: groupID)
     }
     /*updates an existing color group value*/
-    func updateColorGroup(group:OPColorGroup, for name:String){
-        paletteData![name] = group
+    func updateColorGroup(group:OPColorGroup, for groupID:String){
+        paletteData![groupID] = group
     }
     
     /*generates a simple color group used for when the user inserts a new color group in to a palette*/
     func generateTempColorGroup() -> OPColorGroup {
-        let group = OPColorGroup(name:"Blank")
+        let randomId = OPUtil.genIdOfLength(len: 10) as String
+        let group = OPColorGroup(id:randomId)
         let random = arc4random_uniform(201) + 30
-        print(String(format:"%2X%2X%2X",random,random,random))
-        group.addColor(color: OPColor(hexString: String(format:"%2X%2X%2X",random,random,random), weight: 50))
-        paletteKey?.append("blank")
+        let color:OPColor = OPColor(hexString: String(format:"%2X%2X%2X",random,random,random), weight: 50)
+        group.addColor(color: color)
+        paletteKey?.append(randomId)
+        group.headerColorIndex = 0
+        group.setHeaderColor(header: color)
         self.addColorGroup(group: group)
         return group
     }

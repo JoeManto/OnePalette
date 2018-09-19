@@ -16,10 +16,8 @@ protocol ColorGroupSelectorDelegate: class {
 class ColorGroupSelector: NSView {
 
     weak var delegate: ColorGroupSelectorDelegate?
-    
     private var color:NSColor
     private var id:Int
-    
     private var width:CGFloat = 100.0
     private var height:CGFloat = 100.0
     private var x:CGFloat?
@@ -52,28 +50,25 @@ class ColorGroupSelector: NSView {
             addBtn.isSelectable = false
             addBtn.isEditable = false
             addBtn.stringValue = "+"
-            
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = self.bounds
-            
-            let color1 = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1).cgColor
-            let color2 = NSColor(calibratedRed: 30/255, green: 32/255, blue: 34/255, alpha: 1).cgColor
-            gradientLayer.colors = [color1, color2]
-            gradientLayer.locations = [0.1,1.5]
-            
             self.layer?.backgroundColor = NSColor.white.cgColor
             self.layer?.borderWidth = 0
             self.layer?.borderColor = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1).cgColor
-            //self.layer?.addSublayer(gradientLayer)
             self.addSubview(addBtn)
             
         }else{
             self.layer?.backgroundColor = self.color.cgColor
+            self.layer?.borderColor = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1).cgColor
         }
     }
     
     func getID()->Int{
         return self.id
+    }
+    func getColor() -> NSColor {
+        return self.color
+    }
+    func setColor(color:NSColor){
+        self.color = color
     }
     
     override func mouseUp(with event: NSEvent) {

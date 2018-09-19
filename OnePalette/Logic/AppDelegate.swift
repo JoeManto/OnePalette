@@ -11,19 +11,19 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    let popover = NSPopover()
-    var colorViewController=ColorViewerController.freshController
-    let menu = NSMenu()
-    var eventMonitor: EventMonitor?
-    var colorWindow:OPWindow!
-    var colorWindowController: NSWindowController!
-    var colorOptionsViewController:OPViewController!
+    private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    private let popover = NSPopover()
+    private var colorViewController=ColorViewerController.freshController
+    private let menu = NSMenu()
+    private var eventMonitor: EventMonitor?
+    private var colorWindow:OPWindow!
+    private var colorWindowController: NSWindowController!
+    private weak var colorOptionsViewController:OPViewController!
+    
+    private var optionViewIsConfiged = false
+  
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
-        //let managedContext = persistentContainer.viewContext
-        //let entity = NSEntityDescription.entity(forEntityName: "Pal", in: managedContext)
         
         constructMenu()
         statusItem.button?.image = NSImage(named:NSImage.Name("StatusBar"))
@@ -40,14 +40,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.colorWindow.isMovableByWindowBackground = true
         self.colorWindow.center()
         self.colorWindow.isOpaque = false
+        self.colorWindow.isReleasedWhenClosed = true
         self.colorWindow.title = "Modify Colors"
         self.colorWindow.backgroundColor = NSColor.clear
         self.colorWindow.invalidateShadow()
-        colorWindowController = MainWindowController(window: colorWindow)
-        colorWindowController.window?.contentViewController = colorOptionsViewController
         
-        hideController(controller: colorOptionsViewController)
+        self.colorWindowController = MainWindowController(window: colorWindow)
+        self.colorWindowController.window?.contentViewController = colorOptionsViewController
         
+        hideController(window:self.colorWindow,controller: self.colorOptionsViewController)
+        
+        //Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) {
             [weak self] event in if let strongSelf = self, strongSelf.popover.isShown {
                 strongSelf.closePopover(sender: event)
@@ -55,19 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func showController(of type:Int){
-        switch(type){
-        case 0:
-            colorWindowController.window?.makeKeyAndOrderFront(self)
-            NSApp.activate(ignoringOtherApps: true)
-            break;
-        default: break
-        }
-    }
-    func hideController(controller:NSViewController){
-        colorWindow.orderOut(controller)
-    }
-    
+    /*Fills the NSMenu with NSMenuitems*/
     func constructMenu() {
         menu.addItem(NSMenuItem(title: "Color Group Actions", action:nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.addColors(_:)), keyEquivalent: "P"))
@@ -81,6 +72,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
+
+    
+    /*Menu button that shows the OptionsView and configures that view to show the correct display*/
+    @objc func addColors(_ sender:Any?){
+        if !optionViewIsConfiged{
+            colorOptionsViewController = freshOptionController()
+            let pal:Palette = colorOptionsViewController.colorGroupViewDelegate.curPal!
+            let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
+            colorOptionsViewController.configColorGroupSelectors(colorgroups:pal.paletteData!,keys:pal.paletteKey!)
+            colorOptionsViewController.configColorView(colorgroup:curColorGroup!)
+            
+            /*let secondController = ClipboardSettingController()
+            secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
+            colorOptionsViewController.presentViewControllerAsSheet(secondController)*/
+        }
+         showController(of:0)
+    }
+    func showController(of type:Int){
+        switch(type){
+        case 0:
+            colorWindowController.window?.makeKeyAndOrderFront(self)
+            NSApp.activate(ignoringOtherApps: true)
+            break;
+        default: break
+        }
+    }
+    func hideController(window:NSWindow,controller:NSViewController){
+        window.orderOut(controller)
+    }
+    func dealocOptionsController(){
+        let control:OPViewController = colorWindowController.window?.contentViewController as! OPViewController
+        control.colorGroupViewDelegate = nil
+        colorWindowController.dismissController(control)
+        colorWindowController.window?.resignMain()
+    }
+    func freshOptionController() -> OPViewController{
+        let viewController = NSStoryboard(name:NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as! OPViewController
+        viewController.colorGroupViewDelegate = popover.contentViewController as! ColorViewerController
+        self.colorWindowController.window?.contentViewController = viewController
+        return viewController
+    }
+    
+    //-------------------------------------------------------------------
     
     //if the statusItem is clicked
     @objc func iconClicked(sender:NSStatusItem){
@@ -95,21 +129,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
     }
-   @objc func printQuoteClicked(_ sender: Any?) {
-        print(printQuoteClicked);
-    
-    }
-    
-    /*Menu button that shows the OptionsView and configures that view to show the correct display*/
-    @objc func addColors(_ sender:Any?){
-        let pal:Palette = colorOptionsViewController.colorGroupViewDelegate.curPal!
-        let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
+    @objc func printQuoteClicked(_ sender: Any?) {
         
-        if !colorOptionsViewController.isViewConfigred {
-            colorOptionsViewController.configColorGroupSelectors(colorgroups:pal.paletteData!,keys:pal.paletteKey!)
-            colorOptionsViewController.configColorView(colorgroup:curColorGroup!)
-        }
-        showController(of:0)
     }
     
     //Shows or hides the popover
@@ -135,10 +156,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.performClose(sender)
     }
     
-
-    
-    
-    
+    //-------------------------------------------------------------------
     
     
     func applicationWillTerminate(_ aNotification: Notification) {

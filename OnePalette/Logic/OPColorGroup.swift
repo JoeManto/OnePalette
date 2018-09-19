@@ -9,6 +9,7 @@
 import Cocoa
 import CoreData
 
+
 class OPColorGroup : NSObject,NSCoding {
 
     private var headerColor:OPColor
@@ -20,13 +21,13 @@ class OPColorGroup : NSObject,NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(name, forKey: "groupName")
         aCoder.encode(headerColor, forKey: "headerColor")
-        aCoder.encode(headerColor, forKey: "headerColorIndex")
+        aCoder.encode(headerColorIndex, forKey: "headerColorIndex")
         aCoder.encode(identifier, forKey: "identifier")
         if colorsArray == colorsArray { aCoder.encode(colorsArray, forKey: "colorArray")}
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        self.init(name: "")
+        self.init(id:"--")
         self.name = aDecoder.decodeObject(forKey: "groupName") as! String
         self.headerColor = aDecoder.decodeObject(forKey: "headerColor") as! OPColor
         self.headerColorIndex = aDecoder.decodeInteger(forKey: "headerColorIndex")
@@ -34,36 +35,30 @@ class OPColorGroup : NSObject,NSCoding {
         self.colorsArray = aDecoder.decodeObject(forKey: "colorArray") as! Array<OPColor>
     }
     
-    init(name:String) {
+    init(id:String) {
         headerColor = OPColor.init()
         colorsArray = Array<OPColor>()
         headerColorIndex = 0
-        self.name = name
-        identifier = ""
+        self.name = "blank"
+        identifier = id
         super.init()
         self.findHeaderColor()
-        identifier = self.genIdOfLength(len: 6) as String
     }
     
     func addColor(color:OPColor) {
         colorsArray.append(color)
     }
-    
-    func getColorArray() -> Array<OPColor> {
-        return self.colorsArray
+    func sortColorGroupByBrightness(){
+        for (i,color) in colorsArray.enumerated(){
+            var x = i-1
+            while (x >= 0 && (color.calcLum() > colorsArray[x].calcLum()) ){
+                let temp = colorsArray[x]
+                colorsArray[x] = colorsArray[x+1]
+                colorsArray[x+1] = temp
+                x-=1
+            }
+        }
     }
-    
-    func getName() -> String {
-        return name.firstUppercased
-    }
-    func setHeaderColor (header:OPColor) {
-        headerColor = header;
-    }
-    
-    func getHeaderColor() -> OPColor {
-        return headerColor
-    }
-    
     func findHeaderColor() {
         if (colorsArray.count as Int?)! > 0 {
             let head = colorsArray[Int((colorsArray.count)/2)]
@@ -77,25 +72,29 @@ class OPColorGroup : NSObject,NSCoding {
         }
     }
     
+    /*Getter/Setters*/
+    func getColorArray() -> Array<OPColor> {
+        return self.colorsArray
+    }
+    func getIdentifier() -> String {
+        return self.identifier
+    }
+    func getName() -> String{
+        return self.name
+    }
+    func setName(name:String){
+        self.name = name
+    }
+    func setHeaderColor (header:OPColor) {
+        headerColor = header;
+    }
+    func getHeaderColor() -> OPColor {
+        return headerColor
+    }
+    
     func description()->String {
         return "ColorGroup:Name "+name
     }
-    
-    func genIdOfLength(len: Int) -> NSString {
-        
-        let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        
-        let randomString : NSMutableString = NSMutableString(capacity: len)
-        
-        for _ in 1...len{
-            let length = UInt32 (letters.length)
-            let rand = arc4random_uniform(length)
-            randomString.appendFormat("%C", letters.character(at: Int(rand)))
-        }
-        
-        return randomString
-    }
- 
 }
 extension String {
     var firstUppercased: String {

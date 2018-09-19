@@ -20,25 +20,36 @@ extension NSTextField{
     }
 }
 
-class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDelegate,ColorGroupSelectorDelegate {
+class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDelegate,
+                        ColorGroupSelectorDelegate {
 
     var colorGroupViewDelegate:ColorViewerController!
     var isViewConfigred = false
     var editingMode = false
+   
     private var hexField = NSTextField()
     private var compArray:[NSTextField] = [NSTextField(),NSTextField(),NSTextField()]
-    private var isHeaderColorBtn = NSButton(checkboxWithTitle: "Display Color", target: self, action: #selector(setHeaderColor))
+    private var isHeaderColorBtn = NSButton(checkboxWithTitle: "Header Color", target: self, action: #selector(setHeaderColor))
     private var colorSelectors:[ColorGroupSelector] = []
+    private var addSelector:ColorGroupSelector?
+    
     private var colorSqArray:[ColorSquareView] = []
     private var selectedColorSq:Int?
     private var selectedSelector = 1
     private var colorGroup:OPColorGroup?
     private var groupCount:Int?
+    private var inititalGroupCount:Int?
+
     private var keys:[String] = ["Red","Green","Blue"]
-    private var editBtn = NSButton(frame: NSRect(x: 460, y: 5, width: 50, height: 30))
-    private var saveBtn = NSButton(frame: NSRect(x: 500, y: 5, width: 60, height: 30))
-    private var cancelBtn = NSButton(frame:NSRect(x: 400, y: 5, width: 65, height: 30))
+    private var editBtn = NSButton(frame: NSRect(x: 460, y: 61, width: 50, height: 30))
+    private var cancelBtn = NSButton(frame: NSRect(x: 535, y: 5, width: 60, height: 30))
+
+    private let groupName = OPNameTextField(frameRect: NSRect(x: 120, y: 195, width: 100, height: 30), name:"Blank")
+    private let palTitle = OPNameTextField(frameRect: NSRect(x: 60, y: 412, width: 100, height: 30))
     
+    private let sortBtns:[NSButton] = [NSButton(frame: NSRect(x: 600, y: 90, width: 130, height:30))]
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -46,6 +57,7 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         self.view.layer?.backgroundColor = NSColor.white.cgColor
         self.view.layer?.cornerRadius = 10
     }
+    
 
     private func configOptionsView(){
         isViewConfigred = true
@@ -59,11 +71,13 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         hexLabel.isBordered = false
         hexLabel.textColor = NSColor.black
         
-        let helpLabel:NSTextField = NSTextField(frame: NSRect(x: x-50, y: Int(self.view.frame.height/2-55), width: 400, height: 80))
-        helpLabel.stringValue = "select a color from this color group to start modifying the color value \nor select a color on the left side to switch color group"
+        let helpLabel:NSTextField = NSTextField(frame: NSRect(x: x-50, y: Int(self.view.frame.height/2), width: 400, height: 30))
+        helpLabel.stringValue = "select a color from this color group to start modifying the color value"
         helpLabel.textColor = NSColor.init(red:189/255 ,green: 189/255, blue: 189/255,alpha:1)
         helpLabel.isEditable = false
         helpLabel.isBordered = false
+        helpLabel.backgroundColor = NSColor.clear
+        
         
         for (i,key) in keys.enumerated(){
             let tempTextField = NSTextField(frame: NSRect(x: x, y: Int(self.view.frame.height-100), width: 50, height: 30))
@@ -98,34 +112,44 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         editBtn.action = #selector(startEditing)
         editBtn.setButtonType(NSButton.ButtonType.pushOnPushOff)
         
-        saveBtn.bezelStyle = NSButton.BezelStyle.rounded
-        saveBtn.title = "Save"
-        saveBtn.target = self
-        saveBtn.action = #selector(save)
-        saveBtn.setButtonType(NSButton.ButtonType.momentaryPushIn)
-        saveBtn.alignment = NSTextAlignment.center
-        
         cancelBtn.bezelStyle = NSButton.BezelStyle.rounded
-        cancelBtn.title = "Close"
+        cancelBtn.title = "Close and Update"
         cancelBtn.target = self
         cancelBtn.action = #selector(cancel)
         cancelBtn.setButtonType(NSButton.ButtonType.momentaryPushIn)
         cancelBtn.alignment = NSTextAlignment.center
         
         isHeaderColorBtn.frame = NSRect(x: 400, y:self.view.frame.height/2+80, width: 150, height: 20)
+     
+        groupName.delegate = self
+        groupName.refusesFirstResponder = true
+        
+        palTitle.delegate = self
+        palTitle.tag = 5
+        palTitle.placeholderString = "Palette Title"
+        palTitle.refusesFirstResponder = true
+        
+        sortBtns[0].bezelStyle = NSButton.BezelStyle.rounded
+        sortBtns[0].title = "Sort By Brightness"
+        sortBtns[0].action = #selector(performSort)
+        sortBtns[0].setButtonType(NSButton.ButtonType.momentaryPushIn)
+        sortBtns[0].alignment = NSTextAlignment.center
         
         self.view.addSubview(editBtn)
-        self.view.addSubview(saveBtn)
         self.view.addSubview(cancelBtn)
         self.view.addSubview(hexLabel)
+        self.view.addSubview(groupName)
+        self.view.addSubview(palTitle)
         self.view.addSubview(hexField)
         self.view.addSubview(helpLabel)
         self.view.addSubview(isHeaderColorBtn)
+        self.view.addSubview(sortBtns[0])
     }
     
     func configColorView(colorgroup:OPColorGroup){
         configOptionsView()
         self.colorGroup = colorgroup
+        self.inititalGroupCount = colorgroup.colorsArray.count
         var id = 0
         var x = 120
         var y = 140
@@ -144,62 +168,79 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
             id+=1
         }
         self.updateColorSqs(curNumColors: self.colorGroup?.colorsArray.count)
+        self.updateGroupName()
+        self.updatePalTitle()
     }
     
     func configColorGroupSelectors(colorgroups:[String:OPColorGroup],keys:[String]){
         var y = 0
         self.groupCount = colorgroups.count
         let height = (420/colorgroups.count)
-        //print("height = ",height)
-        //print("numColorGroups",colorgroups.count)
         for (i,key) in keys.enumerated(){
             colorSelectors.append( ColorGroupSelector(frameRect: NSRect(x: 0, y: y, width: 50, height: height), color: (colorgroups[key]?.getHeaderColor().color)!, id: i))
             colorSelectors.last!.delegate = self as ColorGroupSelectorDelegate
             self.view.addSubview(colorSelectors.last!)
             y+=height
         }
-        colorSelectors.append( ColorGroupSelector(frameRect: NSRect(x: 0, y: (Int(self.view.frame.height-32)), width: 50, height: 31), color:NSColor.white, id: -1))
-        colorSelectors.last!.delegate = self as ColorGroupSelectorDelegate
-        self.view.addSubview(colorSelectors.last!)
+        addSelector = ColorGroupSelector(frameRect: NSRect(x: 0, y: (Int(self.view.frame.height-32)), width: 50, height: 31), color:NSColor.white, id: -1)
+        addSelector?.delegate = self as ColorGroupSelectorDelegate
+        self.view.addSubview(addSelector!)
     }
     
     
     func updateAndAppendNewGroupSelector() {
         let group = colorGroupViewDelegate.curPal?.generateTempColorGroup()
-        //print("group count ", groupCount!+1)
         let height:Double = 419.0/Double(groupCount!+1)
         var y:Double = 0
         colorSelectors.append(ColorGroupSelector(frameRect: NSRect(x: 0, y: 0, width: 50, height: height), color: group!.colorsArray[0].color, id: groupCount!))
         colorSelectors.last?.delegate = self
-        //print("num selectors",colorSelectors.count)
         self.view.addSubview(colorSelectors.last!)
         for selector in colorSelectors{
-            if selector.getID() != -1{
                 selector.frame = NSRect(x: 0.0, y: y, width: 50.0, height: height)
                 y+=height
-            }
         }
         groupCount!+=1
     }
     
     func updateSelectorColorForHeaderColor(selectorId:Int){
-        colorSelectors[selectorId].layer?.backgroundColor = colorGroup?.getHeaderColor().color.cgColor
+        let color:OPColor = (colorGroup?.getHeaderColor())!
+        if(color.calcLum() > 0.95){
+            colorSelectors[selectorId].layer?.borderWidth = 1
+        }else{
+            colorSelectors[selectorId].layer?.borderWidth = 0
+        }
+        colorSelectors[selectorId].setColor(color:color.color)
+        colorSelectors[selectorId].layer?.backgroundColor = color.color.cgColor
     }
     
     func colorSelectClicked(id: Int) {
-        //print("colorSelector Clicked, ",id)
-         selectedSelector = id
-        let name = self.colorGroupViewDelegate.curPal?.paletteKey![id]
-        _ = updateColorGroup(name:name!)
+        selectedSelector = id
+        let groupID = self.colorGroupViewDelegate.curPal?.paletteKey![id]
+        _ = updateColorGroup(groupID:groupID!)
         let curNumColors = self.colorGroup?.colorsArray.count;
         updateColorSqs(curNumColors: curNumColors)
+        updateGroupName()
     }
     
     func shouldAddColorGroup(id: Int) {
-        if((colorGroupViewDelegate.curPal?.paletteData?.count)! <= 19){
+        if((colorGroupViewDelegate.curPal?.paletteData?.count)! <= 25){
             updateAndAppendNewGroupSelector()
-            //colorSelectClicked(id:((colorGroupViewDelegate.curPal?.paletteKey?.count)!-1))
+            colorSelectClicked(id:((colorGroupViewDelegate.curPal?.paletteKey?.count)!-1))
         }
+    }
+    
+    func updateGroupName(){
+       let name =  self.colorGroup?.getName()
+        if name != "blank"{
+            self.groupName.stringValue = (self.colorGroup?.getName())!
+        }else{
+            self.groupName.stringValue = ""
+        }
+    }
+    
+    func updatePalTitle(){
+        let name = self.colorGroupViewDelegate.curPal?.paletteName
+        palTitle.stringValue = name!
     }
     
     func updateColorSqs(curNumColors:Int?){
@@ -208,7 +249,6 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
             for i in curNumColors! ..< pastnumColors{
                 colorSqArray[i].makeBlankColorSq()
                 colorSqArray[i].editButton?.isHidden = true
-                //print(i)
                 if(isChangableBlankSq(id: i)){
                     colorSqArray[curNumColors!].layer?.backgroundColor = NSColor.white.cgColor
                     colorSqArray[curNumColors!].layer?.borderWidth = 1
@@ -226,6 +266,7 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
     }
 
     func colorSqClicked(id: Int) {
+        groupName.window?.makeFirstResponder(nil)
         if isChangableBlankSq(id:id) || !colorSqArray[id].blankColor{
             markedSq(sqId: id)
             isOptionsEditable(value: true)
@@ -248,7 +289,8 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
     }
     
     @objc func setHeaderColor(){
-        if(self.selectedColorSq != nil){
+        if(self.selectedColorSq != nil &&
+            !self.colorSqArray[self.selectedColorSq!].blankColor ){
             self.colorGroup?.headerColorIndex = self.selectedColorSq!
             self.colorGroup?.setHeaderColor(header: (self.colorGroup?.colorsArray[self.selectedColorSq!])!)
             self.updateSelectorColorForHeaderColor(selectorId: selectedSelector)
@@ -282,7 +324,6 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
             sq.layer?.borderWidth = 1
             }else{sq.layer?.borderWidth = 0}
         }
-        //print("set border width = 2")
         colorSqArray[sqId].layer?.borderWidth = 2
         colorSqArray[sqId].layer?.borderColor = NSColor.black.cgColor
     }
@@ -293,6 +334,7 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
     
     @objc func startEditing(){
         editingMode = !editingMode
+        toggleSortBtnByAnimation(flag:editingMode)
         isOptionsEditable(value:false)
         resetFields()
         if(selectedColorSq != nil){ unMarkSq(id: selectedColorSq!)
@@ -305,15 +347,27 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         }
     }
     
-    @objc func save(){
-        //print((self.colorGroup?.getName())!)
-       // print(self.colorGroupViewDelegate.curPal?.paletteData![(self.colorGroup?.getName())!])
+    func countGroupChanges() -> Int {
+        return groupCount! - inititalGroupCount!
+    }
+    
+    func save(){
         self.colorGroupViewDelegate.curPal?.addColorGroup(group: self.colorGroup!)
-        //self.colorGroupViewDelegate.curPal?.paletteData![(self.colorGroup?.getName())!] = self.colorGroup
         _ = self.colorGroupViewDelegate.curPal?.save()
+        self.saveGroupName()
+        print("selected selector ",selectedSelector )
+        self.colorGroupViewDelegate.updateColorSeletors(groupChanges:self.countGroupChanges())
+        self.colorGroupViewDelegate.updatePalViewForIndex(index: selectedSelector)
     }
     @objc func cancel(){
-       self.view.window?.orderOut(self)
+        self.save()
+        self.view.window?.orderOut(self)
+        self.view.window?.close()
+    }
+    @objc func performSort(){
+        self.colorGroup!.sortColorGroupByBrightness()
+        self.colorGroup!.updateColorWeights(weights:(self.colorGroupViewDelegate.curPal?.paletteWeights)!)
+        self.updateColorSqs(curNumColors: self.colorGroup!.colorsArray.count)
     }
     
     override func controlTextDidChange(_ obj: Notification)
@@ -322,7 +376,6 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         let value:Int!
         switch (object.tag){
         case 0,1,2:
-        //print(object.stringValue)
         if(object.stringValue.count > 0 &&
            object.isValid(forCharSet: NSCharacterSet.decimalDigits as NSCharacterSet)){
             value = Int(object.stringValue)!
@@ -337,12 +390,44 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         case 3:
             if(!object.isValid(forCharSet: NSCharacterSet.alphanumerics as NSCharacterSet) || object.stringValue.count != 6){
                showFieldError(textField: object)
-                //print("showing error")
             }else{
                 removeFieldError(textField: object)
                 if !doOptionsHaveErrors(optionType:1){ updateColor(hex:hexField.stringValue) }
             }
+            break
+        case 4:
+            if object.stringValue.count > 10{
+                object.stringValue = String(object.stringValue.dropLast())
+            }
+            break
         default: break
+        }
+    }
+    func saveGroupName(){
+        self.colorGroup?.setName(name: groupName.stringValue)
+    }
+    
+    func savePalName(){
+       let data:NSArray = OPUtil.retrievePaletteForName(name: palTitle.stringValue)
+        if data.count > 0{
+            palTitle.textColor = NSColor.red
+        }else{
+            palTitle.textColor = NSColor.black
+            self.colorGroupViewDelegate.curPal?.paletteName = palTitle.stringValue
+        }
+    }
+    override func controlTextDidEndEditing(_ obj: Notification) {
+        //add the new group the the current color group
+       let object = obj.object as! NSTextField
+        switch object.tag {
+        case 4:
+            saveGroupName()
+            break
+        case 5:
+            savePalName()
+            break
+        default:
+            break
         }
     }
     
@@ -364,13 +449,10 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
                 colorSqaure.layer?.borderWidth = 1
             }
         }
+        if self.colorGroup?.headerColorIndex == self.selectedColorSq {
+            setHeaderColor()
+        }
     }
-    func updateColorGroup(name:String) -> Int?{
-        let temp = self.colorGroup?.colorsArray.count
-        self.colorGroup = self.colorGroupViewDelegate.curPal?.paletteData![name]
-        return temp
-    }
-    
     func updateColor(hex:String) {
         for compFields in compArray{
             if(compFields.tag != 3){
@@ -381,6 +463,14 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         self.colorGroup?.colorsArray[self.selectedColorSq!] = newColor
         colorSqArray[self.selectedColorSq!].updateForColor(opColor:newColor)
     }
+    
+    func updateColorGroup(groupID:String) -> Int?{
+        let temp = self.colorGroup?.colorsArray.count
+        self.colorGroup = self.colorGroupViewDelegate.curPal?.paletteData![groupID]
+        return temp
+    }
+    
+
     
     func updateFields(selectedIndex:Int){
         let color = self.colorGroup?.colorsArray[selectedIndex]
@@ -431,6 +521,19 @@ class OPViewController: NSViewController,ColorSquareViewDelegate,NSTextFieldDele
         if self.view.layer != nil {
             
         }
+    }
+    
+    @objc func toggleSortBtnByAnimation(flag:Bool){
+        NSAnimationContext.runAnimationGroup({_ in
+            NSAnimationContext.current.duration = 1.0
+            if flag{
+                sortBtns[0].animator().frame = NSRect(x: 460, y: 90, width: 130, height:30)
+            }else{
+                sortBtns[0].animator().frame = NSRect(x: 600, y: 90, width: 130, height:30)
+            }
+            
+        }, completionHandler:{
+        })
     }
 }
 

@@ -27,6 +27,8 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
     var curPal:Palette?
     var curColorGroup:OPColorGroup?
     
+    var palNameList:[String] = [String]()
+    
     override func viewWillAppear() {
         self.view.layer?.backgroundColor = NSColor.white.cgColor
     }
@@ -41,34 +43,30 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         
         curColorGroup = curPal?.paletteData![(curPal?.paletteKey?.first)!]!
 
-        colorValueLabel = NSTextView(frame: NSMakeRect(30,self.view.frame.height-85,120,20))
+        colorValueLabel = NSTextView(frame: NSMakeRect(30,self.view.frame.height-85,150,20))
         colorValueLabel.backgroundColor = NSColor.clear
         colorValueLabel.textColor = NSColor.black
         colorValueLabel.string = (curColorGroup?.getName())!
-        colorValueLabel.isEditable = false;
+        colorValueLabel.isEditable = false
         colorValueLabel.font = NSFont(name: "HelveticaNeue-Light", size: 20.0)!
     
-        nextPalBtn = NSButton.init(frame: NSMakeRect(35.0, 320.0, 22.0, 19.0))
-        pastPalBtn = NSButton.init(frame: NSMakeRect(12.0, 320.0, 22.0, 19.0))
-  
-        let pastCell = NSButtonCell.init(textCell: "<")
-        pastCell.backgroundColor = NSColor.white
-        pastCell.bezelStyle = .texturedSquare
-        let nextCell = NSButtonCell.init(textCell: ">")
+        let nextImage:NSImage = NSImage(imageLiteralResourceName: "nextPalBtn")
+        nextImage.size = NSSize(width: nextImage.size.width/2, height: nextImage.size.height/2)
         
-        nextCell.backgroundColor = NSColor.white
-        nextCell.bezelStyle = .texturedSquare
-        pastPalBtn.state = .off
-        pastPalBtn.isEnabled = true
-        pastPalBtn.bezelStyle = .texturedSquare
-        pastPalBtn.isBordered = false
-        pastPalBtn.cell? = pastCell
+        let pastImage:NSImage = NSImage(imageLiteralResourceName: "pastPalBtn")
+        pastImage.size = NSSize(width: pastImage.size.width/2, height: pastImage.size.height/2)
         
-        nextPalBtn.state = .off
-        nextPalBtn.isEnabled = true
-        nextPalBtn.bezelStyle = .texturedSquare
+        nextPalBtn = NSButton.init(frame: NSMakeRect(47.0, 322.5, nextImage.size.width, nextImage.size.height))
+        nextPalBtn.image = nextImage
         nextPalBtn.isBordered = false
-        nextPalBtn.cell? = nextCell
+        nextPalBtn.target = self
+        nextPalBtn.action =  #selector(nextPal)
+        
+        pastPalBtn = NSButton.init(frame: NSMakeRect(20.0, 322.5, pastImage.size.width, pastImage.size.height))
+        pastPalBtn.image = pastImage
+        pastPalBtn.isBordered = false
+        pastPalBtn.target = self
+        pastPalBtn.action =  #selector(pastPal)
 
         paletteTitle.isBezeled = false
         paletteTitle.drawsBackground = false
@@ -88,6 +86,7 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
                                        userInfo: nil)
         //adds a tracker to the area
         ColorGroupSelectorView.addTrackingArea(area)
+        
     }
     
     /*Checks if the required Paletettes are installed and saves if them if they
@@ -97,87 +96,38 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "Pal", in: managedContext)
         
-        flushData(entity: entity!, insertInto: managedContext)
-        let data = retrievePaletteForName(name: "Apple", insertInto: managedContext)
+        //OPUtil.flushData(entity: entity!, insertInto: managedContext)
+        let data = OPUtil.retrievePaletteForName(name: "Material")
         managedContext.shouldDeleteInaccessibleFaults = true
         if(data.count>0){
-        
+            for (index,d) in data.enumerated(){
+                let temp = d as! NSManagedObject
+                self.palNameList.append(temp.value(forKey: "paletteName") as! String)
+                print(palNameList[index])
+            }
+            
             print("[GET] settng saved palette")
             _ = setCurrentPalForRetrivedPalette(data: data, entity: entity!, insertInto: managedContext)
             _ = self.curPal?.save()
-            self.deleteFaultingData(entity: entity!, insertInto: managedContext)
+            OPUtil.deleteFaultingData(entity: entity!, insertInto: managedContext)
             return true
         }else{
+            
+            self.palNameList.append("Material")
+            
             print("[SET] Creating New Palette")
-            curPal = Palette.init(name: "Apple", localFile: "AppleDesginColors", entity: entity!, insertInto: managedContext)
+            curPal = Palette.init(name: "Material", localFile: "MaterialDesginColors", entity: entity!, insertInto: managedContext)
             _ = curPal?.save()
             return true
         }
         
     }
-    /*Removes all saved entity data in the NSManagedContent*/
-    func flushData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!){
-        let Deleterequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        //Deleterequest.predicate = NSPredicate(format: "paletteName = %@", "Material")
-        do {
-            let result = try context.fetch(Deleterequest)
-            for data in result as! [NSManagedObject] {
-                context.delete(data)
-                try context.save()
-            }
-        } catch {
-            print("Failed to remove data")
-        }
-    }
-    
-    func deleteFaultingData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!) {
-        let Deleterequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        //Deleterequest.predicate = NSPredicate(format: "paletteName = %@", "Material")
-        do {
-            let result = try context.fetch(Deleterequest)
-            for data in result as! [NSManagedObject] {
-                if(data.isFault){
-                    context.delete(data)
-                    try context.save()
-                }
-            }
-        } catch {
-            print("Failed to remove data")
-        }
-    }
-    
-    
-    func printSavedData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!){
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        do {
-            let result = try context.fetch(request)
-            for data in result as! [NSManagedObject] {
-                print(data)
-            }
-        } catch {
-            print("Failed to remove data")
-        }
-    }
-    /*retrives a pal entity from the managedContent with a name predicate*/
-    func retrievePaletteForName(name:String, insertInto context: NSManagedObjectContext!) ->NSArray{
-        let palettesFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        palettesFetch.predicate = NSPredicate(format: "paletteName = %@", name)
-        
-        do {
-            let fetchedPalettes = try context?.fetch(palettesFetch)
-            print("Searching For Palettes Of Name %@",name)
-            return fetchedPalettes! as NSArray;
-        } catch {
-            fatalError("Failed to fetch palettes: \(error)")
-        }
-        return NSArray.init()
-    }
     
     /*Reterives and sets a palette from the imported data from the NSManangedObjectContext*/
     func setCurrentPalForRetrivedPalette(data:NSArray,entity: NSEntityDescription, insertInto context: NSManagedObjectContext!)->Bool {
-        if(data.count>0){
-            print("set Current Pal",data.count)
-           
+        let dataCount = data.count;
+        if(dataCount>0){
+            
             let materialPal = data.lastObject as! NSManagedObject
             curPal = Palette.init(name: materialPal.value(forKey: "paletteName") as! String,
                                   data:NSKeyedUnarchiver.unarchiveObject(with: materialPal.value(forKey: "paletteDataToSave") as! Data) as![String : OPColorGroup],
@@ -185,6 +135,7 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
                                   palKeys:materialPal.value(forKey: "paletteKey") as! [String],
                                   entity: entity,
                                   insertInto: context)
+            
             /*let _:[String:Any] = ["paletteName":curPal?.paletteName!,
                                   "paletteDataToSave":NSKeyedUnarchiver.unarchiveObject(with: materialPal.value(forKey: "paletteDataToSave") as! Data) as![String : OPColorGroup]]*/
             //materialPal.setValuesForKeys()
@@ -211,6 +162,8 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
     func configPalView(pal:Palette) {
         
         let colorArray:Array<OPColor> = (curColorGroup?.getColorArray())!
+        self.paletteTitle.stringValue = pal.paletteName;
+        
         if(colorArray.count>1){
             headerSqView = ColorSquareView.init(fra: NSMakeRect(15, self.view.frame.height/2-85, 150, 150), opColor: (curColorGroup?.getHeaderColor())!,id:0,type:1)
         }else{
@@ -255,11 +208,51 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         }
     }
     
+    func addColorSelect() {
+        colorSelcArray.append(ColorGroupSelector.init(frameRect: NSRect(x: 0, y: 0, width: 0, height: 10), color: NSColor.clear, id: (colorSelcArray.last?.getID())!+1))
+        colorSelcArray.last?.delegate = self
+        ColorGroupSelectorView.addSubview((colorSelcArray.last)!)
+    }
+    
+    func removeColorSelect(){
+        self.colorSelcArray.last?.removeFromSuperview()
+        self.colorSelcArray.last?.delegate = nil
+        colorSelcArray.remove(at: colorSelcArray.count-1)
+    }
+    
+    func updateColorSeletors(groupChanges:Int?){
+        let frame:CGRect = ColorGroupSelectorView.frame //is nil if the pal view isnt alloced before you change colors
+        let y = frame.height/2-7.5
+        let width = frame.width/CGFloat((curPal?.paletteKey?.count)!)
+        var x:CGFloat = 0
+        var i:Int = groupChanges!
+        while(i != 0){
+            if(i > 0){
+                self.addColorSelect()
+                i -= 1
+            }else if (i < 0){
+                self.removeColorSelect()
+                i += 1
+            }
+        }
+        for(index,group) in (curPal?.paletteKey?.enumerated())!{
+            let headerColor:OPColor = (curPal?.paletteData![group]?.getHeaderColor())!
+            colorSelcArray[index].frame = NSMakeRect(x, y, width, 10)
+            colorSelcArray[index].layer?.backgroundColor = headerColor.color.cgColor
+            colorSelcArray[index].setColor(color: headerColor.color)
+            x+=width
+        }
+    }
+    
     func updatePalViewForIndex(index:Int){
         let colorGroup:OPColorGroup = curPal!.paletteData![(curPal?.paletteKey![index])!]!
         let colorArray:Array<OPColor> = colorGroup.getColorArray()
         
+        if colorGroup.getName() == ""{
+            colorGroup.setName(name: "blank")
+        }
         colorValueLabel.string = colorGroup.getName()
+        
         while colorArray.count > colorSqArray.count{
             let index = colorSqArray.count
             let yIndex = Int(index%3)
@@ -304,6 +297,29 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
     }
     
     func shouldAddColorGroup(id: Int) {}
+    
+    @objc func pastPal(){
+        print("past")
+    }
+    
+    @objc func nextPal(){
+        if(curPal?.paletteName != palNameList.last){
+            let indexOfNext = palNameList.index(of: (curPal?.paletteName)!)!+1
+            let nextPal:String = palNameList[indexOfNext]
+            changePalForPalName(palName: nextPal)
+        }
+    }
+    
+    func changePalForPalName(palName:String) -> Bool{
+        guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else {return false}
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Pal", in: managedContext)
+        
+        let data = OPUtil.retrievePaletteForName(name: palName)
+        _ = setCurrentPalForRetrivedPalette(data: data, entity: entity!, insertInto: managedContext)
+        
+        return true
+    }
 
 }
 
