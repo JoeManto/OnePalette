@@ -96,6 +96,7 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "Pal", in: managedContext)
         
+        
         //OPUtil.flushData(entity: entity!, insertInto: managedContext)
         let data = OPUtil.retrievePaletteForName(name: "Material")
         managedContext.shouldDeleteInaccessibleFaults = true
