@@ -27,7 +27,7 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
     var curPal:Palette?
     var curColorGroup:OPColorGroup?
     
-    var palNameList:[String] = [String]()
+    //var palNameList:[String] = [String]()
     
     override func viewWillAppear() {
         self.view.layer?.backgroundColor = NSColor.white.cgColor
@@ -87,6 +87,8 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         //adds a tracker to the area
         ColorGroupSelectorView.addTrackingArea(area)
         
+        
+        
     }
     
     /*Checks if the required Paletettes are installed and saves if them if they
@@ -101,26 +103,34 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
         let data = OPUtil.retrievePaletteForName(name: "Material")
         managedContext.shouldDeleteInaccessibleFaults = true
         if(data.count>0){
+            print("%d",data.count)
             for (index,d) in data.enumerated(){
                 let temp = d as! NSManagedObject
-                self.palNameList.append(temp.value(forKey: "paletteName") as! String)
-                print(palNameList[index])
+                if(index < data.count-1){
+                    OPUtil.deleteMangedObject(dataObject: temp, insertInto: managedContext)
+                }
+                //self.palNameList.append(temp.value(forKey: "paletteName") as! String)
+                //print(palNameList[index])
             }
             
             print("[GET] settng saved palette")
             _ = setCurrentPalForRetrivedPalette(data: data, entity: entity!, insertInto: managedContext)
             _ = self.curPal?.save()
+            
             OPUtil.deleteFaultingData(entity: entity!, insertInto: managedContext)
+            OPUtil.printSavedData(entity: entity!, insertInto: managedContext)
+            
             return true
         }else{
+            print("[SET] Checking For unloaded required palettes")
             
-            self.palNameList.append("Material")
             
-            print("[SET] Creating New Palette")
             curPal = Palette.init(name: "Material", localFile: "MaterialDesginColors", entity: entity!, insertInto: managedContext)
             _ = curPal?.save()
             return true
         }
+        
+        
         
     }
     
@@ -304,11 +314,12 @@ class ColorViewerController: NSViewController,ColorSquareViewDelegate,ColorGroup
     }
     
     @objc func nextPal(){
-        if(curPal?.paletteName != palNameList.last){
-            let indexOfNext = palNameList.index(of: (curPal?.paletteName)!)!+1
-            let nextPal:String = palNameList[indexOfNext]
-            changePalForPalName(palName: nextPal)
-        }
+        print("next")
+        //if(curPal?.paletteName != palNameList.last){
+          //  let indexOfNext = palNameList.index(of: (curPal?.paletteName)!)!+1
+           // let nextPal:String = palNameList[indexOfNext]
+           // changePalForPalName(palName: nextPal)
+        //}
     }
     
     func changePalForPalName(palName:String) -> Bool{

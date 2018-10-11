@@ -55,6 +55,13 @@ class OPUtil: NSObject {
         }
     }
     
+    static func deleteMangedObject(dataObject:NSManagedObject, insertInto context: NSManagedObjectContext!){
+        context.delete(dataObject)
+        do{
+        try context.save()
+        }catch{print("failed to remove data object")}
+    }
+    
     static func printSavedData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!){
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
         do {
