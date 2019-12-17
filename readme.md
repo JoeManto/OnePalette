@@ -4,7 +4,7 @@ v1.0
 > OnePalette is a modern material design color palette that allows for quick and intuitive color lookups. OnePalette was designed and implemented for frontend devs and UX designers in mind, allowing developers and designers to stay on track and keep creating.
 
 Please visit the project listing my personal cv for more infomation 
-[One Palette](https://manto.dev/projects/onepalette)
+[One Palette](https://manto.dev/#/projects/onepalette)
 
 ## Current Features
 * Full material design color palette.
