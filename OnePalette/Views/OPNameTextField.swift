@@ -7,16 +7,17 @@
 //
 
 import Cocoa
-class OPNameTextField: NSTextField{
+
+class OPNameTextField: NSTextField {
     
-     init(frameRect: NSRect) {
+    init(frameRect: NSRect) {
         super.init(frame: frameRect)
         self.stringValue = ""
         configTextField()
-
     }
-    convenience init(frameRect: NSRect,name: String) {
-        self.init(frameRect:frameRect)
+    
+    convenience init(frameRect: NSRect, name: String) {
+        self.init(frameRect: frameRect)
         self.stringValue = name
         configTextField()
     }
@@ -27,9 +28,9 @@ class OPNameTextField: NSTextField{
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
     }
-    private func configTextField(){
+    
+    private func configTextField() {
         self.placeholderString = "Group Name"
         self.isEditable = true
         self.isBordered = false

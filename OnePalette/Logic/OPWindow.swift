@@ -8,12 +8,11 @@
 
 import Cocoa
 
-class OPWindow: NSWindow,NSWindowDelegate {
-    
+class OPWindow: NSWindow, NSWindowDelegate {
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         
-        if sender.contentViewController is OPViewController{
+        if sender.contentViewController is OPViewController {
             sender.contentViewController?.removeFromParentViewController()
             sender.contentViewController?.view.removeFromSuperview()
             
@@ -24,9 +23,9 @@ class OPWindow: NSWindow,NSWindowDelegate {
         
         return true
     }
+    
     func windowWillClose(_ notification: Notification) {
         
     }
-
 }
 

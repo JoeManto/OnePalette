@@ -21,15 +21,9 @@ Please visit the project listing my personal cv for more infomation
 ---
 ## Up Comming Features 
 **1. Custom Application File Extension**
-  * For importing and exporting palettes
 
 **2. Cloud Syncing for palette data** 
-  * Web App version for on the go users
 
 **3. Sketch App Plugin Integeration**
-Not much work here yet.
-As cloud syncing will be needed to automatically fetch user palettes. 
 
 ---
-## To-do
-* change NSStatusItem Image to the logo

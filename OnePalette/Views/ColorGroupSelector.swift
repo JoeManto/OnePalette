@@ -9,21 +9,21 @@
 import Cocoa
 
 protocol ColorGroupSelectorDelegate: class {
-    func colorSelectClicked(id:Int)
-    func shouldAddColorGroup(id:Int)
+    func colorSelectClicked(id: Int)
+    func shouldAddColorGroup(id: Int)
 }
 
 class ColorGroupSelector: NSView {
-
-    weak var delegate: ColorGroupSelectorDelegate?
-    private var color:NSColor
-    private var id:Int
-    private var width:CGFloat = 100.0
-    private var height:CGFloat = 100.0
-    private var x:CGFloat?
-    private var y:CGFloat?
     
-    init(frameRect: NSRect,color:NSColor,id:Int) {
+    weak var delegate: ColorGroupSelectorDelegate?
+    private var color: NSColor
+    private var id: Int
+    private var width: CGFloat = 100.0
+    private var height: CGFloat = 100.0
+    private var x: CGFloat?
+    private var y: CGFloat?
+    
+    init(frameRect: NSRect, color: NSColor, id: Int) {
         self.color = color
         self.id = id
         super.init(frame: frameRect)
@@ -32,14 +32,14 @@ class ColorGroupSelector: NSView {
         self.wantsLayer = true
         self.layer?.cornerRadius = 0
     }
-
+    
     required init?(coder decoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-        if(id == -1){
+        if id == -1 {
             let addBtn = NSTextField(frame: NSRect(x: self.frame.width/2-8, y: self.frame.height/2-5, width: 20, height: 20))
             addBtn.font = NSFont(name: "Helvetica Neue", size: 20)
             addBtn.textColor = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1)
@@ -55,28 +55,29 @@ class ColorGroupSelector: NSView {
             self.layer?.borderColor = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1).cgColor
             self.addSubview(addBtn)
             
-        }else{
+        } else {
             self.layer?.backgroundColor = self.color.cgColor
             self.layer?.borderColor = NSColor(calibratedRed: 30/255, green:32/255, blue: 34/255, alpha: 1).cgColor
         }
     }
     
-    func getID()->Int{
+    func getID() -> Int{
         return self.id
     }
+    
     func getColor() -> NSColor {
         return self.color
     }
-    func setColor(color:NSColor){
+    
+    func setColor(color: NSColor){
         self.color = color
     }
     
     override func mouseUp(with event: NSEvent) {
-        print(self.id)
         if id != -1 {
-            print("id = ", id)
-            delegate?.colorSelectClicked(id:self.id)
-        }else{
+            print("id = \(id)")
+            delegate?.colorSelectClicked(id: self.id)
+        } else {
             delegate?.shouldAddColorGroup(id: self.id)
         }
     }

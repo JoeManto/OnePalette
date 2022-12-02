@@ -8,18 +8,17 @@
 
 import Cocoa
 
-class OPColor: NSObject,NSCoding{
+class OPColor: NSObject, NSCoding {
     
-    private var weight:Int
-     var color:NSColor
-     private var hexValue:String
-     private var componentRed:Float
-     private var componentGreen:Float
-     private var componentBlue:Float
-     private var componentAlpha:Float
-     private var lum:Float
+    private var weight: Int
+    var color: NSColor
+    private var hexValue: String
+    private var componentRed: Float
+    private var componentGreen: Float
+    private var componentBlue: Float
+    private var componentAlpha: Float
+    private var lum: Float
     
-
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.weight, forKey: "weight")
         aCoder.encode(self.color, forKey: "color")
@@ -33,7 +32,7 @@ class OPColor: NSObject,NSCoding{
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
-
+        
         self.weight = aDecoder.decodeInteger(forKey: "weight")
         self.color = aDecoder.decodeObject(forKey: "color") as! NSColor
         self.hexValue = aDecoder.decodeObject(forKey: "hex") as! String
@@ -55,7 +54,7 @@ class OPColor: NSObject,NSCoding{
         self.color = NSColor.clear
         super.init()
     }
-
+    
     convenience init(hexString: String, alpha: CGFloat = 1.0,weight:Int) {
         self.init()
         
@@ -74,8 +73,8 @@ class OPColor: NSObject,NSCoding{
         let red   = CGFloat(r) / 255.0
         let green = CGFloat(g) / 255.0
         let blue  = CGFloat(b) / 255.0
-      
-        self.color = NSColor.init(red:red, green:green, blue:blue, alpha:alpha)
+        
+        self.color = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
         self.weight = weight
         componentRed = Float(self.color.redComponent*255)
         componentGreen = Float(self.color.greenComponent*255)
@@ -90,15 +89,19 @@ class OPColor: NSObject,NSCoding{
     func getWeight() -> Int {
         return self.weight
     }
+    
     func setWeight(weight:Int){
         self.weight = weight
     }
+    
     func getHexString() -> String {
         return hexValue
     }
-    func getColorComponents()->(Float?,Float?,Float?){//add alpha
-        return (self.componentRed,self.componentGreen,self.componentBlue)
+    
+    func getColorComponents() -> (Float?,Float?,Float?) { //add alpha
+        return (self.componentRed, self.componentGreen, self.componentBlue)
     }
+    
     required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
         fatalError("init(pasteboardPropertyList:ofType:) has not been implemented")
     }
@@ -121,5 +124,4 @@ extension NSColor{
             Int(b * 0xff)
         )
     }
-    
 }

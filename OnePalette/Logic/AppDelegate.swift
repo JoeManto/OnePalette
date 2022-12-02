@@ -10,21 +10,19 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
+    
     private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     private let popover = NSPopover()
-    private var colorViewController=ColorViewerController.freshController
+    private var colorViewController = ColorViewerController.freshController
     private let menu = NSMenu()
     private var eventMonitor: EventMonitor?
     private var colorWindow:OPWindow!
     private var colorWindowController: NSWindowController!
-    private weak var colorOptionsViewController:OPViewController!
+    private weak var colorOptionsViewController: OPViewController!
     
     private var optionViewIsConfiged = false
-  
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
         constructMenu()
         statusItem.button?.image = NSImage(named:NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
@@ -48,9 +46,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.colorWindowController = MainWindowController(window: colorWindow)
         self.colorWindowController.window?.contentViewController = colorOptionsViewController
         
-        hideController(window:self.colorWindow,controller: self.colorOptionsViewController)
+        hideController(window: self.colorWindow,controller: self.colorOptionsViewController)
         
-        //Tracks left and right clicks on status item
+        // Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) {
             [weak self] event in if let strongSelf = self, strongSelf.popover.isShown {
                 strongSelf.closePopover(sender: event)
@@ -58,23 +56,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    /*Fills the NSMenu with NSMenuitems*/
+    /// Fills the NSMenu with NSMenuitems
     func constructMenu() {
-        menu.addItem(NSMenuItem(title: "Color Group Actions", action:nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Color Group Actions", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.addColors(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Selected Color Actions", action:nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Selected Color Actions", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Palette Actions", action:nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Palette Actions", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "New Palette", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem(title: "Delete Palette", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
-
     
-    /*Menu button that shows the OptionsView and configures that view to show the correct display*/
+    
+    /// Menu button that shows the OptionsView and configures that view to show the correct display
     @objc func addColors(_ sender:Any?){
         if !optionViewIsConfiged{
             colorOptionsViewController = freshOptionController()
@@ -84,11 +82,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             colorOptionsViewController.configColorView(colorgroup:curColorGroup!)
             
             /*let secondController = ClipboardSettingController()
-            secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
-            colorOptionsViewController.presentViewControllerAsSheet(secondController)*/
+             secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
+             colorOptionsViewController.presentViewControllerAsSheet(secondController)*/
         }
-         showController(of:0)
+        showController(of:0)
     }
+    
     func showController(of type:Int){
         switch(type){
         case 0:
@@ -98,25 +97,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         default: break
         }
     }
-    func hideController(window:NSWindow,controller:NSViewController){
+    
+    func hideController(window:NSWindow,controller:NSViewController) {
         window.orderOut(controller)
     }
-    func dealocOptionsController(){
+    
+    func dealocOptionsController() {
         let control:OPViewController = colorWindowController.window?.contentViewController as! OPViewController
         control.colorGroupViewDelegate = nil
         colorWindowController.dismissController(control)
         colorWindowController.window?.resignMain()
     }
-    func freshOptionController() -> OPViewController{
+    
+    func freshOptionController() -> OPViewController {
         let viewController = NSStoryboard(name:NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as! OPViewController
         viewController.colorGroupViewDelegate = popover.contentViewController as! ColorViewerController
         self.colorWindowController.window?.contentViewController = viewController
         return viewController
     }
     
-    //-------------------------------------------------------------------
-    
-    //if the statusItem is clicked
+    /// If the statusItem is clicked
     @objc func iconClicked(sender:NSStatusItem){
         let event = NSApp.currentEvent!
         if event.type == NSEvent.EventType.rightMouseUp{
@@ -127,13 +127,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }else{
             toggle(nil)
         }
-        
-    }
-    @objc func printQuoteClicked(_ sender: Any?) {
-        
     }
     
-    //Shows or hides the popover
+    @objc func printQuoteClicked(_ sender: Any?) {
+        print("quote clicked")
+    }
+    
+    /// Shows or hides the popover
     func toggle(_ sender: Any?) {
         if popover.isShown {
             closePopover(sender: sender)
@@ -144,60 +144,53 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    //Shows the popover
+    /// Shows the popover
     func showPopover(sender: Any?) {
         if let button = statusItem.button {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxX)
-       }
+        }
     }
     
-    //Removes the popover
+    /// Removes the popover
     func closePopover(sender: Any?) {
         popover.performClose(sender)
     }
     
-    //-------------------------------------------------------------------
-    
-    
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
+    
     // MARK: - Core Data stack
-
+    
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
+        // The persistent container for the application. This implementation
+        // creates and returns a container, having loaded the store for the
+        // application to it. This property is optional since there are legitimate
+        // error conditions that could cause the creation of the store to fail.
         let container = NSPersistentContainer(name: "OnePalette")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
+                
+                // Typical reasons for an error here include:
+                // The parent directory does not exist, cannot be created, or disallows writing.
+                // The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                // The device is out of space.
+                // The store could not be migrated to the current model version.
+                // Check the error message to determine what the actual problem was.
                 fatalError("Unresolved error \(error)")
             }
         })
         return container
     }()
-
+    
     // MARK: - Core Data Saving and Undo support
-
+    
     @IBAction func saveAction(_ sender: AnyObject?) {
         // Performs the save action for the application, which is to send the save: message to the application's managed object context. Any encountered errors are presented to the user.
         let context = persistentContainer.viewContext
-
+        
         if !context.commitEditing() {
             NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing before saving")
         }
@@ -211,12 +204,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-
+    
     func windowWillReturnUndoManager(window: NSWindow) -> UndoManager? {
         // Returns the NSUndoManager for the application. In this case, the manager returned is that of the managed object context for the application.
         return persistentContainer.viewContext.undoManager
     }
-
+    
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // Save changes in the application's managed object context before the application terminates.
         let context = persistentContainer.viewContext
@@ -231,14 +224,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         do {
-            if(!context.hasChanges){ try context.save()}
+            if !context.hasChanges {
+                try context.save()
+            }
             print("saved pal on close")
         } catch {
             let nserror = error as NSError
-
+            
             // Customize this code block to include application-specific recovery steps.
-            let result = sender.presentError(nserror)
-            if (result) {
+            if sender.presentError(nserror) {
                 return .terminateCancel
             }
             
@@ -260,6 +254,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // If we got here, it is time to quit.
         return .terminateNow
     }
-
 }
 
