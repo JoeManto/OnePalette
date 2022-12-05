@@ -9,7 +9,7 @@
 import Cocoa
 import CoreData
 
-class OPColorGroup: NSObject, NSCoding {
+class OPColorGroup: Identifiable, Codable {
     
     private var headerColor: OPColor
     var headerColorIndex: Int
@@ -17,7 +17,7 @@ class OPColorGroup: NSObject, NSCoding {
     private var identifier: String
     var colorsArray: [OPColor]
     
-    func encode(with aCoder: NSCoder) {
+    /*func encode(with aCoder: NSCoder) {
         aCoder.encode(name, forKey: "groupName")
         aCoder.encode(headerColor, forKey: "headerColor")
         aCoder.encode(headerColorIndex, forKey: "headerColorIndex")
@@ -25,22 +25,26 @@ class OPColorGroup: NSObject, NSCoding {
         if colorsArray == colorsArray { aCoder.encode(colorsArray, forKey: "colorArray")}
     }
     
-    required convenience init?(coder aDecoder: NSCoder) {
+    func encode(to encoder: Encoder) throws {
+        
+    }*/
+    
+    /*required convenience init?(coder aDecoder: NSCoder) {
         self.init(id:"--")
         self.name = aDecoder.decodeObject(forKey: "groupName") as! String
         self.headerColor = aDecoder.decodeObject(forKey: "headerColor") as! OPColor
         self.headerColorIndex = aDecoder.decodeInteger(forKey: "headerColorIndex")
         self.identifier = aDecoder.decodeObject(forKey: "identifier") as! String
         self.colorsArray = aDecoder.decodeObject(forKey: "colorArray") as! Array<OPColor>
-    }
+    }*/
     
     init(id: String) {
         headerColor = OPColor.init()
-        colorsArray = Array<OPColor>()
+        colorsArray = [OPColor]()
         headerColorIndex = 0
         self.name = "blank"
         identifier = id
-        super.init()
+        //super.init()
         self.findHeaderColor()
     }
     
@@ -76,7 +80,7 @@ class OPColorGroup: NSObject, NSCoding {
     
     // MARK: Getter & Setters
     
-    func getColorArray() -> Array<OPColor> {
+    func getColorArray() -> [OPColor] {
         return self.colorsArray
     }
     
@@ -92,7 +96,7 @@ class OPColorGroup: NSObject, NSCoding {
         self.name = name
     }
     
-    func setHeaderColor (header:OPColor) {
+    func setHeaderColor (header: OPColor) {
         headerColor = header;
     }
     
@@ -101,7 +105,7 @@ class OPColorGroup: NSObject, NSCoding {
     }
     
     func description()->String {
-        return "ColorGroup:Name "+name
+        return "ColorGroup:Name " + name
     }
 }
 extension String {

@@ -43,7 +43,6 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     
     private let sortBtns = [NSButton(frame: NSRect(x: 600, y: 90, width: 130, height: 30))]
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
@@ -139,7 +138,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
         self.view.addSubview(sortBtns[0])
     }
     
-    func configColorView(colorgroup:OPColorGroup){
+    func configColorView(colorgroup: OPColorGroup){
         configOptionsView()
         self.colorGroup = colorgroup
         self.inititalGroupCount = colorgroup.colorsArray.count
@@ -184,10 +183,10 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     }
     
     func updateAndAppendNewGroupSelector() {
-        let group = colorGroupViewDelegate.curPal?.generateTempColorGroup()
-        let height: Double = 419.0/Double(groupCount!+1)
+        let group = colorGroupViewDelegate.curPal.generateTempColorGroup()
+        let height: Double = 419.0 / Double(groupCount!+1)
         var y: Double = 0
-        colorSelectors.append(ColorGroupSelector(frameRect: NSRect(x: 0, y: 0, width: 50, height: height), color: group!.colorsArray[0].color, id: groupCount!))
+        colorSelectors.append(ColorGroupSelector(frameRect: NSRect(x: 0, y: 0, width: 50, height: height), color: group.colorsArray[0].color, id: groupCount!))
         colorSelectors.last?.delegate = self
         self.view.addSubview(colorSelectors.last!)
         for selector in colorSelectors {
@@ -197,7 +196,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
         groupCount!+=1
     }
     
-    func updateSelectorColorForHeaderColor(selectorId: Int){
+    func updateSelectorColorForHeaderColor(selectorId: Int) {
         let color = (colorGroup?.getHeaderColor())!
         if color.calcLum() > 0.95 {
             colorSelectors[selectorId].layer?.borderWidth = 1
@@ -211,17 +210,17 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     
     func colorSelectClicked(id: Int) {
         selectedSelector = id
-        let groupID = self.colorGroupViewDelegate.curPal?.paletteKey![id]
-        _ = updateColorGroup(groupID:groupID!)
+        let groupID = self.colorGroupViewDelegate.curPal.paletteKey![id]
+        _ = updateColorGroup(groupID:groupID)
         let curNumColors = self.colorGroup?.colorsArray.count;
         updateColorSqs(curNumColors: curNumColors)
         updateGroupName()
     }
     
     func shouldAddColorGroup(id: Int) {
-        if (colorGroupViewDelegate.curPal?.paletteData?.count)! <= 25 {
+        if (colorGroupViewDelegate.curPal.paletteData?.count)! <= 25 {
             updateAndAppendNewGroupSelector()
-            colorSelectClicked(id:((colorGroupViewDelegate.curPal?.paletteKey?.count)!-1))
+            colorSelectClicked(id:((colorGroupViewDelegate.curPal.paletteKey?.count)!-1))
         }
     }
     
@@ -236,8 +235,8 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     }
     
     func updatePalTitle() {
-        let name = self.colorGroupViewDelegate.curPal?.paletteName
-        palTitle.stringValue = name!
+        let name = self.colorGroupViewDelegate.curPal.paletteName
+        palTitle.stringValue = name
     }
     
     func updateColorSqs(curNumColors: Int?) {
@@ -287,7 +286,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     @objc func shouldRemoveColor(id: Int) {
         colorGroup?.colorsArray.remove(at: id)
         let curNumColors = self.colorGroup?.colorsArray.count;
-        self.colorGroup?.updateColorWeights(weights: (self.colorGroupViewDelegate.curPal?.paletteWeights)!)
+        self.colorGroup?.updateColorWeights(weights: (self.colorGroupViewDelegate.curPal.paletteWeights)!)
         updateColorSqs(curNumColors: curNumColors)
     }
     
@@ -351,12 +350,12 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     }
     
     func save() {
-        self.colorGroupViewDelegate.curPal?.addColorGroup(group: self.colorGroup!)
-        _ = self.colorGroupViewDelegate.curPal?.save()
+        self.colorGroupViewDelegate.curPal.addColorGroup(group: self.colorGroup!)
+        _ = self.colorGroupViewDelegate.curPal.save()
         self.saveGroupName()
         print("selected selector ",selectedSelector )
-        self.colorGroupViewDelegate.updateColorSeletors(groupChanges:self.countGroupChanges())
-        self.colorGroupViewDelegate.updatePalViewForIndex(index: selectedSelector)
+        //self.colorGroupViewDelegate.updateColorSeletors(groupChanges:self.countGroupChanges())
+        //self.colorGroupViewDelegate.updatePalViewForIndex(index: selectedSelector)
     }
     
     @objc func cancel() {
@@ -367,7 +366,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     
     @objc func performSort() {
         self.colorGroup!.sortColorGroupByBrightness()
-        self.colorGroup!.updateColorWeights(weights:(self.colorGroupViewDelegate.curPal?.paletteWeights)!)
+        self.colorGroup!.updateColorWeights(weights:(self.colorGroupViewDelegate.curPal.paletteWeights)!)
         self.updateColorSqs(curNumColors: self.colorGroup!.colorsArray.count)
     }
     
@@ -418,14 +417,14 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     }
     
     func savePalName() {
-       let data = OPUtil.retrievePaletteForName(name: palTitle.stringValue)
+      /* let data = OPUtil.retrievePaletteForName(name: palTitle.stringValue)
         if data.count > 0 {
             palTitle.textColor = NSColor.red
         }
         else{
             palTitle.textColor = NSColor.black
-            self.colorGroupViewDelegate.curPal?.paletteName = palTitle.stringValue
-        }
+            self.colorGroupViewDelegate.curPal.paletteName = palTitle.stringValue
+        }*/
     }
     
     override func controlTextDidEndEditing(_ obj: Notification) {
@@ -453,7 +452,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
         else {
             self.colorGroup?.colorsArray[self.selectedColorSq!] = newColor
         }
-        self.colorGroup?.updateColorWeights(weights: (self.colorGroupViewDelegate.curPal?.paletteWeights)!)
+        self.colorGroup?.updateColorWeights(weights: (self.colorGroupViewDelegate.curPal.paletteWeights)!)
         colorSqArray[self.selectedColorSq!].updateForColor(opColor: newColor)
         
         if self.selectedColorSq! - 1 <= 9 {
@@ -481,7 +480,7 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     
     func updateColorGroup(groupID: String) -> Int? {
         let temp = self.colorGroup?.colorsArray.count
-        self.colorGroup = self.colorGroupViewDelegate.curPal?.paletteData![groupID]
+        self.colorGroup = self.colorGroupViewDelegate.curPal.paletteData![groupID]
         return temp
     }
     

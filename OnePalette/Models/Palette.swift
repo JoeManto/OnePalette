@@ -11,39 +11,48 @@ import CoreData
 
 class Palette: NSManagedObject {
     
-    @NSManaged var paletteDataToSave:NSData?
-    var paletteData: [String:OPColorGroup]?
-    @NSManaged var paletteName:String
-    @NSManaged var paletteWeights:[Int]?
-    @NSManaged var paletteKey:[String]?
-    @NSManaged var curGroupIndex:Int
+    @NSManaged var paletteDataToSave: NSData?
+    var paletteData: [String : OPColorGroup]?
+    @NSManaged var paletteName: String
+    @NSManaged var paletteWeights: [Int]?
+    @NSManaged var paletteKey: [String]?
+    @NSManaged var curGroupIndex: Int
+    @NSManaged var dateCreated: Date
     
     override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
+        
+        self.dateCreated = Date()
+        
+        if let data = paletteDataToSave {
+            self.paletteData = try? JSONDecoder().decode([String : OPColorGroup].self, from: Data(referencing: data))
+        }
     }
     
-    init(name:String,entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+    init(name: String, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
-        self.paletteData = NSDictionary.init() as? [String : OPColorGroup]
+        self.paletteData = [String : OPColorGroup]()
         self.paletteName = name
         self.paletteWeights = Array(repeating: 0, count: 10)
         self.paletteKey = Array(repeating: "", count: 0)
         self.curGroupIndex = 0
+        self.dateCreated = Date()
     }
     
-    init(name:String,data:[String:OPColorGroup],palWeights:[Int],palKeys:[String],entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+    init(name: String, data: [String : OPColorGroup], palWeights: [Int], palKeys: [String], date: Date, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
         self.paletteData = data
         self.paletteName = name
         self.paletteWeights = palWeights
         self.paletteKey = palKeys
         self.curGroupIndex = 0
+        self.dateCreated = date
     }
     
     /// Inits a palette object from an import from a local json file that contains palette data
     /// This method is used when the user first runs the application so it can intital install
     /// pre installed palettes
-    convenience init(name: String,localFile: String,entity: NSEntityDescription, insertInto context: NSManagedObjectContext?){
+    convenience init(name: String, localFile: String, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         self.init(name: name, entity: entity, insertInto: context)
         let path = Bundle.main.url(forResource: localFile, withExtension: "json")
         let content = try? String(contentsOf: path!)
@@ -95,12 +104,12 @@ class Palette: NSManagedObject {
     // MARK: Group Methods
     
     /// Adds a colorgroup to the palatte data
-    func addColorGroup(group:OPColorGroup) {
+    func addColorGroup(group: OPColorGroup) {
         paletteData![group.getIdentifier()] = group
         print("added colorGroup")
     }
     
-    /// Adds an empty color group to the palette data with a name*/
+    /// Adds an empty color group to the palette data with a name
     func addEmptyGroup(with groupID:String) {
         print("added empty group")
         paletteData![groupID] = OPColorGroup(id: groupID)
@@ -111,12 +120,12 @@ class Palette: NSManagedObject {
         paletteData![groupID] = group
     }
     
-    /// Generates a simple color group used for when the user inserts a new color group in to a palette*/
+    /// Generates a simple color group used for when the user inserts a new color group in to a palette
     func generateTempColorGroup() -> OPColorGroup {
-        let randomId = OPUtil.genIdOfLength(len: 10) as String
+        let randomId = UUID().uuidString
         let group = OPColorGroup(id:randomId)
         let random = arc4random_uniform(201) + 30
-        let color:OPColor = OPColor(hexString: String(format:"%2X%2X%2X",random,random,random), weight: 50)
+        let color = OPColor(hexString: String(format:"%2X%2X%2X", random, random, random), weight: 50)
         group.addColor(color: color)
         paletteKey?.append(randomId)
         group.headerColorIndex = 0
@@ -127,16 +136,20 @@ class Palette: NSManagedObject {
     
     // MARK:  CoreData Save
     
-    /// Turns paletteData to BinaryData so it can be saved as an NSManaged objec in core data*/
-    func saveColorData(){
-        self.paletteDataToSave = NSKeyedArchiver.archivedData(withRootObject: self.paletteData!) as NSData
+    /// Turns paletteData to BinaryData so it can be saved as an NSManaged objec in core data
+    func saveColorData() {
+        guard let data = self.paletteData else {
+            return
+        }
+        
+        self.paletteDataToSave = NSData(data: (try? JSONEncoder().encode(data)) ?? Data())
     }
     
-    /// Core data saves the manangedObjectContext to the entitity*/
+    /// Core data saves the manangedObjectContext to the entitity
     func save() ->  Bool{
         saveColorData()
         
-        if (managedObjectContext?.hasChanges)! {
+        if managedObjectContext!.hasChanges {
             do {
                 try managedObjectContext?.save()
                 print("saved palette")

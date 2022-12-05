@@ -8,10 +8,10 @@
 
 import Cocoa
 
-class OPColor: NSObject, NSCoding {
+class OPColor: Identifiable, Codable {
     
     private var weight: Int
-    var color: NSColor
+    var saveableColor: CodeableColor
     private var hexValue: String
     private var componentRed: Float
     private var componentGreen: Float
@@ -19,7 +19,11 @@ class OPColor: NSObject, NSCoding {
     private var componentAlpha: Float
     private var lum: Float
     
-    func encode(with aCoder: NSCoder) {
+    var color: NSColor {
+        saveableColor.nsColor
+    }
+    
+    /*func encode(with aCoder: NSCoder) {
         aCoder.encode(self.weight, forKey: "weight")
         aCoder.encode(self.color, forKey: "color")
         aCoder.encode(self.hexValue, forKey: "hex")
@@ -41,9 +45,9 @@ class OPColor: NSObject, NSCoding {
         self.componentBlue = Float(aDecoder.decodeFloat(forKey: "componentBlue"))
         self.componentAlpha = Float(aDecoder.decodeFloat(forKey: "componentAlpha"))
         self.lum = Float(aDecoder.decodeFloat(forKey: "lum"))
-    }
+    }*/
     
-    override init() {
+    init() {
         self.weight = 0
         self.lum = 0;
         self.componentRed = -1
@@ -51,8 +55,7 @@ class OPColor: NSObject, NSCoding {
         self.componentBlue = -1
         self.componentAlpha = -1
         self.hexValue = "#"
-        self.color = NSColor.clear
-        super.init()
+        self.saveableColor = CodeableColor(from: .cyan)
     }
     
     convenience init(hexString: String, alpha: CGFloat = 1.0,weight:Int) {
@@ -74,16 +77,18 @@ class OPColor: NSObject, NSCoding {
         let green = CGFloat(g) / 255.0
         let blue  = CGFloat(b) / 255.0
         
-        self.color = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
+        let colorValue = NSColor.init(red: red, green: green, blue: blue, alpha: alpha)
+        self.saveableColor = CodeableColor(from: colorValue)
         self.weight = weight
-        componentRed = Float(self.color.redComponent*255)
-        componentGreen = Float(self.color.greenComponent*255)
-        componentAlpha = Float(self.color.blueComponent*255)
+        componentRed = Float(colorValue.redComponent*255)
+        componentGreen = Float(colorValue.greenComponent*255)
+        componentAlpha = Float(colorValue.blueComponent*255)
         self.lum = Float(calcLum())
     }
     
     func calcLum() -> CGFloat {
-        return (0.299*color.redComponent + 0.587*color.greenComponent + 0.114*color.blueComponent)
+        let color = self.color
+        return (0.299 * color.redComponent + 0.587 * color.greenComponent + 0.114 * color.blueComponent)
     }
     
     func getWeight() -> Int {
@@ -98,7 +103,7 @@ class OPColor: NSObject, NSCoding {
         return hexValue
     }
     
-    func getColorComponents() -> (Float?,Float?,Float?) { //add alpha
+    func getColorComponents() -> (Float?, Float?, Float?) { //add alpha
         return (self.componentRed, self.componentGreen, self.componentBlue)
     }
     

@@ -8,10 +8,128 @@
 
 import Cocoa
 import CoreData
+import SwiftUI
 
-class ColorViewerController: NSViewController, ColorSquareViewDelegate, ColorGroupSelectorDelegate {
+class ColorViewerController: NSHostingController<PaletteView> { //, ColorSquareViewDelegate, ColorGroupSelectorDelegate {
     
-    @IBOutlet weak var addColorLabel: NSTextField!
+    var curPal: Palette
+    var curColorGroup: OPColorGroup
+    var paletteViewModel: PaletteViewModel
+    
+    init(curPal: Palette) {
+        self.curPal = curPal
+        self.curColorGroup = curPal.paletteData?.first?.value ?? OPColorGroup(id: "empty")
+        
+        self.paletteViewModel = PaletteViewModel(palette: curPal, onNext: {
+    
+        }, onPrev: {
+
+        })
+        
+        super.init(rootView: PaletteView(vm: self.paletteViewModel))
+    }
+    
+    @MainActor required dynamic init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        
+        //Adds transparency to the app
+        //view.window?.isOpaque = false
+        //view.window?.contentViewController?.view.layer?.backgroundColor = .clear
+        //view.window?.alphaValue = 0.9 //you can remove this line but it adds a nice effect to it
+        
+        
+        let blurView = NSVisualEffectView(frame: .zero)
+        blurView.blendingMode = .withinWindow
+        blurView.material = .popover
+        blurView.state = .active
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(blurView)
+        
+        NSLayoutConstraint.activate([
+            blurView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            blurView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+       
+    }
+    
+   /* /// Checks if the required Paletettes are installed and saves if them if they
+    /// are not and sets the current pal to one of the required palettes
+    func loadRequiredPalettes() -> Bool {
+        guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else {return false}
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Pal", in: managedContext)
+        
+        
+        //OPUtil.flushData(entity: entity!, insertInto: managedContext)
+        let data = OPUtil.retrievePaletteForName(name: "Material")
+        managedContext.shouldDeleteInaccessibleFaults = true
+        
+        if data.count > 0 {
+            for (index,d) in data.enumerated() {
+                let temp = d as! NSManagedObject
+                if index < data.count - 1 {
+                    OPUtil.deleteMangedObject(dataObject: temp, insertInto: managedContext)
+                }
+            }
+            
+            print("[GET] settng saved palette")
+            _ = setCurrentPalForRetrivedPalette(data: data, entity: entity!, insertInto: managedContext)
+            _ = self.curPal.save()
+            
+            OPUtil.deleteFaultingData(entity: entity!, insertInto: managedContext)
+            OPUtil.printSavedData(entity: entity!, insertInto: managedContext)
+            
+            return true
+        }
+        else {
+            print("[SET] Checking For unloaded required palettes")
+            
+            curPal = Palette.init(name: "Material", localFile: "MaterialDesginColors", entity: entity!, insertInto: managedContext)
+            _ = curPal.save()
+            return true
+        }
+    }
+    
+    /// Reterives and sets a palette from the imported data from the NSManangedObjectContext
+    func setCurrentPalForRetrivedPalette(data: NSArray, entity: NSEntityDescription, insertInto context: NSManagedObjectContext!) -> Bool {
+        let dataCount = data.count
+        
+        guard data.count > 0 else {
+            print("No palettes found")
+            return false
+        }
+        
+        let materialPal = data.lastObject as! NSManagedObject
+        
+        curPal = Palette.init(name: materialPal.value(forKey: "paletteName") as! String,
+                              data: NSKeyedUnarchiver.unarchiveObject(with: materialPal.value(forKey: "paletteDataToSave") as! Data) as! [String : OPColorGroup],
+                              palWeights: materialPal.value(forKey: "paletteWeights") as! [Int],
+                              palKeys: materialPal.value(forKey: "paletteKey") as! [String],
+                              date: materialPal.value(forKey: "dateCreated") as! Date,
+                              entity: entity,
+                              insertInto: context)
+        
+        /*let _:[String:Any] = ["paletteName":curPal?.paletteName!,
+                              "paletteDataToSave":NSKeyedUnarchiver.unarchiveObject(with: materialPal.value(forKey: "paletteDataToSave") as! Data) as![String : OPColorGroup]]*/
+        //materialPal.setValuesForKeys()
+        return true
+
+    }*/
+    
+    /*@IBOutlet weak var addColorLabel: NSTextField!
     @IBOutlet weak var paletteTitle: NSTextField!
     @IBOutlet weak var ColorGroupView: NSView!
     @IBOutlet weak var ColorGroupSelectorView: NSView!
@@ -28,6 +146,7 @@ class ColorViewerController: NSViewController, ColorSquareViewDelegate, ColorGro
     override func viewWillAppear() {
         self.view.layer?.backgroundColor = NSColor.white.cgColor
     }
+    
     override var representedObject: Any? {
         didSet {
             
@@ -69,19 +188,25 @@ class ColorViewerController: NSViewController, ColorSquareViewDelegate, ColorGro
         paletteTitle.isEditable = false
         
         self.configPalView(pal: curPal!)
+        //self.addColorGroupView()
+        
         self.configColorSelctors(pal: curPal!)
         self.view.addSubview(colorValueLabel)
         self.view.addSubview(nextPalBtn)
         self.view.addSubview(pastPalBtn)
  
-        //the trackingArea of the Color Selector view
+        // The trackingArea of the Color Selector view
         let area = NSTrackingArea.init(rect: ColorGroupSelectorView.bounds,
                                        options: [NSTrackingArea.Options.mouseEnteredAndExited,
                                                  NSTrackingArea.Options.activeAlways],
                                        owner: self,
                                        userInfo: nil)
-        //adds a tracker to the area
+        // Adds a tracker to the area
         ColorGroupSelectorView.addTrackingArea(area)
+    }
+    
+    func addColorGroupView() {
+        
     }
     
     /// Checks if the required Paletettes are installed and saves if them if they
@@ -122,8 +247,8 @@ class ColorViewerController: NSViewController, ColorSquareViewDelegate, ColorGro
         }
     }
     
-    /*Reterives and sets a palette from the imported data from the NSManangedObjectContext*/
-    func setCurrentPalForRetrivedPalette(data:NSArray,entity: NSEntityDescription, insertInto context: NSManagedObjectContext!)->Bool {
+    /// Reterives and sets a palette from the imported data from the NSManangedObjectContext
+    func setCurrentPalForRetrivedPalette(data: NSArray, entity: NSEntityDescription, insertInto context: NSManagedObjectContext!) -> Bool {
         let dataCount = data.count;
         if(dataCount>0){
             
@@ -326,18 +451,5 @@ class ColorViewerController: NSViewController, ColorSquareViewDelegate, ColorGro
         
         return true
     }
-
-}
-
-extension ColorViewerController {
-    // MARK: Storyboard instantiation
-    static func freshController() -> ColorViewerController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        let identifier = NSStoryboard.SceneIdentifier(rawValue: "ColorViewerController")
-        
-        guard let viewcontroller = storyboard.instantiateController(withIdentifier: identifier) as? ColorViewerController else {
-            fatalError("Why cant i find ColorViewerController? - Check Main.storyboard")
-        }
-        return viewcontroller
-    }
+*/
 }

@@ -13,28 +13,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     private let popover = NSPopover()
-    private var colorViewController = ColorViewerController.freshController
+
     private let menu = NSMenu()
     private var eventMonitor: EventMonitor?
-    private var colorWindow:OPWindow!
+    private var colorWindow: OPWindow!
+    
     private var colorWindowController: NSWindowController!
     private weak var colorOptionsViewController: OPViewController!
     
     private var optionViewIsConfiged = false
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        PaletteService.shared.onPalettesFetched {
+            self.setup()
+        }
+    }
+    
+    func setup() {
         constructMenu()
         statusItem.button?.image = NSImage(named:NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         
-        popover.contentViewController = colorViewController()
+        guard let palette = PaletteService.shared.lastUsed else {
+            return
+        }
+      
+        self.popover.contentViewController = ColorViewerController(curPal: palette)
         
-        colorOptionsViewController = NSStoryboard(name:NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as! OPViewController
-        colorOptionsViewController.colorGroupViewDelegate = popover.contentViewController as! ColorViewerController
-        _  = colorOptionsViewController.colorGroupViewDelegate.loadRequiredPalettes()
+        colorOptionsViewController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as? OPViewController
+        colorOptionsViewController.colorGroupViewDelegate = popover.contentViewController as? ColorViewerController
         
-        self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable,.miniaturizable,.titled], backing: .buffered, defer: false)
+        self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false)
         self.colorWindow.isMovableByWindowBackground = true
         self.colorWindow.center()
         self.colorWindow.isOpaque = false
@@ -74,12 +84,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Menu button that shows the OptionsView and configures that view to show the correct display
     @objc func addColors(_ sender:Any?){
-        if !optionViewIsConfiged{
+        if !optionViewIsConfiged {
             colorOptionsViewController = freshOptionController()
-            let pal:Palette = colorOptionsViewController.colorGroupViewDelegate.curPal!
+            let pal = colorOptionsViewController.colorGroupViewDelegate.curPal
             let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
-            colorOptionsViewController.configColorGroupSelectors(colorgroups:pal.paletteData!,keys:pal.paletteKey!)
-            colorOptionsViewController.configColorView(colorgroup:curColorGroup!)
+            colorOptionsViewController.configColorGroupSelectors(colorgroups: pal.paletteData!, keys:pal.paletteKey!)
+            colorOptionsViewController.configColorView(colorgroup: curColorGroup!)
             
             /*let secondController = ClipboardSettingController()
              secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
@@ -111,7 +121,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func freshOptionController() -> OPViewController {
         let viewController = NSStoryboard(name:NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as! OPViewController
-        viewController.colorGroupViewDelegate = popover.contentViewController as! ColorViewerController
+        viewController.colorGroupViewDelegate = popover.contentViewController as? ColorViewerController
         self.colorWindowController.window?.contentViewController = viewController
         return viewController
     }
@@ -119,7 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// If the statusItem is clicked
     @objc func iconClicked(sender:NSStatusItem){
         let event = NSApp.currentEvent!
-        if event.type == NSEvent.EventType.rightMouseUp{
+        if event.type == NSEvent.EventType.rightMouseUp {
             closePopover(sender:nil)
             statusItem.menu = menu;
             statusItem.popUpMenu(menu)
@@ -146,8 +156,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Shows the popover
     func showPopover(sender: Any?) {
+        let invisibleWindow = NSWindow(contentRect: NSMakeRect(0, 0, 20, 5), styleMask: .borderless, backing: .buffered, defer: false)
+        invisibleWindow.backgroundColor = .red
+        invisibleWindow.alphaValue = 0
+        
         if let button = statusItem.button {
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.maxX)
+            let buttonRect:NSRect = button.convert(button.bounds, to: nil)
+            let screenRect:NSRect = button.window!.convertToScreen(buttonRect)
+            
+            // calculate the bottom center position (10 is the half of the window width)
+            let posX = screenRect.origin.x + (screenRect.width / 2) - 10
+            let posY = screenRect.origin.y
+
+            // position and show the window
+            invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
+            invisibleWindow.makeKeyAndOrderFront(self)
+            
+            popover.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: NSRectEdge.minX)
+            
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
     
