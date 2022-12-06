@@ -12,6 +12,19 @@
                   ]
     },
     
+    "Names":{
+        "values":[
+                  "red",
+                  "orange",
+                  "yellow",
+                  "green",
+                  "tealblue",
+                  "blue",
+                  "purple",
+                  "pink",
+                  ]
+    },
+    
     "weights":{
         "values":[
                   "50",

@@ -10,7 +10,7 @@ import Cocoa
 import CoreData
 import SwiftUI
 
-class ColorViewerController: NSHostingController<PaletteView> { //, ColorSquareViewDelegate, ColorGroupSelectorDelegate {
+class ColorViewerController: NSHostingController<PaletteView> {
     
     var curPal: Palette
     var curColorGroup: OPColorGroup
@@ -20,37 +20,29 @@ class ColorViewerController: NSHostingController<PaletteView> { //, ColorSquareV
         self.curPal = curPal
         self.curColorGroup = curPal.paletteData?.first?.value ?? OPColorGroup(id: "empty")
         
-        self.paletteViewModel = PaletteViewModel(palette: curPal, onNext: {
+        self.paletteViewModel = PaletteViewModel(palette: curPal,
+        onNext: { pal in
     
-        }, onPrev: {
+        }, onPrev: { pal in
 
         })
         
         super.init(rootView: PaletteView(vm: self.paletteViewModel))
     }
     
-    @MainActor required dynamic init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        //Adds transparency to the app
-        //view.window?.isOpaque = false
-        //view.window?.contentViewController?.view.layer?.backgroundColor = .clear
-        //view.window?.alphaValue = 0.9 //you can remove this line but it adds a nice effect to it
-        
+        // Adds transparency to the app
+        view.window?.isOpaque = false
+        view.window?.alphaValue = 0.98
         
         let blurView = NSVisualEffectView(frame: .zero)
-        blurView.blendingMode = .withinWindow
+        blurView.blendingMode = .behindWindow
         blurView.material = .popover
         blurView.state = .active
         blurView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +55,10 @@ class ColorViewerController: NSHostingController<PaletteView> { //, ColorSquareV
             blurView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
        
+    }
+    
+    @MainActor required dynamic init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
    /* /// Checks if the required Paletettes are installed and saves if them if they

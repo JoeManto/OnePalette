@@ -8,13 +8,12 @@
 
 import Cocoa
 
-class OPUtil: NSObject {
+class OPUtil {
     
     static func flushData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!){
-        let Deleterequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        //Deleterequest.predicate = NSPredicate(format: "paletteName = %@", "Material")
+        let deleteRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
         do {
-            let result = try context.fetch(Deleterequest)
+            let result = try context.fetch(deleteRequest)
             for data in result as! [NSManagedObject] {
                 context.delete(data)
                 try context.save()
@@ -25,12 +24,11 @@ class OPUtil: NSObject {
     }
     
     static func deleteFaultingData(entity: NSEntityDescription, insertInto context: NSManagedObjectContext!) {
-        let Deleterequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
-        //Deleterequest.predicate = NSPredicate(format: "paletteName = %@", "Material")
+        let deleteRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pal")
         do {
-            let result = try context.fetch(Deleterequest)
+            let result = try context.fetch(deleteRequest)
             for data in result as! [NSManagedObject] {
-                if(data.isFault){
+                if (data.isFault) {
                     context.delete(data)
                     try context.save()
                 }

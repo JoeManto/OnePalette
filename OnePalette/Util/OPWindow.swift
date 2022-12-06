@@ -11,7 +11,6 @@ import Cocoa
 class OPWindow: NSWindow, NSWindowDelegate {
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        
         if sender.contentViewController is OPViewController {
             sender.contentViewController?.removeFromParentViewController()
             sender.contentViewController?.view.removeFromSuperview()

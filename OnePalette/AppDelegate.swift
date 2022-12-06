@@ -87,9 +87,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !optionViewIsConfiged {
             colorOptionsViewController = freshOptionController()
             let pal = colorOptionsViewController.colorGroupViewDelegate.curPal
-            let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
+            /*let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
             colorOptionsViewController.configColorGroupSelectors(colorgroups: pal.paletteData!, keys:pal.paletteKey!)
-            colorOptionsViewController.configColorView(colorgroup: curColorGroup!)
+            colorOptionsViewController.configColorView(colorgroup: curColorGroup!)*/
             
             /*let secondController = ClipboardSettingController()
              secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
@@ -126,29 +126,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return viewController
     }
     
-    /// If the statusItem is clicked
-    @objc func iconClicked(sender:NSStatusItem){
-        let event = NSApp.currentEvent!
-        if event.type == NSEvent.EventType.rightMouseUp {
-            closePopover(sender:nil)
-            statusItem.menu = menu;
-            statusItem.popUpMenu(menu)
-            statusItem.menu = nil;
-        }else{
-            toggle(nil)
+    /// Handler when the status icon is click. Handles left and right clicks
+    @objc func iconClicked(sender: NSStatusItem) {
+        let wasRightClick = NSApp.currentEvent?.type == NSEvent.EventType.rightMouseUp
+        if wasRightClick {
+            self.showMenu()
+        }
+        else{
+            self.togglePopover(nil)
         }
     }
     
-    @objc func printQuoteClicked(_ sender: Any?) {
-        print("quote clicked")
+    /// Shows the menu next to the status item
+    func showMenu() {
+        closePopover(sender:nil)
+        statusItem.menu = menu;
+        statusItem.popUpMenu(menu)
+        statusItem.menu = nil;
     }
     
     /// Shows or hides the popover
-    func toggle(_ sender: Any?) {
+    func togglePopover(_ sender: Any?) {
         if popover.isShown {
             closePopover(sender: sender)
             eventMonitor?.stop()
-        } else {
+        }
+        else {
             eventMonitor?.start()
             showPopover(sender: sender)
         }
@@ -181,6 +184,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Removes the popover
     func closePopover(sender: Any?) {
         popover.performClose(sender)
+    }
+    
+    @objc func printQuoteClicked(_ sender: Any?) {
+        print("quote clicked")
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {

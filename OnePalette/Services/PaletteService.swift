@@ -95,6 +95,18 @@ class PaletteService {
         return self.palettes.filter { $0.paletteName == name }
     }
     
+    func updateCurrentGroup(groupId: String) {
+        let curPal = self.palettes[curPaletteIndex]
+        let groupExists = curPal.paletteData?.contains(where: { (key, value) in value.getIdentifier() == groupId }) ?? false
+        
+        guard groupExists else {
+            print("Provided groupId doesn't exist")
+            return
+        }
+        
+        self.palettes[curPaletteIndex].curGroupId = groupId
+    }
+    
     func nextPalette() -> Palette {
         print("next")
         let nextIndex = self.curPaletteIndex + 1

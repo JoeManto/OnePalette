@@ -11,31 +11,56 @@ import SwiftUI
 
 class PaletteViewModel: ObservableObject {
     @Published var palette: Palette
-    var selectionVm: ColorGroupSelectorViewModel
+    private(set) var selectionVm: ColorGroupSelectorViewModel!
     var colorGridVm: ColorGroupGridViewModel
     
-    init(palette: Palette, onNext: @escaping () -> (), onPrev: @escaping () -> ()) {
+    var onNext: (Palette) -> ()
+    var onPrev: (Palette) -> ()
+    
+    init(palette: Palette, onNext: @escaping (Palette) -> (), onPrev: @escaping (Palette) -> ()) {
         self.palette = palette
-        self.selectionVm = ColorGroupSelectorViewModel(groups:
-            Array(palette.paletteData?.values ?? [String : OPColorGroup]().values)
-        )
-        
         self.colorGridVm = ColorGroupGridViewModel(palette: palette)
-        
         self.onNext = onNext
         self.onPrev = onPrev
+        
+        self.selectionVm = ColorGroupSelectorViewModel(
+            groups: Array(palette.paletteData?.values ?? [String : OPColorGroup]().values),
+            onSelection: { [weak self] id in
+                self?.onSelection(id: id)
+            }
+        )
+    }
+    
+    private func onSelection(id: String) {
+        PaletteService.shared.updateCurrentGroup(groupId: id)
+        if let updatedPal = PaletteService.shared.lastUsed {
+            self.palette = updatedPal
+            self.updateViewModels()
+        }
     }
     
     func updateViewModels() {
         self.selectionVm = ColorGroupSelectorViewModel(groups:
-            Array(self.palette.paletteData?.values ?? [String : OPColorGroup]().values)
+            Array(self.palette.paletteData?.values ?? [String : OPColorGroup]().values),
+            onSelection: { [weak self] id in
+                self?.onSelection(id: id)
+            }
         )
         
         self.colorGridVm = ColorGroupGridViewModel(palette: self.palette)
     }
     
-    var onNext: () -> ()
-    var onPrev: () -> ()
+    func nextPalette() {
+        palette = PaletteService.shared.nextPalette()
+        updateViewModels()
+        self.onNext(palette)
+    }
+    
+    func prevPalette() {
+        palette = PaletteService.shared.prevPalette()
+        updateViewModels()
+        self.onPrev(palette)
+    }
 }
 
 struct PaletteView: View {
@@ -45,15 +70,13 @@ struct PaletteView: View {
         VStack {
             HStack {
                 Button(action: {
-                    vm.palette = PaletteService.shared.prevPalette()
-                    vm.updateViewModels()
+                    vm.prevPalette()
                 }, label: {
                     Image(systemName: "arrow.left")
                 })
                 
                 Button(action: {
-                    vm.palette = PaletteService.shared.nextPalette()
-                    vm.updateViewModels()
+                    vm.nextPalette()
                 }, label: {
                     Image(systemName: "arrow.right")
                 })
@@ -65,7 +88,7 @@ struct PaletteView: View {
             ColorGroupGridView(vm: vm.colorGridVm)
             ColorGroupSelectorView(vm: vm.selectionVm)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .frame(height: 100)
+                .frame(height: 50)
         }
         .padding(10)
     }
@@ -83,9 +106,9 @@ struct PaletteView_Previews: PreviewProvider {
     
     static var previews: some View {
         PaletteView(vm: PaletteViewModel(palette: Self.palette,
-        onNext: {
+        onNext: { pal in
             
-        }, onPrev: {
+        }, onPrev: { pal in 
             
         }))
     }

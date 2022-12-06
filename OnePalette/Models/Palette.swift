@@ -12,12 +12,13 @@ import CoreData
 class Palette: NSManagedObject {
     
     @NSManaged var paletteDataToSave: NSData?
-    var paletteData: [String : OPColorGroup]?
     @NSManaged var paletteName: String
     @NSManaged var paletteWeights: [Int]?
     @NSManaged var paletteKey: [String]?
-    @NSManaged var curGroupIndex: Int
+    @NSManaged var curGroupId: String
     @NSManaged var dateCreated: Date
+    
+    var paletteData: [String : OPColorGroup]?
     
     override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
@@ -35,7 +36,7 @@ class Palette: NSManagedObject {
         self.paletteName = name
         self.paletteWeights = Array(repeating: 0, count: 10)
         self.paletteKey = Array(repeating: "", count: 0)
-        self.curGroupIndex = 0
+        self.curGroupId = ""
         self.dateCreated = Date()
     }
     
@@ -45,7 +46,7 @@ class Palette: NSManagedObject {
         self.paletteName = name
         self.paletteWeights = palWeights
         self.paletteKey = palKeys
-        self.curGroupIndex = 0
+        self.curGroupId = (data.first?.value.getIdentifier()) ?? ""
         self.dateCreated = date
     }
     
@@ -96,6 +97,8 @@ class Palette: NSManagedObject {
                     }
                 }
             }
+            
+            self.curGroupId = (self.paletteData?.first?.value.getIdentifier()) ?? ""
         } catch {
             print("Error parsing Json")
         }

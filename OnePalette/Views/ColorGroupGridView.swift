@@ -27,7 +27,11 @@ class ColorGroupGridViewModel: ObservableObject {
     
     init(palette: Palette) {
         self.palette = palette
-        self.group = palette.paletteData?.first?.value ?? OPColorGroup(id: "Empty")
+        
+        let lastUsedGroup = palette.paletteData?[palette.curGroupId]
+        let firstGroup = palette.paletteData?.first?.value
+        
+        self.group = lastUsedGroup ?? firstGroup ?? OPColorGroup(id: "Empty")
     }
     
     func updateToGroup(name: String) {
