@@ -9,17 +9,6 @@
 import Foundation
 import SwiftUI
 
-class ColorGroupSelectorViewModel {
-    var groups: [OPColorGroup]
-    
-    var onSelection: (String) -> ()
-    
-    init(groups: [OPColorGroup], onSelection: @escaping (String) -> ()) {
-        self.groups = groups
-        self.onSelection = onSelection
-    }
-}
-
 struct ColorGroupSelectorButton: View {
     let group: OPColorGroup
     let vm: ColorGroupSelectorViewModel
