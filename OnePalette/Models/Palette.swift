@@ -9,7 +9,7 @@
 import Cocoa
 import CoreData
 
-class Palette: NSManagedObject {
+class Palette: NSManagedObject, Identifiable {
     
     @NSManaged var paletteDataToSave: NSData?
     @NSManaged var paletteName: String

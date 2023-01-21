@@ -58,7 +58,7 @@ class OPColor: Identifiable, Codable {
         self.saveableColor = CodeableColor(from: .cyan)
     }
     
-    convenience init(hexString: String, alpha: CGFloat = 1.0,weight:Int) {
+    convenience init(hexString: String, alpha: CGFloat = 1.0, weight: Int) {
         self.init()
         
         self.hexValue = hexString
@@ -128,5 +128,14 @@ extension NSColor{
             Int(g * 0xff),
             Int(b * 0xff)
         )
+    }
+}
+
+// MARK: OPColor Factory
+
+extension OPColor {
+    
+    static func empty() -> OPColor {
+        return OPColor(hexString: "000000", alpha: 0.2, weight: 0)
     }
 }

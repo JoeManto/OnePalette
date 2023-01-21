@@ -69,7 +69,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Fills the NSMenu with NSMenuitems
     func constructMenu() {
         menu.addItem(NSMenuItem(title: "Color Group Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.addColors(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.testing(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Test", action: #selector(AppDelegate.testing(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Selected Color Actions", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
@@ -96,6 +97,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
              colorOptionsViewController.presentViewControllerAsSheet(secondController)*/
         }
         showController(of:0)
+    }
+    
+    @objc func testing(_ sender: Any?) {
+        let window = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false)
+        window.isMovableByWindowBackground = true
+        window.center()
+        window.isOpaque = false
+        window.isReleasedWhenClosed = true
+        window.title = "Modify Colors"
+        window.backgroundColor = NSColor.clear
+        window.invalidateShadow()
+        
+        let controller = MainWindowController(window: colorWindow)
+        controller.window?.contentViewController = PaletteModifierViewController()
+        controller.window?.makeKeyAndOrderFront(self)
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     func showController(of type:Int){

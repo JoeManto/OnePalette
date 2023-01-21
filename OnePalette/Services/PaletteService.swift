@@ -13,13 +13,11 @@ class PaletteService {
     
     static let shared = PaletteService()
     
-    private let context: NSManagedObjectContext
-    private let entity: NSEntityDescription
-    
     private(set) var palettes = [Palette]()
     
     private var curPaletteIndex: Int
     
+    /// The current palette being presented in PaletteView
     var lastUsed: Palette? {
         self.palettes[curPaletteIndex]
     }
@@ -34,6 +32,9 @@ class PaletteService {
         let queue = DispatchQueue(label: "com.onepalette.palette-service.operation-queue", qos: .userInitiated)
         return queue
     }()
+    
+    private let context: NSManagedObjectContext
+    private let entity: NSEntityDescription
     
     private init() {
         self.context = (NSApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
