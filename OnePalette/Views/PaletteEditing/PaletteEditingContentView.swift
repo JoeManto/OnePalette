@@ -10,21 +10,33 @@ import Foundation
 import SwiftUI
 
 class PaletteEditingContentViewModel: ObservableObject {
-    @Published var palette: Palette?
+    @Published var palette: Palette
     
-    lazy var selectedColorGroup: OPColorGroup = {
-        self.palette?.paletteData?.first?.value ?? OPColorGroup(id: "EmptyGroup")
-    }()
+    private(set) var selectionVm: ColorGroupSelectorViewModel!
     
-    init(palette: Palette?) {
+    @Published var selectedColorGroup: OPColorGroup
+    
+    init(palette: Palette!) {
         self.palette = palette
+        
+        let groups = palette.groups
+        
+        self.selectedColorGroup = groups.first ?? OPColorGroup(id: "EmptyGroup")
+        
+        self.selectionVm = ColorGroupSelectorViewModel(groups: groups, onSelection: { [weak self] id in
+            self?.onSelection(id: id)
+        })
+    }
+    
+    private func onSelection(id: String) {
+        if let group = self.palette.groups.filter({ $0.getIdentifier() == id }).first {
+            self.selectedColorGroup = group
+        }
     }
     
     /// Returns an array of color square views padded with empty color square views at the end if needed
     func getPaddedColorGroupView() -> [ColorView] {
         var colors = self.selectedColorGroup.getColorArray()
-        colors.removeLast()
-        colors.removeLast()
         var views = [ColorView]()
         
         for i in 0..<colors.count {
@@ -47,10 +59,10 @@ class PaletteEditingContentViewModel: ObservableObject {
 struct PaletteEditingContentView: View {
     
     @ObservedObject var vm: PaletteEditingContentViewModel
-    
+  
     var body: some View {
         VStack {
-            Text(vm.palette?.paletteName ?? "")
+            Text(vm.palette.paletteName)
             
             let views = vm.getPaddedColorGroupView()
             
@@ -67,6 +79,7 @@ struct PaletteEditingContentView: View {
                     }
                 }
                 
+                ColorGroupSelectorView(vm: vm.selectionVm)
             }
         }
         .frame(width: 500, height: 500)

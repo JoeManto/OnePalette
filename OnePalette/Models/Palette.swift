@@ -20,6 +20,10 @@ class Palette: NSManagedObject, Identifiable {
     
     var paletteData: [String : OPColorGroup]?
     
+    var groups: [OPColorGroup] {
+        Array(self.paletteData?.values ?? [String: OPColorGroup]().values)
+    }
+    
     override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
         
@@ -113,13 +117,13 @@ class Palette: NSManagedObject, Identifiable {
     }
     
     /// Adds an empty color group to the palette data with a name
-    func addEmptyGroup(with groupID:String) {
+    func addEmptyGroup(with groupID: String) {
         print("added empty group")
         paletteData![groupID] = OPColorGroup(id: groupID)
     }
     
     /// Updates an existing color group value
-    func updateColorGroup(group:OPColorGroup, for groupID:String){
+    func updateColorGroup(group: OPColorGroup, for groupID: String){
         paletteData![groupID] = group
     }
     

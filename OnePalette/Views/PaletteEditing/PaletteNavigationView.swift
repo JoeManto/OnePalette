@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import AppKit
 
 class PaletteNavigationViewModel: ObservableObject {
     
@@ -39,6 +40,7 @@ struct PaletteNavigationView: View {
                     }
             }
         }
+        .setBackgroundColor(color: Color(nsColor: NSColor.controlBackgroundColor))
     }
 }
 

@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		70218C4920B7965400C508E8 /* OPGroupOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70218C4820B7965400C508E8 /* OPGroupOptionsView.swift */; };
 		702F38A520E9975A0099BC87 /* ClipboardSettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702F38A420E9975A0099BC87 /* ClipboardSettingController.swift */; };
 		703F0309297C5CF20007152F /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703F0308297C5CF20007152F /* ColorView.swift */; };
+		703F030C297C808C0007152F /* List+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703F030B297C808C0007152F /* List+Modifiers.swift */; };
+		703F030F297C81BD0007152F /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 703F030E297C81BD0007152F /* Introspect */; };
 		70603853293C3BC200D275B9 /* PaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603852293C3BC200D275B9 /* PaletteView.swift */; };
 		70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */; };
 		70603858293D2BA200D275B9 /* PaletteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603857293D2BA200D275B9 /* PaletteService.swift */; };
@@ -57,6 +59,7 @@
 		70218C4820B7965400C508E8 /* OPGroupOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPGroupOptionsView.swift; sourceTree = "<group>"; };
 		702F38A420E9975A0099BC87 /* ClipboardSettingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardSettingController.swift; sourceTree = "<group>"; };
 		703F0308297C5CF20007152F /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
+		703F030B297C808C0007152F /* List+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List+Modifiers.swift"; sourceTree = "<group>"; };
 		70603852293C3BC200D275B9 /* PaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteView.swift; sourceTree = "<group>"; };
 		70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorView.swift; sourceTree = "<group>"; };
 		70603857293D2BA200D275B9 /* PaletteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteService.swift; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				703F030F297C81BD0007152F /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +141,14 @@
 				703F0308297C5CF20007152F /* ColorView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		703F030A297C80650007152F /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				703F030B297C808C0007152F /* List+Modifiers.swift */,
+			);
+			path = ViewModifiers;
 			sourceTree = "<group>";
 		};
 		70603856293D2B8500D275B9 /* Services */ = {
@@ -226,6 +238,7 @@
 		70D690712048CED70070C99D /* OnePalette */ = {
 			isa = PBXGroup;
 			children = (
+				703F030A297C80650007152F /* ViewModifiers */,
 				70603856293D2B8500D275B9 /* Services */,
 				70CD4859293BD087000AF83A /* Models */,
 				70CD485B293BD114000AF83A /* ViewModels */,
@@ -270,6 +283,9 @@
 			dependencies = (
 			);
 			name = OnePalette;
+			packageProductDependencies = (
+				703F030E297C81BD0007152F /* Introspect */,
+			);
 			productName = OnePalette;
 			productReference = 70D6906F2048CED70070C99D /* OnePalette.app */;
 			productType = "com.apple.product-type.application";
@@ -322,6 +338,9 @@
 				Base,
 			);
 			mainGroup = 70D690662048CED70070C99D;
+			packageReferences = (
+				703F030D297C81BD0007152F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = 70D690702048CED70070C99D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -382,6 +401,7 @@
 				702F38A520E9975A0099BC87 /* ClipboardSettingController.swift in Sources */,
 				70D690782048CED70070C99D /* OnePalette.xcdatamodeld in Sources */,
 				70D69098204BA5360070C99D /* EventMonitor.swift in Sources */,
+				703F030C297C808C0007152F /* List+Modifiers.swift in Sources */,
 				70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */,
 				70FE68A5204F5DEB00DA4E76 /* OPColor.swift in Sources */,
 				70FE68A3204F5C9700DA4E76 /* OPColorGroup.swift in Sources */,
@@ -530,7 +550,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
@@ -544,7 +565,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = OnePalette/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.OnePalette;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -561,7 +585,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = OnePalette/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.OnePalette;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -577,7 +604,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = OnePaletteTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.OnePaletteTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -594,7 +625,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = OnePaletteTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.OnePaletteTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -633,6 +668,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		703F030D297C81BD0007152F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		703F030E297C81BD0007152F /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 703F030D297C81BD0007152F /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		70D690762048CED70070C99D /* OnePalette.xcdatamodeld */ = {

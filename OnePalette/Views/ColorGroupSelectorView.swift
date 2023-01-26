@@ -17,7 +17,7 @@ struct ColorGroupSelectorButton: View {
     
     var body: some View {
         Color(group.getHeaderColor().color)
-            .frame(width: .infinity, height: self.height)
+            .frame(height: self.height)
             .onHover { isInside in
                 withAnimation(Animation.easeIn(duration: 0.2)) {
                     self.height = isInside ? 30.0 : 20.0
