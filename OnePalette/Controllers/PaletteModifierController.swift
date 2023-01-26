@@ -12,19 +12,18 @@ import SwiftUI
 import Combine
 
 class NavigationViewController: NSViewController {
+    init() {
+       super.init(nibName: nil, bundle: nil)
+    }
 
-   init() {
-      super.init(nibName: nil, bundle: nil)
-   }
+    required init?(coder: NSCoder) {
+       fatalError("init(coder:) has not been implemented")
+    }
 
-   required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-   }
-
-   override func loadView() {
-      view = NSView()
-      view.wantsLayer = true
-   }
+    override func loadView() {
+       view = NSView()
+       view.wantsLayer = true
+    }
 }
 
 class PaletteModifierViewController: NSSplitViewController {
@@ -69,6 +68,7 @@ class PaletteModifierViewController: NSSplitViewController {
         
         let navView = PaletteEditingContentView(vm: self.contentViewModel)
         let view = NSHostingView(rootView: navView)
+        
         view.translatesAutoresizingMaskIntoConstraints = false
         vc.view.addSubview(view)
         
@@ -84,8 +84,8 @@ class PaletteModifierViewController: NSSplitViewController {
 
     override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-       setupUI()
-       setupLayout()
+        setupUI()
+        setupLayout()
     }
 
     required init?(coder: NSCoder) {

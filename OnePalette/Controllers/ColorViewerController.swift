@@ -35,29 +35,35 @@ class ColorViewerController: NSHostingController<PaletteView> {
     }
     
     override func viewWillAppear() {
+        self.addBackgroundBlur()
         super.viewWillAppear()
-        
-        // Adds transparency to the app
-        view.window?.isOpaque = false
-        view.window?.alphaValue = 0.98
+       
+    }
+    
+    @MainActor required dynamic init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension NSViewController {
+    
+    func addBackgroundBlur() {
+        self.view.window?.isOpaque = false
+        self.view.window?.alphaValue = 0.98
         
         let blurView = NSVisualEffectView(frame: .zero)
         blurView.blendingMode = .behindWindow
         blurView.material = .popover
         blurView.state = .active
         blurView.translatesAutoresizingMaskIntoConstraints = false
+        
         self.view.addSubview(blurView)
         
         NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            blurView.topAnchor.constraint(equalTo:  self.view.topAnchor),
+            blurView.leadingAnchor.constraint(equalTo:  self.view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo:  self.view.trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo:  self.view.bottomAnchor)
         ])
-       
-    }
-    
-    @MainActor required dynamic init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
