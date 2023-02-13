@@ -80,6 +80,16 @@ class OPColorGroup: Identifiable, Codable {
         return "ColorGroup:Name " + name
     }
 }
+
+extension [OPColorGroup] {
+    
+    func sortedByBrightness() -> [OPColorGroup] {
+        self.sorted(by: { a, z in
+            a.headerColor.lum > z.headerColor.lum
+        })
+    }
+}
+
 extension String {
     var firstUppercased: String {
         guard let first = first else { return "" }

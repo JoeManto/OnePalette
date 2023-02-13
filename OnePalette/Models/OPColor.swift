@@ -12,7 +12,7 @@ class OPColor: Identifiable, Codable, NSCopying {
 
     private var weight: Int
     private var hexValue: String
-    private var lum: Float
+    private(set) var lum: Float
     
     private(set) var saveableColor: CodeableColor
     

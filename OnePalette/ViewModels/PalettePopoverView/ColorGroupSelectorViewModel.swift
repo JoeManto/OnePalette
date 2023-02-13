@@ -14,7 +14,7 @@ class ColorGroupSelectorViewModel {
     var onSelection: (String) -> ()
     
     init(groups: [OPColorGroup], onSelection: @escaping (String) -> ()) {
-        self.groups = groups
+        self.groups = groups.sortedByBrightness()
         self.onSelection = onSelection
     }
 }
