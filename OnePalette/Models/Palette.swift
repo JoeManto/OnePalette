@@ -83,7 +83,7 @@ class Palette: NSManagedObject, Identifiable {
                         self.paletteWeights![index] = Int(stringVal)!
                     }
                 }
-                for  palKey in self.paletteKey! {
+                for palKey in self.paletteKey! {
                     if let nestDictionary = dictionary[palKey] as? [String: Any] {
                         let colorGroup:NSArray = nestDictionary["values"] as! NSArray
                         self.paletteData![palKey] = OPColorGroup.init(id: palKey)
@@ -123,8 +123,15 @@ class Palette: NSManagedObject, Identifiable {
     }
     
     /// Updates an existing color group value
-    func updateColorGroup(group: OPColorGroup, for groupID: String){
+    func updateColorGroup(group: OPColorGroup, for groupID: String) {
         paletteData![groupID] = group
+    }
+    
+    func updateColorGroup(group: OPColorGroup, save: Bool) {
+        self.updateColorGroup(group: group, for: group.getIdentifier())
+        if save {
+            _ = self.save()
+        }
     }
     
     /// Generates a simple color group used for when the user inserts a new color group in to a palette
@@ -136,7 +143,6 @@ class Palette: NSManagedObject, Identifiable {
         group.addColor(color: color)
         paletteKey?.append(randomId)
         group.headerColorIndex = 0
-        group.setHeaderColor(header: color)
         self.addColorGroup(group: group)
         return group
     }
@@ -153,7 +159,7 @@ class Palette: NSManagedObject, Identifiable {
     }
     
     /// Core data saves the manangedObjectContext to the entitity
-    func save() ->  Bool{
+    func save() -> Bool {
         saveColorData()
         
         if managedObjectContext!.hasChanges {

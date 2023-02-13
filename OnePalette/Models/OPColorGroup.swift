@@ -11,41 +11,21 @@ import CoreData
 
 class OPColorGroup: Identifiable, Codable {
     
-    private var headerColor: OPColor
     var headerColorIndex: Int
     private var name: String
     private var identifier: String
     var colorsArray: [OPColor]
     
-    /*func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: "groupName")
-        aCoder.encode(headerColor, forKey: "headerColor")
-        aCoder.encode(headerColorIndex, forKey: "headerColorIndex")
-        aCoder.encode(identifier, forKey: "identifier")
-        if colorsArray == colorsArray { aCoder.encode(colorsArray, forKey: "colorArray")}
+    var headerColor: OPColor {
+        colorsArray[headerColorIndex]
     }
     
-    func encode(to encoder: Encoder) throws {
-        
-    }*/
-    
-    /*required convenience init?(coder aDecoder: NSCoder) {
-        self.init(id:"--")
-        self.name = aDecoder.decodeObject(forKey: "groupName") as! String
-        self.headerColor = aDecoder.decodeObject(forKey: "headerColor") as! OPColor
-        self.headerColorIndex = aDecoder.decodeInteger(forKey: "headerColorIndex")
-        self.identifier = aDecoder.decodeObject(forKey: "identifier") as! String
-        self.colorsArray = aDecoder.decodeObject(forKey: "colorArray") as! Array<OPColor>
-    }*/
-    
     init(id: String) {
-        headerColor = OPColor.init()
         colorsArray = [OPColor]()
         headerColorIndex = 0
         self.name = "blank"
         identifier = id
-        //super.init()
-        self.findHeaderColor()
+        self.headerColorIndex = colorsArray.count / 2
     }
     
     func addColor(color: OPColor) {
@@ -65,15 +45,11 @@ class OPColorGroup: Identifiable, Codable {
     }
     
     func findHeaderColor() {
-        if (colorsArray.count as Int?)! > 0 {
-            let head = colorsArray[Int((colorsArray.count)/2)]
-            headerColorIndex = Int((colorsArray.count)/2)
-            setHeaderColor(header: head)
-        }
+        headerColorIndex = colorsArray.count / 2
     }
     
     func updateColorWeights(weights:[Int]) {
-        for (i,color) in colorsArray.enumerated() {
+        for (i, color) in colorsArray.enumerated() {
             color.setWeight(weight: weights[i])
         }
     }
@@ -92,12 +68,8 @@ class OPColorGroup: Identifiable, Codable {
         return self.name
     }
     
-    func setName(name:String){
+    func setName(name: String){
         self.name = name
-    }
-    
-    func setHeaderColor (header: OPColor) {
-        headerColor = header;
     }
     
     func getHeaderColor() -> OPColor {

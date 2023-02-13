@@ -31,7 +31,7 @@ class PaletteViewModel: ObservableObject {
     }
     
     private func onSelection(id: String) {
-        PaletteService.shared.updateCurrentGroup(groupId: id)
+        PaletteService.shared.setCurrentGroup(groupId: id)
         if let updatedPal = PaletteService.shared.lastUsed {
             self.palette = updatedPal
             self.updateViewModels()

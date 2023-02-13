@@ -8,8 +8,8 @@
 
 import Cocoa
 
-class OPColor: Identifiable, Codable {
-    
+class OPColor: Identifiable, Codable, NSCopying {
+
     private var weight: Int
     private var hexValue: String
     private var lum: Float
@@ -43,6 +43,15 @@ class OPColor: Identifiable, Codable {
         self.lum = Float(calcLum())
     }
     
+    convenience init(nsColor: NSColor, weight: Int = 0) {
+        self.init()
+        
+        self.hexValue = nsColor.toHexString
+        self.color = nsColor
+        self.weight = weight
+        self.lum = Float(calcLum())
+    }
+    
     func calcLum() -> CGFloat {
         let color = self.color
         return (0.299 * color.redComponent + 0.587 * color.greenComponent + 0.114 * color.blueComponent)
@@ -62,6 +71,15 @@ class OPColor: Identifiable, Codable {
 
     required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
         fatalError("init(pasteboardPropertyList:ofType:) has not been implemented")
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = OPColor(nsColor: self.color, weight: self.weight)
+        return copy
+    }
+    
+    func shallowCopy() -> OPColor {
+        return self.copy() as! OPColor
     }
 }
 

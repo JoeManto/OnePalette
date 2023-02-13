@@ -293,7 +293,6 @@ class OPViewController: NSViewController, ColorSquareViewDelegate, NSTextFieldDe
     @objc func setHeaderColor() {
         if self.selectedColorSq != nil && !self.colorSqArray[self.selectedColorSq!].blankColor {
             self.colorGroup?.headerColorIndex = self.selectedColorSq!
-            self.colorGroup?.setHeaderColor(header: (self.colorGroup?.colorsArray[self.selectedColorSq!])!)
             self.updateSelectorColorForHeaderColor(selectorId: selectedSelector)
         }
     }

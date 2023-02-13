@@ -58,7 +58,7 @@ struct ColorView: View, Identifiable {
             .padding([.top], 10)
             .padding([.leading], -10)
         }
-        .background(Color(colorModel.color))
+        .background(Color(nsColor: colorModel.color))
         .cornerRadius(self.isHeader ? 30 : 10)
     }
 }
