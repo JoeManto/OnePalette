@@ -43,7 +43,6 @@ class PaletteEditingContentViewModel: ObservableObject {
             let color = NSColor(newColor as Color)
             self.selectedColorGroup.colorsArray[self.selectedColorIndex].color = color
             self.colorArray = self.getPaddedColorGroupView()
-        
         })
         .store(in: &subs)
     }
@@ -83,6 +82,16 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
         
         return views
+    }
+    
+    func updatePalette(palette: Palette) {
+        self.palette = palette
+        self.selectedColorGroup = palette.groups.first ?? OPColorGroup(id: "Empty")
+        self.colorArray = self.getPaddedColorGroupView()
+        
+        self.groupSelectorVm = ColorGroupSelectorViewModel(groups: palette.groups, onSelection: { [weak self] id in
+            self?.onColorGroupSelection(id: id)
+        })
     }
 }
 

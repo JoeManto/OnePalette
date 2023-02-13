@@ -19,7 +19,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var colorWindow: OPWindow!
     
     private var colorWindowController: NSWindowController!
-    private weak var colorOptionsViewController: OPViewController!
     
     private var optionViewIsConfiged = false
     
@@ -40,10 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
       
         self.popover.contentViewController = ColorViewerController(curPal: palette)
-        
-        colorOptionsViewController = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as? OPViewController
-        colorOptionsViewController.colorGroupViewDelegate = popover.contentViewController as? ColorViewerController
-        
+                
         self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false)
         self.colorWindow.isMovableByWindowBackground = true
         self.colorWindow.center()
@@ -53,10 +49,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.colorWindow.backgroundColor = NSColor.clear
         self.colorWindow.invalidateShadow()
         
-        self.colorWindowController = MainWindowController(window: colorWindow)
-        self.colorWindowController.window?.contentViewController = colorOptionsViewController
-        
-        hideController(window: self.colorWindow,controller: self.colorOptionsViewController)
+        self.colorWindowController = MainWindowController(window: self.colorWindow)
+        self.colorWindow.contentViewController = PaletteModifierViewController()
         
         // Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) {
@@ -82,65 +76,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
     
-    
-    /// Menu button that shows the OptionsView and configures that view to show the correct display
-    @objc func addColors(_ sender:Any?){
-        if !optionViewIsConfiged {
-            colorOptionsViewController = freshOptionController()
-            let pal = colorOptionsViewController.colorGroupViewDelegate.curPal
-            /*let curColorGroup = pal.paletteData![pal.paletteKey![pal.curGroupIndex]]
-            colorOptionsViewController.configColorGroupSelectors(colorgroups: pal.paletteData!, keys:pal.paletteKey!)
-            colorOptionsViewController.configColorView(colorgroup: curColorGroup!)*/
-            
-            /*let secondController = ClipboardSettingController()
-             secondController.view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
-             colorOptionsViewController.presentViewControllerAsSheet(secondController)*/
-        }
-        showController(of:0)
-    }
-    
     @objc func testing(_ sender: Any?) {
-        let window = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false)
-        window.isMovableByWindowBackground = true
-        window.center()
-        window.isOpaque = false
-        window.isReleasedWhenClosed = true
-        window.title = "Modify Colors"
-        window.backgroundColor = NSColor.clear
-        window.invalidateShadow()
-        
-        let controller = MainWindowController(window: colorWindow)
-        controller.window?.contentViewController = PaletteModifierViewController()
-        controller.window?.makeKeyAndOrderFront(self)
+        self.colorWindow.contentViewController = PaletteModifierViewController()
+        self.colorWindow.makeKeyAndOrderFront(self)
         NSApp.activate(ignoringOtherApps: true)
-    }
-    
-    func showController(of type:Int){
-        switch(type){
-        case 0:
-            colorWindowController.window?.makeKeyAndOrderFront(self)
-            NSApp.activate(ignoringOtherApps: true)
-            break;
-        default: break
-        }
     }
     
     func hideController(window:NSWindow,controller:NSViewController) {
         window.orderOut(controller)
-    }
-    
-    func dealocOptionsController() {
-        let control:OPViewController = colorWindowController.window?.contentViewController as! OPViewController
-        control.colorGroupViewDelegate = nil
-        colorWindowController.dismissController(control)
-        colorWindowController.window?.resignMain()
-    }
-    
-    func freshOptionController() -> OPViewController {
-        let viewController = NSStoryboard(name:NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "OPViewController")) as! OPViewController
-        viewController.colorGroupViewDelegate = popover.contentViewController as? ColorViewerController
-        self.colorWindowController.window?.contentViewController = viewController
-        return viewController
     }
     
     /// Handler when the status icon is click. Handles left and right clicks
@@ -156,10 +99,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Shows the menu next to the status item
     func showMenu() {
-        closePopover(sender:nil)
-        statusItem.menu = menu;
+        closePopover(sender: nil)
+        statusItem.menu = menu
         statusItem.popUpMenu(menu)
-        statusItem.menu = nil;
+        statusItem.menu = nil
     }
     
     /// Shows or hides the popover

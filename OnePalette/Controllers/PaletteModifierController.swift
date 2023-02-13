@@ -30,7 +30,7 @@ class PaletteModifierViewController: NSSplitViewController {
     
     private let splitViewResorationIdentifier = "com.company.restorationId:mainSplitViewController"
     
-    var subs = Set<AnyCancellable>()
+    private var subs = Set<AnyCancellable>()
         
     lazy var contentViewModel: PaletteEditingContentViewModel = {
         PaletteEditingContentViewModel(palette: PaletteService.shared.palettes.first)
@@ -50,13 +50,11 @@ class PaletteModifierViewController: NSSplitViewController {
             view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
         ])
         
-        navView.vm.navigationPublisher.sink { [weak self] selectedPalette in
+        navView.vm.navigationPublisher.sink { [unowned self] selectedPalette in
             guard let palette = selectedPalette as? Palette else {
                 return
             }
-            print(palette.paletteName)
-            
-            self?.contentViewModel.palette = palette
+            self.contentViewModel.updatePalette(palette: palette)
         }
         .store(in: &self.subs)
         
