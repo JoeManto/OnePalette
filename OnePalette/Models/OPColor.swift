@@ -10,8 +10,8 @@ import Cocoa
 
 class OPColor: Identifiable, Codable, NSCopying {
 
-    private var weight: Int
-    private var hexValue: String
+    private(set) var weight: Int
+    private(set) var hexValue: String
     private(set) var lum: Float
     
     private(set) var saveableColor: CodeableColor
@@ -52,7 +52,7 @@ class OPColor: Identifiable, Codable, NSCopying {
         self.lum = Float(calcLum())
     }
     
-    func calcLum() -> CGFloat {
+    private func calcLum() -> CGFloat {
         let color = self.color
         return (0.299 * color.redComponent + 0.587 * color.greenComponent + 0.114 * color.blueComponent)
     }
@@ -89,5 +89,13 @@ extension OPColor {
     
     static func empty() -> OPColor {
         return OPColor(hexString: "000000", alpha: 0.2, weight: 0)
+    }
+}
+
+extension [OPColor] {
+    func sortedByBrightness() -> [OPColor] {
+        self.sorted(by: { a, z in
+            a.lum > z.lum
+        })
     }
 }

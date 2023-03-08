@@ -12,8 +12,8 @@ import CoreData
 class OPColorGroup: Identifiable, Codable {
     
     var headerColorIndex: Int
-    private var name: String
-    private var identifier: String
+    var name: String
+    var identifier: String
     var colorsArray: [OPColor]
     
     var headerColor: OPColor {
@@ -33,22 +33,14 @@ class OPColorGroup: Identifiable, Codable {
     }
     
     func sortColorGroupByBrightness() {
-        for (i,color) in colorsArray.enumerated() {
-            var x = i-1
-            while (x >= 0 && (color.calcLum() > colorsArray[x].calcLum())) {
-                let temp = colorsArray[x]
-                colorsArray[x] = colorsArray[x+1]
-                colorsArray[x+1] = temp
-                x-=1
-            }
-        }
+        colorsArray = colorsArray.sortedByBrightness()
     }
     
     func findHeaderColor() {
         headerColorIndex = colorsArray.count / 2
     }
     
-    func updateColorWeights(weights:[Int]) {
+    func updateColorWeights(weights: [Int]) {
         for (i, color) in colorsArray.enumerated() {
             color.setWeight(weight: weights[i])
         }
@@ -64,11 +56,11 @@ class OPColorGroup: Identifiable, Codable {
         return self.identifier
     }
     
-    func getName() -> String{
+    func getName() -> String {
         return self.name
     }
     
-    func setName(name: String){
+    func setName(name: String) {
         self.name = name
     }
     
@@ -76,8 +68,8 @@ class OPColorGroup: Identifiable, Codable {
         return headerColor
     }
     
-    func description()->String {
-        return "ColorGroup:Name " + name
+    func description()-> String {
+        return "ColorGroup(\(identifier)) - name: \(name) numColors: \(colorsArray.count)"
     }
 }
 
@@ -91,6 +83,7 @@ extension [OPColorGroup] {
 }
 
 extension String {
+    
     var firstUppercased: String {
         guard let first = first else { return "" }
         return String(first).uppercased() + dropFirst()

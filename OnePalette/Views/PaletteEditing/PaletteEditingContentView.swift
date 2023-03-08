@@ -52,6 +52,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
         
         if let group = self.palette.groups.filter({ $0.getIdentifier() == id }).first {
+            self.selectedColorIndex = 0
             self.palette.updateColorGroup(group: self.selectedColorGroup, for: self.selectedColorGroup.getIdentifier())
             self.selectedColorGroup = group
             self.colorArray = self.getPaddedColorGroupView()
@@ -69,7 +70,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         var views = [ColorView]()
         
         for i in 0..<colors.count {
-            views.append(ColorView(colorModel: colors[i].shallowCopy()))
+            views.append(ColorView(colorModel: colors[i].shallowCopy(), isSelected: i == self.selectedColorIndex))
         }
         
         let remainder = 10 - colors.count
