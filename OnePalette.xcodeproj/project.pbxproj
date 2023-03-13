@@ -23,6 +23,11 @@
 		7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */; };
 		706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B90B720CAFC9D005E6250 /* OPUtil.swift */; };
 		7070BDFE20D05A2F00A96D5A /* OPNameTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7070BDFD20D05A2F00A96D5A /* OPNameTextField.swift */; };
+		708E8B8C29B970B9001363A9 /* ResponseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B8B29B970B9001363A9 /* ResponseField.swift */; };
+		708E8B8F29B9710C001363A9 /* ResponseFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B8E29B9710C001363A9 /* ResponseFieldViewModel.swift */; };
+		708E8B9129B9A9F1001363A9 /* Font+Standard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9029B9A9F1001363A9 /* Font+Standard.swift */; };
+		708E8B9329BC4F26001363A9 /* DropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9229BC4F26001363A9 /* DropDownView.swift */; };
+		708E8B9629BEBB82001363A9 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9529BEBB82001363A9 /* CheckBox.swift */; };
 		70B64F23209667B200D379BC /* AppleDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B64F22209667B200D379BC /* AppleDesginColors.json */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
 		70B64F292098369400D379BC /* OPWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F282098369400D379BC /* OPWindow.swift */; };
@@ -67,6 +72,11 @@
 		7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteNavigationView.swift; sourceTree = "<group>"; };
 		706B90B720CAFC9D005E6250 /* OPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPUtil.swift; sourceTree = "<group>"; };
 		7070BDFD20D05A2F00A96D5A /* OPNameTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPNameTextField.swift; sourceTree = "<group>"; };
+		708E8B8B29B970B9001363A9 /* ResponseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseField.swift; sourceTree = "<group>"; };
+		708E8B8E29B9710C001363A9 /* ResponseFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseFieldViewModel.swift; sourceTree = "<group>"; };
+		708E8B9029B9A9F1001363A9 /* Font+Standard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Standard.swift"; sourceTree = "<group>"; };
+		708E8B9229BC4F26001363A9 /* DropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownView.swift; sourceTree = "<group>"; };
+		708E8B9529BEBB82001363A9 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		70B64F22209667B200D379BC /* AppleDesginColors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AppleDesginColors.json; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		70B64F282098369400D379BC /* OPWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPWindow.swift; sourceTree = "<group>"; };
@@ -123,6 +133,7 @@
 		702F38A720E997790099BC87 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				708E8B9429BEBB5D001363A9 /* UtilViews */,
 				7060393A294FC02200D275B9 /* PaletteEditing */,
 				70218C4820B7965400C508E8 /* OPGroupOptionsView.swift */,
 				7070BDFD20D05A2F00A96D5A /* OPNameTextField.swift */,
@@ -169,6 +180,25 @@
 			path = PaletteEditing;
 			sourceTree = "<group>";
 		};
+		708E8B8A29B96FD4001363A9 /* ResponseField */ = {
+			isa = PBXGroup;
+			children = (
+				708E8B8E29B9710C001363A9 /* ResponseFieldViewModel.swift */,
+				708E8B8B29B970B9001363A9 /* ResponseField.swift */,
+			);
+			path = ResponseField;
+			sourceTree = "<group>";
+		};
+		708E8B9429BEBB5D001363A9 /* UtilViews */ = {
+			isa = PBXGroup;
+			children = (
+				708E8B9529BEBB82001363A9 /* CheckBox.swift */,
+				708E8B9229BC4F26001363A9 /* DropDownView.swift */,
+				708E8B8A29B96FD4001363A9 /* ResponseField */,
+			);
+			path = UtilViews;
+			sourceTree = "<group>";
+		};
 		70CD4859293BD087000AF83A /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +216,7 @@
 				70B64F282098369400D379BC /* OPWindow.swift */,
 				706B90B720CAFC9D005E6250 /* OPUtil.swift */,
 				70603859293D465B00D275B9 /* NSColor+Util.swift */,
+				708E8B9029B9A9F1001363A9 /* Font+Standard.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -367,6 +398,8 @@
 				70603853293C3BC200D275B9 /* PaletteView.swift in Sources */,
 				7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */,
 				7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */,
+				708E8B9129B9A9F1001363A9 /* Font+Standard.swift in Sources */,
+				708E8B9329BC4F26001363A9 /* DropDownView.swift in Sources */,
 				7060385A293D465B00D275B9 /* NSColor+Util.swift in Sources */,
 				70D690732048CED70070C99D /* AppDelegate.swift in Sources */,
 				7070BDFE20D05A2F00A96D5A /* OPNameTextField.swift in Sources */,
@@ -379,10 +412,13 @@
 				70D690782048CED70070C99D /* OnePalette.xcdatamodeld in Sources */,
 				70D69098204BA5360070C99D /* EventMonitor.swift in Sources */,
 				703F030C297C808C0007152F /* List+Modifiers.swift in Sources */,
+				708E8B9629BEBB82001363A9 /* CheckBox.swift in Sources */,
+				708E8B8F29B9710C001363A9 /* ResponseFieldViewModel.swift in Sources */,
 				70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */,
 				70FE68A5204F5DEB00DA4E76 /* OPColor.swift in Sources */,
 				70FE68A3204F5C9700DA4E76 /* OPColorGroup.swift in Sources */,
 				70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */,
+				708E8B8C29B970B9001363A9 /* ResponseField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

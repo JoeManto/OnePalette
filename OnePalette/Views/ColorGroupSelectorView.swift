@@ -13,14 +13,14 @@ struct ColorGroupSelectorButton: View {
     let group: OPColorGroup
     let vm: ColorGroupSelectorViewModel
     
-    @State var height = 20.0
+    @State var dynamicSize = 20.0
     
     var body: some View {
         Color(group.getHeaderColor().color)
-            .frame(height: self.height)
+            .frame(height: self.dynamicSize)
             .onHover { isInside in
                 withAnimation(Animation.easeIn(duration: 0.2)) {
-                    self.height = isInside ? 30.0 : 20.0
+                    self.dynamicSize = isInside ? 30.0 : 20.0
                 }
             }
             .onTapGesture {
@@ -40,6 +40,7 @@ struct ColorGroupSelectorView: View {
             }
             .padding([.trailing, .leading], -4)
         }
+        .frame(height: 50)
     }
 }
 

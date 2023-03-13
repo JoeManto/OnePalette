@@ -13,7 +13,10 @@ class ColorGroupSelectorViewModel {
     
     var onSelection: (String) -> ()
     
-    init(groups: [OPColorGroup], onSelection: @escaping (String) -> ()) {
+    let isVertical: Bool
+    
+    init(groups: [OPColorGroup], isVertical: Bool = false, onSelection: @escaping (String) -> ()) {
+        self.isVertical = isVertical
         self.groups = groups.sortedByBrightness()
         self.onSelection = onSelection
     }

@@ -21,6 +21,14 @@ class PaletteEditingContentViewModel: ObservableObject {
     
     @Published var selectedColor: Color
     
+    @Published var hexFieldValueColor: String {
+        didSet {
+            self.selectedColor = Color(nsColor: NSColor.hex(hexFieldValueColor, alpha: 1.0))
+        }
+    }
+    
+    @Published var isHeader: Bool
+    
     var selectedColorIndex: Int = 0
     
     private var subs = Set<AnyCancellable>()
@@ -32,6 +40,8 @@ class PaletteEditingContentViewModel: ObservableObject {
         
         self.selectedColorGroup = groups.first ?? OPColorGroup(id: "EmptyGroup")
         self.selectedColor = Color.white
+        self.hexFieldValueColor = "#FFFFFF"
+        self.isHeader = false
         
         self.groupSelectorVm = ColorGroupSelectorViewModel(groups: groups, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
@@ -61,7 +71,9 @@ class PaletteEditingContentViewModel: ObservableObject {
     
     func onColorTap(index: Int) {
         self.selectedColorIndex = index
+        self.isHeader = self.selectedColorGroup.headerColorIndex == index
         self.selectedColor = Color(self.selectedColorGroup.colorsArray[index].color)
+        self.hexFieldValueColor = NSColor(self.selectedColor).toHexString
     }
     
     /// Returns an array of color square views padded with empty color square views at the end if needed
@@ -90,7 +102,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.selectedColorGroup = palette.groups.first ?? OPColorGroup(id: "Empty")
         self.colorArray = self.getPaddedColorGroupView()
         
-        self.groupSelectorVm = ColorGroupSelectorViewModel(groups: palette.groups, onSelection: { [weak self] id in
+        self.groupSelectorVm = ColorGroupSelectorViewModel(groups: palette.groups, isVertical: true, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
         })
     }
@@ -103,12 +115,32 @@ struct PaletteEditingContentView: View {
     @State var showingColorPicker: Bool = false
     
     var body: some View {
-        VStack {
+        ScrollView {
             Text(vm.palette.paletteName)
-                        
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
+                .padding([.top, .leading])
+            
+            Text(vm.selectedColorGroup.name)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.standardFontBold(size: 32.0, relativeTo: .title))
+                .padding([.leading])
+            
             VStack {
-                ColorPicker("Set color", selection: $vm.selectedColor)
-        
+                HStack {
+                    Text("Picker")
+                        .font(.standardFontMedium(size: 14, relativeTo: .body))
+                    ColorPicker("", selection: $vm.selectedColor)
+                    Text("Hex")
+                        .font(.standardFontMedium(size: 14, relativeTo: .body))
+                    TextField("", text: $vm.hexFieldValueColor)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 100)
+                    Text("Header")
+                    CheckBox(isOn: $vm.isHeader)
+                }
+                .padding([.bottom], 5)
+                
                 HStack {
                     ForEach(0..<5) { i in
                         vm.colorArray[i]
@@ -127,9 +159,46 @@ struct PaletteEditingContentView: View {
                 }
                 
                 ColorGroupSelectorView(vm: vm.groupSelectorVm)
+                
+                self.colorSpaceField()
+                self.sortPaletteByBrightnessField()
+                self.sortGroupByBrightnessField()
             }
         }
         .frame(width: 500, height: 500)
         .background(.background)
-    }    
+    }
+    
+    @ViewBuilder func colorSpaceField() -> some View {
+        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
+            title: "Palette Color Space",
+            subtitle: "Determines how colors are rendered in palette view",
+            type: .selection
+        ), selection: ResponseFieldSelection(options: ["sRGB (Default)"], onSelection: { idx, selection in
+            print("Selection \(selection)")
+        })))
+        .padding()
+    }
+    
+    @ViewBuilder func sortPaletteByBrightnessField() -> some View  {
+        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
+            title: "Sort palette by brightness",
+            subtitle: "Reorders the color groups of the current palette\nby the brightness of header color of each group ",
+            type: .action
+        ), action: ResponseFieldAction(name: "Sort", onAction: {
+            print("sort palette by brightness action")
+        })))
+        .padding()
+    }
+    
+    @ViewBuilder func sortGroupByBrightnessField() -> some View {
+        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
+            title: "Sort group by brightness",
+            subtitle: "Reorders the color cells in the current group\nby the brightness",
+            type: .action
+        ), action: ResponseFieldAction(name: "Sort", onAction: {
+            print("sory group by brightness action")
+        })))
+        .padding()
+    }
 }
