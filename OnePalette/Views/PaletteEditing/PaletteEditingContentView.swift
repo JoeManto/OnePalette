@@ -160,12 +160,15 @@ struct PaletteEditingContentView: View {
                 
                 ColorGroupSelectorView(vm: vm.groupSelectorVm)
                 
-                self.colorSpaceField()
-                self.sortPaletteByBrightnessField()
                 self.sortGroupByBrightnessField()
+                    .padding([.leading, .trailing], 50)
+                self.colorSpaceField()
+                    .padding([.leading, .trailing], 50)
+                self.sortPaletteByBrightnessField()
+                    .padding([.leading, .trailing], 50)
             }
         }
-        .frame(width: 500, height: 500)
+        .frame(width: 600, height: 500)
         .background(.background)
     }
     
@@ -177,7 +180,6 @@ struct PaletteEditingContentView: View {
         ), selection: ResponseFieldSelection(options: ["sRGB (Default)"], onSelection: { idx, selection in
             print("Selection \(selection)")
         })))
-        .padding()
     }
     
     @ViewBuilder func sortPaletteByBrightnessField() -> some View  {
@@ -188,7 +190,6 @@ struct PaletteEditingContentView: View {
         ), action: ResponseFieldAction(name: "Sort", onAction: {
             print("sort palette by brightness action")
         })))
-        .padding()
     }
     
     @ViewBuilder func sortGroupByBrightnessField() -> some View {
@@ -199,6 +200,5 @@ struct PaletteEditingContentView: View {
         ), action: ResponseFieldAction(name: "Sort", onAction: {
             print("sory group by brightness action")
         })))
-        .padding()
     }
 }

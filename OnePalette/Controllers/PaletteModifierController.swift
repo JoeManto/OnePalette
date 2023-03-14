@@ -102,7 +102,7 @@ class PaletteModifierViewController: NSSplitViewController {
         minimumThicknessForInlineSidebars = 180
 
         let itemA = NSSplitViewItem(sidebarWithViewController: self.navigationController)
-        itemA.minimumThickness = 80
+        itemA.minimumThickness = 150
         self.addSplitViewItem(itemA)
 
         let itemB = NSSplitViewItem(contentListWithViewController: self.contentController)

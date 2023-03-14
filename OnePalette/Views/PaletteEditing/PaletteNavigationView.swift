@@ -31,22 +31,47 @@ struct PaletteNavigationView: View {
     
     @ObservedObject var vm: PaletteNavigationViewModel
     
+    @State private var isActive: String
+    
+    init(vm: PaletteNavigationViewModel) {
+        self.vm = vm
+        self.isActive = vm.palettes.first?.paletteName ?? ""
+    }
+    
     var body: some View {
         List {
             ForEach(self.vm.palettes) { palette in
-                Text(palette.paletteName)
+                //Group {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text(palette.paletteName)
+                            .padding(8)
+                    }
+                    .background(isActive == palette.paletteName ? .blue : .clear, in: Rectangle())
+                    .cornerRadius(8)
                     .onTapGesture {
+                        isActive = palette.paletteName
                         self.vm.navigationPublisher.send(palette)
                     }
+                    Spacer()
+                }
+                .listRowInsets(EdgeInsets())
             }
         }
         .setBackgroundColor(color: Color(nsColor: NSColor.controlBackgroundColor))
     }
 }
 
+@available(macOS 13.0, *)
 struct PaletteNavigation_Previews: PreviewProvider {
     
     static var previews: some View {
-        PaletteNavigationView(vm: PaletteNavigationViewModel(palettes: PaletteService.shared.palettes))
+        VStack {
+            PaletteNavigationView(vm: PaletteNavigationViewModel(palettes: PaletteService.shared.palettes))
+                .frame(width: 125, height: 150)
+        }
+        .padding(5)
+        .background(.green)
     }
 }
