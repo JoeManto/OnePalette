@@ -46,19 +46,20 @@ struct ResponseField: View {
             if vm.fieldType == .selection {
                 self.selectionView()
             }
-            else if vm.fieldType == .action {
-                self.actionView()
+            else if vm.fieldType == .action, let action = vm.action {
+                self.actionView(action: action)
             }
         }
     }
     
-    private func actionView() -> some View {
+    private func actionView(action: ResponseFieldAction) -> some View {
         VStack {
-            Text(vm.action?.name ?? "")
+            Text(action.name)
+                .foregroundColor(action.destructive ? .red : .primary)
                 .padding(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.selection, lineWidth: 1.5)
+                        .stroke(action.destructive ? .red : .gray, lineWidth: 1.5)
                 )
                 .onTapGesture {
                     vm.action?.onAction()
@@ -83,6 +84,10 @@ struct ResponseField_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(title: "Sort palette by brightness", subtitle: "Reorders the color groups of the current palette\nby the brightness of header color of each group ", type: .action), action: ResponseFieldAction(name: "Action", onAction: {
+                print("Action")
+            })))
+            
+            ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(title: "Sort palette by brightness", subtitle: "Reorders the color groups of the current palette\nby the brightness of header color of each group ", type: .action), action: ResponseFieldAction(name: "Action", destructive: true, onAction: {
                 print("Action")
             })))
             

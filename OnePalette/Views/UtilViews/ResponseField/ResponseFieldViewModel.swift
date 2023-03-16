@@ -25,6 +25,7 @@ struct ResponseFieldContent {
 
 struct ResponseFieldAction {
     let name: String
+    var destructive: Bool = false
     let onAction: () -> ()
 }
 
