@@ -134,6 +134,25 @@ class PaletteService {
         return self.palettes[prevIndex]
     }
     
+    func removeAllPalettes() {
+        self.onOperationQueue {
+            self.palettes = []
+            self.curPaletteIndex = 0
+            OPUtil.flushData(entity: self.entity, insertInto: self.context)
+            
+            self.installMaterialDesignPalette()
+            self.installAppleDesignPalette()
+        }
+    }
+    
+    func cleanInstall() {
+        self.onOperationQueue {
+            self.removeAllPalettes()
+            self.installMaterialDesignPalette()
+            self.installAppleDesignPalette()
+        }
+    }
+    
     func onPalettesFetched(_ block: @escaping () -> ()) {
         self.postSetupQueue.async {
             DispatchQueue.main.async {

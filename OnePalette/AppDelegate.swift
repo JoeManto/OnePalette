@@ -60,30 +60,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    // MARK: Window & Menu
+    
     /// Fills the NSMenu with NSMenuitems
     func constructMenu() {
         menu.addItem(NSMenuItem(title: "Color Group Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.testing(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem(title: "Test", action: #selector(AppDelegate.testing(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.openPaletteModifier(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Clean Install", action: #selector(AppDelegate.cleanInstall(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Selected Color Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Palette Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "New Palette", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem(title: "Delete Palette", action: #selector(AppDelegate.printQuoteClicked(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "New Palette", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Delete Palette", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
     
-    @objc func testing(_ sender: Any?) {
+    // MARK: Selectors
+    
+    @objc func openPaletteModifier(_ sender: Any?) {
         self.colorWindow.contentViewController = PaletteModifierViewController()
         self.colorWindow.makeKeyAndOrderFront(self)
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    func hideController(window:NSWindow,controller:NSViewController) {
-        window.orderOut(controller)
+    @objc func cleanInstall(_ sender: Any?) {
+        closePopover(sender: nil)
+        self.colorWindow.orderOut(nil)
+        PaletteService.shared.cleanInstall()
+    }
+    
+    @objc func placeholder(_ sender: Any?) {
+        print("Place Holder")
     }
     
     /// Handler when the status icon is click. Handles left and right clicks
@@ -97,6 +107,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    // MARK: Popover Controls
+
     /// Shows the menu next to the status item
     func showMenu() {
         closePopover(sender: nil)
@@ -146,12 +158,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.performClose(sender)
     }
     
-    @objc func printQuoteClicked(_ sender: Any?) {
-        print("quote clicked")
-    }
+    // MARK: Window and Application Lifecycle
     
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+    }
+    
+    func hideController(window: NSWindow, controller: NSViewController) {
+        window.orderOut(controller)
     }
     
     // MARK: - Core Data stack
