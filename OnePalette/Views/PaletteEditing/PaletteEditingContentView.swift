@@ -169,8 +169,11 @@ struct PaletteEditingContentView: View {
                     Divider()
                         
                     self.sortGroupByBrightnessField()
+                        .padding(.bottom, 10)
                     self.colorSpaceField()
+                        .padding(.bottom, 10)
                     self.deleteGroupField(groupName: vm.selectedColorGroup.name)
+                        .padding(.bottom, 10)
                     
                     Text("Palette Settings")
                         .font(.standardFontBold(size: 18, relativeTo: .subheadline))
@@ -180,7 +183,9 @@ struct PaletteEditingContentView: View {
                     Divider()
                     
                     self.sortPaletteByBrightnessField()
+                        .padding(.bottom, 10)
                     self.deletePaletteField(paletteName: vm.palette.paletteName)
+                        .padding(.bottom, 10)
                     
                 }
                 .padding([.leading, .trailing], 50)

@@ -13,6 +13,7 @@ struct ResponseField: View {
     let vm: ResponseFieldViewModel
     
     @State var selection: String
+    @State private var actionInProgress: Bool = false
     
     init(vm: ResponseFieldViewModel) {
         self.vm = vm
@@ -36,6 +37,7 @@ struct ResponseField: View {
                 Text(vm.content.subtitle)
                     .font(Font.standardFontMedium(size: 14, relativeTo: .body))
                     .foregroundColor(.gray)
+                    .frame(maxWidth: 400, alignment: .leading)
                 Spacer()
             }
         }
@@ -52,17 +54,36 @@ struct ResponseField: View {
         }
     }
     
-    private func actionView(action: ResponseFieldAction) -> some View {
+    @ViewBuilder private func actionView(action: ResponseFieldAction) -> some View {
         VStack {
             Text(action.name)
-                .foregroundColor(action.destructive ? .red : .primary)
+                .foregroundColor({
+                    if action.destructive {
+                        return AppColors.destructive.highlighting(actionInProgress)
+                    }
+                    else {
+                        return AppColors.gray1.highlighting(actionInProgress)
+                    }
+                }())
                 .padding(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(action.destructive ? .red : .gray, lineWidth: 1.5)
+                        .stroke({ () -> Color in
+                            if action.destructive {
+                                return AppColors.destructive.highlighting(actionInProgress)
+                            }
+                            else {
+                                return AppColors.gray1.highlighting(actionInProgress)
+                            }
+                        }(), lineWidth: 1.5)
                 )
                 .onTapGesture {
+                    self.actionInProgress = true
                     vm.action?.onAction()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(350))) {
+                        self.actionInProgress = false
+                    }
                 }
         }
     }
