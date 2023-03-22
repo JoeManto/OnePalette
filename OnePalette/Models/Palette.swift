@@ -15,13 +15,20 @@ class Palette: NSManagedObject, Identifiable {
     @NSManaged var paletteName: String
     @NSManaged var paletteWeights: [Int]?
     @NSManaged var paletteKey: [String]?
+    @NSManaged var groupsOrder: [String]?
     @NSManaged var curGroupId: String
     @NSManaged var dateCreated: Date
     
     var paletteData: [String : OPColorGroup]?
     
     var groups: [OPColorGroup] {
-        Array(self.paletteData?.values ?? [String: OPColorGroup]().values)
+        var groups = [OPColorGroup]()
+        
+        for id in groupsOrder ?? [] {
+            groups.append(self.paletteData?[id] ?? OPColorGroup(id: "empty"))
+        }
+        
+        return groups
     }
     
     override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
@@ -40,16 +47,18 @@ class Palette: NSManagedObject, Identifiable {
         self.paletteName = name
         self.paletteWeights = Array(repeating: 0, count: 10)
         self.paletteKey = Array(repeating: "", count: 0)
+        self.groupsOrder = Array(repeating: "", count: 0)
         self.curGroupId = ""
         self.dateCreated = Date()
     }
     
-    init(name: String, data: [String : OPColorGroup], palWeights: [Int], palKeys: [String], date: Date, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+    init(name: String, data: [String : OPColorGroup], groupsOrder: [String], palWeights: [Int], palKeys: [String], date: Date, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
         self.paletteData = data
         self.paletteName = name
         self.paletteWeights = palWeights
         self.paletteKey = palKeys
+        self.groupsOrder = groupsOrder
         self.curGroupId = (data.first?.value.getIdentifier()) ?? ""
         self.dateCreated = date
     }
@@ -84,8 +93,10 @@ class Palette: NSManagedObject, Identifiable {
                     }
                 }
                 for palKey in self.paletteKey! {
+                    self.groupsOrder?.append(palKey)
                     if let nestDictionary = dictionary[palKey] as? [String: Any] {
                         let colorGroup:NSArray = nestDictionary["values"] as! NSArray
+
                         self.paletteData![palKey] = OPColorGroup.init(id: palKey)
                         for (index, i) in colorGroup.enumerated(){
                             self.paletteData![palKey]?.addColor(color: OPColor.init(hexString: i as! String, alpha: 1.0, weight: self.paletteWeights![index]))
@@ -95,9 +106,10 @@ class Palette: NSManagedObject, Identifiable {
                 }
                 
                 if let nestDictionary = dictionary["Names"] as? [String:Any] {
-                    let names:NSArray = nestDictionary["values"] as! NSArray
+                    let names: NSArray = nestDictionary["values"] as! NSArray
                     for (index, i) in (self.paletteKey?.enumerated())! {
-                        self.paletteData?[i]?.setName(name: names[index] as! String)
+                        let name = names[index] as! String
+                        self.paletteData?[i]?.setName(name: name)
                     }
                 }
             }
@@ -129,6 +141,24 @@ class Palette: NSManagedObject, Identifiable {
     
     func updateColorGroup(group: OPColorGroup, save: Bool) {
         self.updateColorGroup(group: group, for: group.getIdentifier())
+        if save {
+            _ = self.save()
+        }
+    }
+    
+    func updateColorGroups(groups: [OPColorGroup], save: Bool) {
+        for group in groups {
+            self.updateColorGroup(group: group, save: false)
+        }
+        
+        if save {
+            _ = self.save()
+        }
+    }
+    
+    func reorderGroups(off groups: [OPColorGroup], save: Bool) {
+        self.groupsOrder = groups.map { $0.identifier }
+        
         if save {
             _ = self.save()
         }

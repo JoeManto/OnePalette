@@ -8,8 +8,8 @@
 
 import Foundation
 
-class ColorGroupSelectorViewModel {
-    var groups: [OPColorGroup]
+class ColorGroupSelectorViewModel: ObservableObject {
+    @Published var groups: [OPColorGroup]
     
     var onSelection: (String) -> ()
     
@@ -17,7 +17,7 @@ class ColorGroupSelectorViewModel {
     
     init(groups: [OPColorGroup], isVertical: Bool = false, onSelection: @escaping (String) -> ()) {
         self.isVertical = isVertical
-        self.groups = groups
+        self.groups = groups.filter { $0.colorsArray.count > 0 }
         self.onSelection = onSelection
     }
 }

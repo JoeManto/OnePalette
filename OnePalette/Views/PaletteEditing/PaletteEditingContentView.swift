@@ -50,6 +50,10 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.colorArray = self.getPaddedColorGroupView()
         
         self.$selectedColor.sink(receiveValue: { [unowned self] newColor in
+            guard selectedColorIndex < self.selectedColorGroup.colorsArray.count else {
+                return
+            }
+            
             let color = NSColor(newColor as Color)
             self.selectedColorGroup.colorsArray[self.selectedColorIndex].color = color
             self.colorArray = self.getPaddedColorGroupView()
@@ -217,7 +221,10 @@ struct PaletteEditingContentView: View {
             subtitle: "Reorders the color groups of the current palette\nby the brightness of header color of each group ",
             type: .action
         ), action: ResponseFieldAction(name: "Sort", onAction: {
-            print("sort palette by brightness action")
+            let newGroups = vm.palette.groups.sortedByBrightness()
+            vm.palette.reorderGroups(off: newGroups, save: true)
+            vm.groupSelectorVm.groups = newGroups
+            vm.requestUIUpdate()
         })))
     }
     
