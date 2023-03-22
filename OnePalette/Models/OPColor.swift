@@ -18,10 +18,12 @@ class OPColor: Identifiable, Codable, NSCopying {
     
     var color: NSColor {
         get {
-            saveableColor.nsColor
+            self.saveableColor.nsColor
         }
         set {
-            saveableColor = CodeableColor(from: newValue)
+            self.saveableColor = CodeableColor(from: newValue)
+            self.lum = Float(calcLum())
+            self.hexValue = newValue.toHexString
         }
     }
     

@@ -76,6 +76,11 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.hexFieldValueColor = NSColor(self.selectedColor).toHexString
     }
     
+    func requestUIUpdate() {
+        // Select the same color group to trigger an update
+        onColorGroupSelection(id: self.selectedColorGroup.identifier)
+    }
+    
     /// Returns an array of color square views padded with empty color square views at the end if needed
     func getPaddedColorGroupView() -> [ColorView] {
         let colors = self.selectedColorGroup.colorsArray
@@ -222,7 +227,8 @@ struct PaletteEditingContentView: View {
             subtitle: "Reorders the color cells in the current group\nby the brightness",
             type: .action
         ), action: ResponseFieldAction(name: "Sort", onAction: {
-            print("sory group by brightness action")
+            vm.selectedColorGroup.sortColorGroupByBrightness()
+            vm.requestUIUpdate()
         })))
     }
     

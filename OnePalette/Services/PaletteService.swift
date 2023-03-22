@@ -40,9 +40,7 @@ class PaletteService {
         self.context = (NSApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
         self.entity = NSEntityDescription.entity(forEntityName: "Pal", in: context)!
         self.curPaletteIndex = 0 // TODO update search for value from userdefaults if not found default to first palette
-                
-        OPUtil.flushData(entity: entity, insertInto: context)
-        
+                        
         onOperationQueue {
             if self.fetchAllPalettes() == 0 {
                 // If the user has no saved palettes install the default palettes
