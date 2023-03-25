@@ -19,11 +19,10 @@ Please visit the project listing in my personal cv for more infomation
 <img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/editColorsview.png"/>
 
 ---
-## Up Comming Features 
+## Up Coming Features 
 **1. Custom Application File Extension**
 
 **2. Cloud Syncing for palette data** 
 
 **3. Sketch App Plugin Integeration**
-
 ---
