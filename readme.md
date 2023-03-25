@@ -16,7 +16,7 @@ Please visit the project listing in my personal cv for more infomation
 * Ability to sort and modify color groups and palettes.
 
 <img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/menuView.png"/>
-<img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/editColorsview.png"/>
+<img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/modifyColorsView.png"/>
 
 ---
 ## Up Coming Features 
