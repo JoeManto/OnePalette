@@ -217,11 +217,11 @@ struct PaletteEditingContentView: View {
     
     @ViewBuilder func sortPaletteByBrightnessField() -> some View  {
         ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Sort palette by brightness",
-            subtitle: "Reorders the color groups of the current palette\nby the brightness of header color of each group ",
+            title: "Sort Palette Groups",
+            subtitle: "Reorders the color groups of the current palette in rainbow order",
             type: .action
         ), action: ResponseFieldAction(name: "Sort", onAction: {
-            let newGroups = vm.palette.groups.sortedByBrightness()
+            let newGroups = vm.palette.groups.sortByRainbowColors()//sortedByBrightness()
             vm.palette.reorderGroups(off: newGroups, save: true)
             vm.groupSelectorVm.groups = newGroups
             vm.requestUIUpdate()

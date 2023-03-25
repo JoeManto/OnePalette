@@ -80,6 +80,31 @@ extension [OPColorGroup] {
             a.headerColor.lum > z.headerColor.lum
         })
     }
+    
+    func sortByRainbowColors() -> [OPColorGroup] {
+        return self.sorted(by: { a, z in
+            let headerA = a.headerColor
+            let headerB = z.headerColor
+            
+            let h1 = Int(headerA.color.hueComponent * 16)
+            let l1 = Int(headerA.color.brightnessComponent * 16)
+            let s1 = Int(headerA.color.saturationComponent * 8)
+            
+            let h2 = Int(headerB.color.hueComponent * 16)
+            let l2 = Int(headerB.color.brightnessComponent * 16)
+            let s2 = Int(headerB.color.saturationComponent * 8)
+            
+            if h1 != h2 {
+                return h1 < h2
+            }
+            else if l1 != l2 {
+                return l1 < l2
+            }
+            else {
+                return s1 < s2
+            }
+        })
+    }
 }
 
 extension String {
