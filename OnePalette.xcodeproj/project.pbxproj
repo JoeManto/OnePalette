@@ -253,13 +253,13 @@
 		70D690712048CED70070C99D /* OnePalette */ = {
 			isa = PBXGroup;
 			children = (
-				703F030A297C80650007152F /* ViewModifiers */,
 				70603856293D2B8500D275B9 /* Services */,
 				70CD4859293BD087000AF83A /* Models */,
 				70CD485B293BD114000AF83A /* ViewModels */,
 				702F38A720E997790099BC87 /* Views */,
 				702F38A620E997670099BC87 /* Controllers */,
 				70CD485A293BD0A6000AF83A /* Util */,
+				703F030A297C80650007152F /* ViewModifiers */,
 				70D690722048CED70070C99D /* AppDelegate.swift */,
 				70D690792048CED70070C99D /* Assets.xcassets */,
 				70D6907B2048CED70070C99D /* Main.storyboard */,

@@ -22,8 +22,6 @@ struct DynamicColor {
 }
 
 struct AppColors {
-    
-    static let destructive = DynamicColor(normal: OPColor(hexString: "FF3B30", weight: 0), highlight: OPColor(hexString: "fc5e56", weight: 0))
-    
+    static let destructive = DynamicColor(normal: OPColor(hexString: "FF3B30", weight: 0), highlight: OPColor(hexString: "FC5E56", weight: 0))
     static let gray1 = DynamicColor(normal: OPColor(hexString: "C7C7CC", weight: 0), highlight: OPColor(hexString: "DEDEDE", weight: 0))
 }
