@@ -15,6 +15,13 @@ struct ResponseField: View {
     @State var selection: String
     @State private var actionInProgress: Bool = false
     
+    @State private var btnSize = CGSize(width: 0, height: 0)
+    @State private var offsetX = 0.0
+    @State private var deleting = false
+    
+    @State private var waveIndicatorScale = 1.0
+    @State private var waveIndicatorOpacity = 0.0
+    
     init(vm: ResponseFieldViewModel) {
         self.vm = vm
         self.selection = vm.selection?.options.first ?? "selection"
@@ -54,37 +61,98 @@ struct ResponseField: View {
         }
     }
     
+    func deletionAnimation() {
+        var transaction = Transaction(animation: .linear)
+        transaction.disablesAnimations = true
+
+        withTransaction(transaction) {
+            self.offsetX = self.btnSize.width
+            withAnimation(.linear(duration: 5.0)) {
+                self.offsetX = 0
+            }
+        }
+    }
+    
+    func deletionCompleteAnimation() {
+        self.waveIndicatorOpacity = 1.0
+        withAnimation(.easeInOut(duration: 1.0)) {
+            self.waveIndicatorScale = 1.5
+            self.waveIndicatorOpacity = 0.0
+            DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .seconds(1))) {
+                self.waveIndicatorOpacity = 0.0
+                self.waveIndicatorScale = 1.0
+            }
+        }
+    }
+    
     @ViewBuilder private func actionView(action: ResponseFieldAction) -> some View {
         VStack {
-            Text(action.name)
-                .foregroundColor({
-                    if action.destructive {
-                        return AppColors.destructive.highlighting(actionInProgress)
-                    }
-                    else {
-                        return AppColors.gray1.highlighting(actionInProgress)
-                    }
-                }())
-                .padding(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke({ () -> Color in
-                            if action.destructive {
-                                return AppColors.destructive.highlighting(actionInProgress)
-                            }
-                            else {
-                                return AppColors.gray1.highlighting(actionInProgress)
-                            }
-                        }(), lineWidth: 1.5)
-                )
-                .onTapGesture {
-                    self.actionInProgress = true
-                    vm.action?.onAction()
+            ZStack {
+                Color.red
+                    .opacity(1.0)
+                    .cornerRadius(8)
+                    .offset(x: offsetX)
+                
+                Text(action.name)
+                    .foregroundColor({
+                        if action.destructive {
+                            return deleting ? .white : AppColors.destructive.highlighting(actionInProgress)
+                        }
+                        else {
+                            return AppColors.gray1.highlighting(actionInProgress)
+                        }
+                    }())
+                    .padding([.leading, .trailing])
+                    .padding([.top, .bottom], 10)
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(350))) {
-                        self.actionInProgress = false
+            }
+            .cornerRadius(8)
+            .readIntrinsicContentSize(to: $btnSize)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke({ () -> Color in
+                        if action.destructive {
+                            return AppColors.destructive.highlighting(actionInProgress)
+                        }
+                        else {
+                            return AppColors.gray1.highlighting(actionInProgress)
+                        }
+                    }(), lineWidth: 1.5)
+                    
+            )
+            .onHold(
+                onTap: {
+                    print("onTap")
+                    if action.destructive, self.deleting == false {
+                        self.deleting = true
+                        
+                        deletionAnimation()
+                    }
+                },
+                onRelease: { time in
+                    guard action.destructive else {
+                        action.onAction()
+                        return
+                    }
+                    
+                    self.deleting = false
+                    self.offsetX = self.btnSize.width
+                    
+                    if time > 5.0 {
+                        action.onAction()
+                        deletionCompleteAnimation()
                     }
                 }
+            )
+            .onAppear {
+                self.offsetX = self.btnSize.width
+            }
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(AppColors.destructive.highlighting(false), lineWidth: 1.0)
+                .scaleEffect(self.waveIndicatorScale)
+                .opacity(self.waveIndicatorOpacity)
         }
     }
     

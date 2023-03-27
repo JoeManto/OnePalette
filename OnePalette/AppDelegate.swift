@@ -41,7 +41,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.popover.contentViewController = ColorViewerController(curPal: palette)
                 
         self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "ModifyColorsWindow")
-        self.colorWindow.isMovableByWindowBackground = true
         self.colorWindow.isOpaque = false
         self.colorWindow.isReleasedWhenClosed = true
         self.colorWindow.title = "Modify Colors"

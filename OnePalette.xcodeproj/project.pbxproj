@@ -32,6 +32,8 @@
 		70B64F23209667B200D379BC /* AppleDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B64F22209667B200D379BC /* AppleDesginColors.json */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
 		70B64F292098369400D379BC /* OPWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F282098369400D379BC /* OPWindow.swift */; };
+		70C3079629D0F0E1008C3AC9 /* HoldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C3079529D0F0E1008C3AC9 /* HoldModifier.swift */; };
+		70C3079829D12C5B008C3AC9 /* IntrinsicContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C3079729D12C5B008C3AC9 /* IntrinsicContentSize.swift */; };
 		70CD485D293C19F9000AF83A /* ColorGroupGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CD485C293C19F9000AF83A /* ColorGroupGridView.swift */; };
 		70D690732048CED70070C99D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D690722048CED70070C99D /* AppDelegate.swift */; };
 		70D690782048CED70070C99D /* OnePalette.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70D690762048CED70070C99D /* OnePalette.xcdatamodeld */; };
@@ -82,6 +84,8 @@
 		70B64F22209667B200D379BC /* AppleDesginColors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AppleDesginColors.json; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		70B64F282098369400D379BC /* OPWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPWindow.swift; sourceTree = "<group>"; };
+		70C3079529D0F0E1008C3AC9 /* HoldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldModifier.swift; sourceTree = "<group>"; };
+		70C3079729D12C5B008C3AC9 /* IntrinsicContentSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicContentSize.swift; sourceTree = "<group>"; };
 		70CD485C293C19F9000AF83A /* ColorGroupGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupGridView.swift; sourceTree = "<group>"; };
 		70D6906F2048CED70070C99D /* OnePalette.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnePalette.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D690722048CED70070C99D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				703F030B297C808C0007152F /* List+Modifiers.swift */,
+				70C3079529D0F0E1008C3AC9 /* HoldModifier.swift */,
+				70C3079729D12C5B008C3AC9 /* IntrinsicContentSize.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -401,6 +407,7 @@
 				70603853293C3BC200D275B9 /* PaletteView.swift in Sources */,
 				7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */,
 				7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */,
+				70C3079829D12C5B008C3AC9 /* IntrinsicContentSize.swift in Sources */,
 				708E8B9129B9A9F1001363A9 /* Font+Standard.swift in Sources */,
 				708E8B9329BC4F26001363A9 /* DropDownView.swift in Sources */,
 				7060385A293D465B00D275B9 /* NSColor+Util.swift in Sources */,
@@ -413,6 +420,7 @@
 				706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */,
 				702F38A520E9975A0099BC87 /* ClipboardSettingController.swift in Sources */,
 				70D690782048CED70070C99D /* OnePalette.xcdatamodeld in Sources */,
+				70C3079629D0F0E1008C3AC9 /* HoldModifier.swift in Sources */,
 				70D69098204BA5360070C99D /* EventMonitor.swift in Sources */,
 				703F030C297C808C0007152F /* List+Modifiers.swift in Sources */,
 				708E8B9629BEBB82001363A9 /* CheckBox.swift in Sources */,
