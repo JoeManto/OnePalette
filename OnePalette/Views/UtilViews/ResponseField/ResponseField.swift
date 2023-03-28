@@ -67,7 +67,7 @@ struct ResponseField: View {
 
         withTransaction(transaction) {
             self.offsetX = self.btnSize.width
-            withAnimation(.linear(duration: 5.0)) {
+            withAnimation(.linear(duration: 3.0)) {
                 self.offsetX = 0
             }
         }
@@ -138,11 +138,12 @@ struct ResponseField: View {
                     self.deleting = false
                     self.offsetX = self.btnSize.width
                     
-                    if time > 5.0 {
+                    if time >= 3.0 {
                         action.onAction()
                         deletionCompleteAnimation()
                     }
-                }
+                },
+                maxHoldTime: 3
             )
             .onAppear {
                 self.offsetX = self.btnSize.width
