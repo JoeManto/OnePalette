@@ -11,21 +11,23 @@ import SwiftUI
 
 struct ColorGroupSelectorButton: View {
     let group: OPColorGroup
-    let vm: ColorGroupSelectorViewModel
+    @ObservedObject var vm: ColorGroupSelectorViewModel
     
     @State var dynamicSize = 20.0
     
     var body: some View {
         Color(group.getHeaderColor().color)
-            .frame(height: self.dynamicSize)
+            .frame(height: vm.selectedGroupId == group.identifier ? 30.0 : self.dynamicSize)
             .onHover { isInside in
                 withAnimation(Animation.easeIn(duration: 0.2)) {
                     self.dynamicSize = isInside ? 30.0 : 20.0
                 }
             }
             .onTapGesture {
-                print("on selection \(group.getIdentifier())")
-                vm.onSelection(group.getIdentifier())
+                let id = group.getIdentifier()
+                print("on selection \(id)")
+                vm.onSelection(id)
+                vm.selectedGroupId = id
             }
     }
 }

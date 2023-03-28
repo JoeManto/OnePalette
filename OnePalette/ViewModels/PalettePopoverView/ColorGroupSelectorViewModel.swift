@@ -15,6 +15,8 @@ class ColorGroupSelectorViewModel: ObservableObject {
     
     let isVertical: Bool
     
+    @Published var selectedGroupId = ""
+    
     init(groups: [OPColorGroup], isVertical: Bool = false, onSelection: @escaping (String) -> ()) {
         self.isVertical = isVertical
         self.groups = groups.filter { $0.colorsArray.count > 0 }
