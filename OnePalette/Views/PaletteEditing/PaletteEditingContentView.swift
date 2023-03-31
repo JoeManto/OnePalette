@@ -74,10 +74,22 @@ class PaletteEditingContentViewModel: ObservableObject {
     }
     
     func onColorTap(index: Int) {
+        let colorArray = self.selectedColorGroup.colorsArray
+        
+        defer {
+            self.selectedColor = Color(self.selectedColorGroup.colorsArray[selectedColorIndex].color)
+            self.hexFieldValueColor = NSColor(self.selectedColor).toHexString
+        }
+        
+        guard index < colorArray.count else {
+            // Empty slot was tapped so add a new color at next avaiable slot
+            self.addNewColor()
+            self.selectedColorIndex = colorArray.count
+            return
+        }
+        
         self.selectedColorIndex = index
         self.isHeader = self.selectedColorGroup.headerColorIndex == index
-        self.selectedColor = Color(self.selectedColorGroup.colorsArray[index].color)
-        self.hexFieldValueColor = NSColor(self.selectedColor).toHexString
     }
     
     func requestUIUpdate() {
@@ -116,6 +128,20 @@ class PaletteEditingContentViewModel: ObservableObject {
         })
     }
     
+    /// Adds a new color to the current group
+    func addNewColor() {
+        guard let lastColor = self.colorArray.last?.colorModel else {
+            return
+        }
+        
+        let newWeight = lastColor.weight == 50 ? 100 : lastColor.weight + 100
+        let newColor = OPColor.randomGray(weight: newWeight)
+        self.selectedColorGroup.addColor(color: newColor)
+        
+        self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
+    }
+    
+    /// Adds a new group to the current palette
     func addNewGroup() {
         let newGroup = OPColorGroup.newGroup()
         self.palette.addColorGroup(group: newGroup, save: false)

@@ -92,6 +92,16 @@ extension OPColor {
     static func empty() -> OPColor {
         return OPColor(hexString: "000000", alpha: 0.2, weight: 0)
     }
+    
+    static func randomGray(weight: Int) -> OPColor {
+        let val = CGFloat.random(in: 0.20...0.80)
+        var comps: [CGFloat] = [val, val, val, 1.0]
+        
+        // TODO: will need to take in color space param in the future
+        let color = NSColor(colorSpace: .sRGB, components: &comps, count: 4)
+        
+        return OPColor(nsColor: color, weight: weight)
+    }
 }
 
 extension [OPColor] {
