@@ -122,18 +122,16 @@ class Palette: NSManagedObject, Identifiable {
     
     // MARK: Group Methods
     
-    /// Adds a colorgroup to the palatte data
-    func addColorGroup(group: OPColorGroup) {
-        paletteData![group.getIdentifier()] = group
-        print("added colorGroup")
+    /// Adds a ColorGroup to the palatte data at the end of the group order
+    func addColorGroup(group: OPColorGroup, save: Bool) {
+        let id = group.identifier
+        self.groupsOrder?.append(id)
+        paletteData?[id] = group
+        
+        if save {
+            _ = self.save()
+        }
     }
-    
-    /// Adds an empty color group to the palette data with a name
-    func addEmptyGroup(with groupID: String) {
-        print("added empty group")
-        paletteData![groupID] = OPColorGroup(id: groupID)
-    }
-    
     /// Updates an existing color group value
     func updateColorGroup(group: OPColorGroup, for groupID: String) {
         paletteData![groupID] = group
@@ -162,19 +160,6 @@ class Palette: NSManagedObject, Identifiable {
         if save {
             _ = self.save()
         }
-    }
-    
-    /// Generates a simple color group used for when the user inserts a new color group in to a palette
-    func generateTempColorGroup() -> OPColorGroup {
-        let randomId = UUID().uuidString
-        let group = OPColorGroup(id:randomId)
-        let random = arc4random_uniform(201) + 30
-        let color = OPColor(hexString: String(format:"%2X%2X%2X", random, random, random), weight: 50)
-        group.addColor(color: color)
-        paletteKey?.append(randomId)
-        group.headerColorIndex = 0
-        self.addColorGroup(group: group)
-        return group
     }
     
     // MARK:  CoreData Save

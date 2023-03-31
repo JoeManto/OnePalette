@@ -115,6 +115,20 @@ class PaletteEditingContentViewModel: ObservableObject {
             self?.onColorGroupSelection(id: id)
         })
     }
+    
+    func addNewGroup() {
+        let newGroup = OPColorGroup.newGroup()
+        self.palette.addColorGroup(group: newGroup, save: false)
+        self.sortPalette()
+        self.onColorGroupSelection(id: newGroup.identifier)
+    }
+    
+    func sortPalette() {
+        let newGroups = self.palette.groups.sortByRainbowColors()
+        self.palette.reorderGroups(off: newGroups, save: true)
+        self.groupSelectorVm.groups = newGroups
+        self.requestUIUpdate()
+    }
 }
 
 struct PaletteEditingContentView: View {
@@ -169,6 +183,8 @@ struct PaletteEditingContentView: View {
                 
                 ColorGroupSelectorView(vm: vm.groupSelectorVm)
                 
+                self.addNewGroupButton()
+                
                 VStack {
                     Text("Color Group Settings")
                         .font(.standardFontBold(size: 18, relativeTo: .subheadline))
@@ -205,6 +221,18 @@ struct PaletteEditingContentView: View {
         .background(.background)
     }
     
+    @ViewBuilder func addNewGroupButton() -> some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                vm.addNewGroup()
+            }, label: {
+                Text("New Group")
+            })
+        }
+        .padding(.trailing, 65)
+    }
+    
     @ViewBuilder func colorSpaceField() -> some View {
         ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
             title: "Palette Color Space",
@@ -221,10 +249,7 @@ struct PaletteEditingContentView: View {
             subtitle: "Reorders the color groups of the current palette in rainbow order",
             type: .action
         ), action: ResponseFieldAction(name: "Sort", onAction: {
-            let newGroups = vm.palette.groups.sortByRainbowColors()//sortedByBrightness()
-            vm.palette.reorderGroups(off: newGroups, save: true)
-            vm.groupSelectorVm.groups = newGroups
-            vm.requestUIUpdate()
+            vm.sortPalette()
         })))
     }
     

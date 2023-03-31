@@ -71,6 +71,18 @@ class OPColorGroup: Identifiable, Codable {
     func description()-> String {
         return "ColorGroup(\(identifier)) - name: \(name) numColors: \(colorsArray.count)"
     }
+    
+    static func newGroup() -> OPColorGroup {
+        let group = OPColorGroup(id: UUID().uuidString)
+        group.name = "New Group"
+        
+        let val = CGFloat.random(in: 0.20...0.80)
+        var comps: [CGFloat] = [val, val, val, 1.0]
+        let color = NSColor(colorSpace: .sRGB, components: &comps, count: 4)
+        group.addColor(color: OPColor(nsColor: color, weight: 100))
+        
+        return group
+    }
 }
 
 extension [OPColorGroup] {
