@@ -96,7 +96,7 @@ class PaletteService {
     
     func setCurrentGroup(groupId: String) {
         let curPal = self.palettes[curPaletteIndex]
-        let groupExists = curPal.paletteData?.contains(where: { (key, value) in value.getIdentifier() == groupId }) ?? false
+        let groupExists = curPal.paletteData?.contains(where: { (key, value) in value.identifier == groupId }) ?? false
         
         guard groupExists else {
             print("Provided groupId doesn't exist")

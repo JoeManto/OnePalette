@@ -13,15 +13,15 @@ class ColorGroupGridViewModel: ObservableObject {
     private var group: OPColorGroup
     
     var nonHeaderColors: [OPColor] {
-        return group.getColorArray().filter { $0.id != group.getHeaderColor().id }
+        return group.colorsArray.filter { $0.id != group.headerColor.id }
     }
     
     var header: OPColor {
-        return group.getHeaderColor()
+        return group.headerColor
     }
     
     var name: String {
-        group.getName()
+        group.name
     }
     
     init(palette: Palette) {

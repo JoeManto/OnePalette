@@ -11,9 +11,9 @@ import CoreData
 
 class OPColorGroup: Identifiable, Codable {
     
-    var headerColorIndex: Int
+    private(set) var identifier: String
     var name: String
-    var identifier: String
+    var headerColorIndex: Int
     var colorsArray: [OPColor]
     
     var headerColor: OPColor {
@@ -40,38 +40,19 @@ class OPColorGroup: Identifiable, Codable {
         headerColorIndex = colorsArray.count / 2
     }
     
+    /// Sets all color's weights off provided weights
     func updateColorWeights(weights: [Int]) {
         for (i, color) in colorsArray.enumerated() {
             color.setWeight(weight: weights[i])
         }
     }
     
-    // MARK: Getter & Setters
-    
-    func getColorArray() -> [OPColor] {
-        return self.colorsArray
-    }
-    
-    func getIdentifier() -> String {
-        return self.identifier
-    }
-    
-    func getName() -> String {
-        return self.name
-    }
-    
-    func setName(name: String) {
-        self.name = name
-    }
-    
-    func getHeaderColor() -> OPColor {
-        return headerColor
-    }
-    
-    func description()-> String {
+    func description() -> String {
         return "ColorGroup(\(identifier)) - name: \(name) numColors: \(colorsArray.count)"
     }
-    
+}
+
+extension OPColorGroup {
     static func newGroup() -> OPColorGroup {
         let group = OPColorGroup(id: UUID().uuidString)
         group.name = "New Group"

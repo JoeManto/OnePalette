@@ -59,7 +59,7 @@ class Palette: NSManagedObject, Identifiable {
         self.paletteWeights = palWeights
         self.paletteKey = palKeys
         self.groupsOrder = groupsOrder
-        self.curGroupId = (data.first?.value.getIdentifier()) ?? ""
+        self.curGroupId = (data.first?.value.identifier) ?? ""
         self.dateCreated = date
     }
     
@@ -101,7 +101,8 @@ class Palette: NSManagedObject, Identifiable {
                         for (index, i) in colorGroup.enumerated(){
                             self.paletteData![palKey]?.addColor(color: OPColor.init(hexString: i as! String, alpha: 1.0, weight: self.paletteWeights![index]))
                         }
-                        self.paletteData![palKey]?.findHeaderColor()
+                        let group = self.paletteData![palKey]
+                        self.paletteData![palKey]?.headerColorIndex = (group?.colorsArray.count ?? 0) / 2
                     }
                 }
                 
@@ -109,12 +110,12 @@ class Palette: NSManagedObject, Identifiable {
                     let names: NSArray = nestDictionary["values"] as! NSArray
                     for (index, i) in (self.paletteKey?.enumerated())! {
                         let name = names[index] as! String
-                        self.paletteData?[i]?.setName(name: name)
+                        self.paletteData?[i]?.name = name
                     }
                 }
             }
             
-            self.curGroupId = (self.paletteData?.first?.value.getIdentifier()) ?? ""
+            self.curGroupId = (self.paletteData?.first?.value.identifier) ?? ""
         } catch {
             print("Error parsing Json")
         }
@@ -138,7 +139,7 @@ class Palette: NSManagedObject, Identifiable {
     }
     
     func updateColorGroup(group: OPColorGroup, save: Bool) {
-        self.updateColorGroup(group: group, for: group.getIdentifier())
+        self.updateColorGroup(group: group, for: group.identifier)
         if save {
             _ = self.save()
         }

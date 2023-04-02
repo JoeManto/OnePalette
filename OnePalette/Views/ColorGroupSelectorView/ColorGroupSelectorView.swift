@@ -16,7 +16,7 @@ struct ColorGroupSelectorButton: View {
     @State var dynamicSize = 20.0
     
     var body: some View {
-        Color(group.getHeaderColor().color)
+        Color(group.headerColor.color)
             .frame(height: vm.selectedGroupId == group.identifier ? 30.0 : self.dynamicSize)
             .onHover { isInside in
                 withAnimation(Animation.easeIn(duration: 0.2)) {
@@ -24,7 +24,7 @@ struct ColorGroupSelectorButton: View {
                 }
             }
             .onTapGesture {
-                let id = group.getIdentifier()
+                let id = group.identifier
                 print("on selection \(id)")
                 vm.onSelection(id)
                 vm.selectedGroupId = id
