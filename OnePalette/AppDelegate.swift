@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let menu = NSMenu()
     private var eventMonitor: EventMonitor?
-    private var colorWindow: OPWindow!
+    var colorWindow: OPWindow!
     
     private var colorWindowController: NSWindowController!
     
@@ -51,8 +51,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.colorWindow.contentViewController = PaletteModifierViewController()
         
         // Tracks left and right clicks on status item
-        eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) {
-            [weak self] event in if let strongSelf = self, strongSelf.popover.isShown {
+        eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown], isLocal: false) { [weak self] event in
+            if let strongSelf = self, strongSelf.popover.isShown {
                 strongSelf.closePopover(sender: event)
             }
         }

@@ -17,15 +17,20 @@ struct PaletteEditingContentView: View {
     
     var body: some View {
         ScrollView {
-            Text(vm.palette.paletteName)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
-                .padding([.top, .leading])
+            EditableLabel($vm.palette.paletteName, onEditEnd: {
+                self.vm.saveChanges()
+            })
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
+            .padding([.top, .leading])
             
-            Text(vm.selectedColorGroup.name)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.standardFontBold(size: 32.0, relativeTo: .title))
-                .padding([.leading])
+            EditableLabel($vm.selectedColorGroup.name, onEditEnd: {
+                self.vm.saveChanges()
+            })
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.standardFontBold(size: 32.0, relativeTo: .title))
+            .padding([.leading])
+            
             
             VStack {
                 HStack {

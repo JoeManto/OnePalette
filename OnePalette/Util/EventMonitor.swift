@@ -12,9 +12,11 @@ public class EventMonitor {
     private var monitor: Any?
     private let mask: NSEvent.EventTypeMask
     private let handler: (NSEvent?) -> Void
+    private let isLocal: Bool
     
-    public init(mask: NSEvent.EventTypeMask, handler: @escaping (NSEvent?) -> Void) {
+    public init(mask: NSEvent.EventTypeMask, isLocal: Bool = true, handler: @escaping (NSEvent?) -> Void) {
         self.mask = mask
+        self.isLocal = isLocal
         self.handler = handler
     }
     
@@ -23,7 +25,15 @@ public class EventMonitor {
     }
     
     public func start() {
-        monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler)
+        if isLocal {
+            monitor = NSEvent.addLocalMonitorForEvents(matching: mask, handler: { [weak self] event in
+                self?.handler(event)
+                return event
+            })
+        }
+        else {
+            monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler)
+        }
     }
     
     public func stop() {

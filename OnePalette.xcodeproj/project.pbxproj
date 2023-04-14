@@ -28,6 +28,8 @@
 		708E8B9129B9A9F1001363A9 /* Font+Standard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9029B9A9F1001363A9 /* Font+Standard.swift */; };
 		708E8B9329BC4F26001363A9 /* DropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9229BC4F26001363A9 /* DropDownView.swift */; };
 		708E8B9629BEBB82001363A9 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B9529BEBB82001363A9 /* CheckBox.swift */; };
+		70A5642629D9F9EC00C14C22 /* EditableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A5642529D9F9EC00C14C22 /* EditableLabel.swift */; };
+		70A5642C29DA556E00C14C22 /* ReadFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A5642B29DA556E00C14C22 /* ReadFrameModifier.swift */; };
 		70B64F23209667B200D379BC /* AppleDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B64F22209667B200D379BC /* AppleDesginColors.json */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
 		70B64F292098369400D379BC /* OPWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F282098369400D379BC /* OPWindow.swift */; };
@@ -79,6 +81,8 @@
 		708E8B9029B9A9F1001363A9 /* Font+Standard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Standard.swift"; sourceTree = "<group>"; };
 		708E8B9229BC4F26001363A9 /* DropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownView.swift; sourceTree = "<group>"; };
 		708E8B9529BEBB82001363A9 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
+		70A5642529D9F9EC00C14C22 /* EditableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableLabel.swift; sourceTree = "<group>"; };
+		70A5642B29DA556E00C14C22 /* ReadFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFrameModifier.swift; sourceTree = "<group>"; };
 		70B64F22209667B200D379BC /* AppleDesginColors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AppleDesginColors.json; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		70B64F282098369400D379BC /* OPWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPWindow.swift; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 				703F030B297C808C0007152F /* List+Modifiers.swift */,
 				70C3079529D0F0E1008C3AC9 /* HoldModifier.swift */,
 				70C3079729D12C5B008C3AC9 /* IntrinsicContentSize.swift */,
+				70A5642B29DA556E00C14C22 /* ReadFrameModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 				708E8B9529BEBB82001363A9 /* CheckBox.swift */,
 				708E8B9229BC4F26001363A9 /* DropDownView.swift */,
 				708E8B8A29B96FD4001363A9 /* ResponseField */,
+				70A5642529D9F9EC00C14C22 /* EditableLabel.swift */,
 			);
 			path = UtilityViews;
 			sourceTree = "<group>";
@@ -394,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70A5642629D9F9EC00C14C22 /* EditableLabel.swift in Sources */,
 				7060385D293ECD8F00D275B9 /* PaletteViewModel.swift in Sources */,
 				706038662946D26600D275B9 /* PaletteModifierController.swift in Sources */,
 				70B64F292098369400D379BC /* OPWindow.swift in Sources */,
@@ -410,6 +417,7 @@
 				70D690732048CED70070C99D /* AppDelegate.swift in Sources */,
 				70FE689F204F5BF300DA4E76 /* Palette.swift in Sources */,
 				70F954F7296B86980035E8E3 /* PaletteEditingContentView.swift in Sources */,
+				70A5642C29DA556E00C14C22 /* ReadFrameModifier.swift in Sources */,
 				70603858293D2BA200D275B9 /* PaletteService.swift in Sources */,
 				70603861293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift in Sources */,
 				706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */,
@@ -512,7 +520,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -567,7 +575,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;

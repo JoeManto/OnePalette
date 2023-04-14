@@ -19,7 +19,6 @@ struct DropDownView: View {
         Menu {
             ForEach((0..<items.count), id: \.self) { i in
                 Button(items[i], action: {
-                    print("hello")
                     onSelection(i, items[i])
                 })
                 Divider()
@@ -28,5 +27,4 @@ struct DropDownView: View {
             Text(title)
         }
     }
-    
 }

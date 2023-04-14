@@ -13,8 +13,6 @@ import SwiftUI
 class PaletteEditingContentViewModel: ObservableObject {
     @Published var palette: Palette
     
-    private(set) var groupSelectorVm: ColorGroupSelectorViewModel!
-    
     @Published var selectedColorGroup: OPColorGroup
     
     @Published var colorArray = [ColorView]()
@@ -27,7 +25,10 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
     }
     
+    /// Determines if the current selected color cell is the header color
     @Published var isHeader: Bool
+    
+    private(set) var groupSelectorVm: ColorGroupSelectorViewModel!
     
     var selectedColorIndex: Int = 0
     
@@ -61,6 +62,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         .store(in: &subs)
     }
     
+    /// Sets the selected color group and changes color cells and fields to reflect the new selection
     private func onColorGroupSelection(id: String) {
         // Save the current changes before switching
         self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
@@ -73,6 +75,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
     }
     
+    /// Sets the color at provided index as the selected color. If no color exists one is added
     func onColorTap(index: Int) {
         let colorArray = self.selectedColorGroup.colorsArray
         
@@ -92,8 +95,8 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.isHeader = self.selectedColorGroup.headerColorIndex == index
     }
     
+    /// Selects the same color group to trigger an update
     func requestUIUpdate() {
-        // Select the same color group to trigger an update
         onColorGroupSelection(id: self.selectedColorGroup.identifier)
     }
     
@@ -118,6 +121,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         return views
     }
     
+    /// Updates the UI for a new palette
     func updatePalette(palette: Palette) {
         self.palette = palette
         self.selectedColorGroup = palette.groups.first ?? OPColorGroup(id: "Empty")
@@ -126,6 +130,11 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.groupSelectorVm = ColorGroupSelectorViewModel(groups: palette.groups, isVertical: true, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
         })
+    }
+    
+    /// Updates the current palette with the current changes in the selected group
+    func saveChanges() {
+        self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
     }
     
     /// Adds a new color to the current group
@@ -141,7 +150,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
     }
     
-    /// Adds a new group to the current palette
+    /// Adds a new group to the current palette and selects the new group
     func addNewGroup() {
         let newGroup = OPColorGroup.newGroup()
         self.palette.addColorGroup(group: newGroup, save: false)
@@ -149,6 +158,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.onColorGroupSelection(id: newGroup.identifier)
     }
     
+    /// Sorts the color groups in the palette and updates the group selector
     func sortPalette() {
         let newGroups = self.palette.groups.sortByRainbowColors()
         self.palette.reorderGroups(off: newGroups, save: true)
