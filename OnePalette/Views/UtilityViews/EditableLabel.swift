@@ -12,7 +12,7 @@ import Combine
 
 extension View {
     @ViewBuilder
-    private func onTapBackgroundContent(enabled: Bool, viewFrame: CGRect, windowSize: CGSize, _ action: @escaping () -> Void) -> some View {
+    private func onBackgroundTapContent(enabled: Bool, viewFrame: CGRect, windowSize: CGSize, _ action: @escaping () -> Void) -> some View {
         if enabled {
             Color.clear
                 .frame(width: windowSize.width, height: windowSize.height)
@@ -25,15 +25,14 @@ extension View {
         }
     }
 
-    func onTapBackground(enabled: Bool, viewFrame: CGRect, _ action: @escaping () -> Void) -> some View {
+    func onBackgroundTap(enabled: Bool, viewFrame: CGRect, _ action: @escaping () -> Void) -> some View {
         let windowSize = CGSize(width: (NSApplication.shared.delegate as? AppDelegate)!.colorWindow.contentView!.bounds.width * 2,
                             height: (NSApplication.shared.delegate as? AppDelegate)!.colorWindow.contentView!.bounds.height * 2)
         return background(
-            onTapBackgroundContent(enabled: enabled, viewFrame: viewFrame, windowSize: windowSize, action)
+            onBackgroundTapContent(enabled: enabled, viewFrame: viewFrame, windowSize: windowSize, action)
         )
     }
 }
-
 
 struct EditableLabel: View {
     @Binding var text: String
@@ -65,7 +64,7 @@ struct EditableLabel: View {
             textFieldView()
                 .fixedSize()
                 .opacity(self.editing ? 1 : 0)
-                .onTapBackground(enabled: editing, viewFrame: frame) {
+                .onBackgroundTap(enabled: editing, viewFrame: frame) {
                     editing = false
                 }
             

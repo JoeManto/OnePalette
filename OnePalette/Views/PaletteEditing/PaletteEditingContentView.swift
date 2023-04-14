@@ -31,7 +31,6 @@ struct PaletteEditingContentView: View {
             .font(.standardFontBold(size: 32.0, relativeTo: .title))
             .padding([.leading])
             
-            
             VStack {
                 HStack {
                     Text("Picker")

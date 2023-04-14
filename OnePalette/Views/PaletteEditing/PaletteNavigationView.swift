@@ -41,7 +41,6 @@ struct PaletteNavigationView: View {
     var body: some View {
         List {
             ForEach(self.vm.palettes) { palette in
-                //Group {
                 HStack {
                     Spacer()
                     VStack {
