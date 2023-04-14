@@ -13,17 +13,25 @@ import AppKit
 
 class PaletteNavigationViewModel: ObservableObject {
     
-    let palettes: [Palette]
-    @Published var selectedIndex = 0
+    @Published var palettes: [Palette]
+    @Published var activePalette: String
     
     var navigationPublisher = PassthroughSubject<Any, Never>()
     
     init(palettes: [Palette]) {
         self.palettes = palettes
+        self.activePalette = palettes.first?.paletteName ?? ""
     }
     
-    func paletteTap() {
-        navigationPublisher.send(self.palettes[self.selectedIndex])
+    func paletteTapped(palette: Palette) {
+        self.activePalette = palette.paletteName
+        self.navigationPublisher.send(palette)
+    }
+    
+    /// Updates all the palettes and sets the active palette
+    func update(activePalette: String) {
+        self.palettes = PaletteService.shared.palettes
+        self.activePalette = activePalette
     }
 }
 
@@ -31,11 +39,8 @@ struct PaletteNavigationView: View {
     
     @ObservedObject var vm: PaletteNavigationViewModel
     
-    @State private var isActive: String
-    
     init(vm: PaletteNavigationViewModel) {
         self.vm = vm
-        self.isActive = vm.palettes.first?.paletteName ?? ""
     }
     
     var body: some View {
@@ -47,11 +52,10 @@ struct PaletteNavigationView: View {
                         Text(palette.paletteName)
                             .padding(8)
                     }
-                    .background(isActive == palette.paletteName ? .blue : .clear, in: Rectangle())
+                    .background(vm.activePalette == palette.paletteName ? .blue : .clear, in: Rectangle())
                     .cornerRadius(8)
                     .onTapGesture {
-                        isActive = palette.paletteName
-                        self.vm.navigationPublisher.send(palette)
+                        vm.paletteTapped(palette: palette)
                     }
                     Spacer()
                 }

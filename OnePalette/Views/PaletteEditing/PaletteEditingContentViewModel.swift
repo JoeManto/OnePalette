@@ -28,6 +28,8 @@ class PaletteEditingContentViewModel: ObservableObject {
     /// Determines if the current selected color cell is the header color
     @Published var isHeader: Bool
     
+    var paletteNameChangePublisher = PassthroughSubject<String, Never>()
+    
     private(set) var groupSelectorVm: ColorGroupSelectorViewModel!
     
     var selectedColorIndex: Int = 0

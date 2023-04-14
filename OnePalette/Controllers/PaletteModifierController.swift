@@ -35,10 +35,14 @@ class PaletteModifierViewController: NSSplitViewController {
     lazy var contentViewModel: PaletteEditingContentViewModel = {
         PaletteEditingContentViewModel(palette: PaletteService.shared.palettes.first)
     }()
+    
+    lazy var navViewModel: PaletteNavigationViewModel = {
+        PaletteNavigationViewModel(palettes: PaletteService.shared.palettes)
+    }()
 
     lazy var navigationController = {
         let vc = NavigationViewController()
-        let navView = PaletteNavigationView(vm: PaletteNavigationViewModel(palettes: PaletteService.shared.palettes))
+        let navView = PaletteNavigationView(vm: self.navViewModel)
         let view = NSHostingView(rootView: navView)
         view.translatesAutoresizingMaskIntoConstraints = false
         vc.view.addSubview(view)
@@ -49,14 +53,6 @@ class PaletteModifierViewController: NSSplitViewController {
             view.topAnchor.constraint(equalTo: vc.view.topAnchor),
             view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
         ])
-        
-        navView.vm.navigationPublisher.sink { [unowned self] selectedPalette in
-            guard let palette = selectedPalette as? Palette else {
-                return
-            }
-            self.contentViewModel.updatePalette(palette: palette)
-        }
-        .store(in: &self.subs)
         
         return vc
     }()
@@ -64,8 +60,8 @@ class PaletteModifierViewController: NSSplitViewController {
     lazy var contentController = {
         let vc = NavigationViewController()
         
-        let navView = PaletteEditingContentView(vm: self.contentViewModel)
-        let view = NSHostingView(rootView: navView)
+        let contentView = PaletteEditingContentView(vm: self.contentViewModel)
+        let view = NSHostingView(rootView: contentView)
         
         view.translatesAutoresizingMaskIntoConstraints = false
         vc.view.addSubview(view)
@@ -76,7 +72,7 @@ class PaletteModifierViewController: NSSplitViewController {
             view.topAnchor.constraint(equalTo: vc.view.topAnchor),
             view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
         ])
-        
+
         return vc
     }()
 
@@ -84,6 +80,23 @@ class PaletteModifierViewController: NSSplitViewController {
        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupUI()
         setupLayout()
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        
+        contentViewModel.paletteNameChangePublisher.sink { name in
+            self.navViewModel.update(activePalette: name)
+        }
+        .store(in: &self.subs)
+        
+        navViewModel.navigationPublisher.sink { [unowned self] selectedPalette in
+            guard let palette = selectedPalette as? Palette else {
+                return
+            }
+            self.contentViewModel.updatePalette(palette: palette)
+        }
+        .store(in: &self.subs)
     }
 
     required init?(coder: NSCoder) {

@@ -19,6 +19,7 @@ struct PaletteEditingContentView: View {
         ScrollView {
             EditableLabel($vm.palette.paletteName, onEditEnd: {
                 self.vm.saveChanges()
+                self.vm.paletteNameChangePublisher.send(vm.palette.paletteName)
             })
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
