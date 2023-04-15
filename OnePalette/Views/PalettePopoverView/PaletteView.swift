@@ -32,6 +32,7 @@ struct PaletteView: View {
             }
             
             ColorGroupGridView(vm: vm.colorGridVm)
+            
             ColorGroupSelectorView(vm: vm.selectionVm)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(height: 50)

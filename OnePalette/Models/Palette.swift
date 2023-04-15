@@ -21,6 +21,7 @@ class Palette: NSManagedObject, Identifiable {
     
     var paletteData: [String : OPColorGroup]?
     
+    /// The color groups contained in the palette in the users pefered order
     var groups: [OPColorGroup] {
         var groups = [OPColorGroup]()
         

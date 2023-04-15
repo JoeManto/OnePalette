@@ -23,14 +23,14 @@ class PaletteViewModel: ObservableObject {
         self.onPrev = onPrev
         
         self.selectionVm = ColorGroupSelectorViewModel(
-            groups: Array(palette.paletteData?.values ?? [String : OPColorGroup]().values),
+            groups: palette.groups,
             onSelection: { [weak self] id in
-                self?.onSelection(id: id)
+                self?.onColorGroupSelection(id: id)
             }
         )
     }
     
-    private func onSelection(id: String) {
+    private func onColorGroupSelection(id: String) {
         PaletteService.shared.setCurrentGroup(groupId: id)
         if let updatedPal = PaletteService.shared.lastUsed {
             self.palette = updatedPal
@@ -39,10 +39,9 @@ class PaletteViewModel: ObservableObject {
     }
     
     func updateViewModels() {
-        self.selectionVm = ColorGroupSelectorViewModel(groups:
-            Array(self.palette.paletteData?.values ?? [String : OPColorGroup]().values),
+        self.selectionVm = ColorGroupSelectorViewModel(groups: self.palette.groups,
             onSelection: { [weak self] id in
-                self?.onSelection(id: id)
+                self?.onColorGroupSelection(id: id)
             }
         )
         
