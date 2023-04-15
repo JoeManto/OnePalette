@@ -16,16 +16,20 @@ struct ColorView: View, Identifiable {
     let isHeader: Bool
     let isEmpty: Bool
     let isSelected: Bool
+    let isEditing: Bool
+    let onDelete: (() -> Void)?
     
     private let textColor: Color
     private let size: CGSize
     
-    init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false) {
+    init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
         self.isEmpty = isEmpty
         self.id = colorModel.id
         self.isSelected = isSelected
+        self.isEditing = isEditing
+        self.onDelete = onDelete
         
         if isHeader {
             self.size = CGSize(width: 150, height: 150)
@@ -75,6 +79,20 @@ struct ColorView: View, Identifiable {
             if isSelected {
                 RoundedRectangle(cornerRadius: self.isHeader ? 30 : 10)
                     .stroke(.selection, lineWidth: 3)
+            }
+        })
+        .overlay(alignment: .topTrailing, content: {
+            if isSelected && isEditing {
+                ZStack {
+                    Image(systemName: "xmark.circle")
+                        .padding(3)
+                }
+                .clipShape(Circle())
+                .background(.red, in: Circle())
+                .offset(CGSize(width: 10, height: -12))
+                .onTapGesture {
+                    onDelete?()
+                }
             }
         })
     }

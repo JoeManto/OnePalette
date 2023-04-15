@@ -108,7 +108,12 @@ class PaletteEditingContentViewModel: ObservableObject {
         var views = [ColorView]()
         
         for i in 0..<colors.count {
-            views.append(ColorView(colorModel: colors[i].shallowCopy(), isSelected: i == self.selectedColorIndex))
+            views.append(ColorView(colorModel: colors[i].shallowCopy(), isSelected: i == self.selectedColorIndex, isEditing: true,
+            onDelete: { [unowned self] in
+                self.selectedColorGroup.colorsArray.remove(at: i)
+                self.colorArray = self.getPaddedColorGroupView()
+                self.saveChanges()
+            }))
         }
         
         let remainder = 10 - colors.count
