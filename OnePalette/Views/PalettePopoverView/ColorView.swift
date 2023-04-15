@@ -18,13 +18,14 @@ struct ColorView: View, Identifiable {
     let isSelected: Bool
     let isEditing: Bool
     let onDelete: (() -> Void)?
+    let responsive: Bool
     
     private let textColor: Color
     private let size: CGSize
     
     @State private var hovered: Bool = false
     
-    init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, onDelete: (() -> Void)? = nil) {
+    init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
         self.isEmpty = isEmpty
@@ -32,6 +33,7 @@ struct ColorView: View, Identifiable {
         self.isSelected = isSelected
         self.isEditing = isEditing
         self.onDelete = onDelete
+        self.responsive = responsive
         
         if isHeader {
             self.size = CGSize(width: 150, height: 150)
@@ -74,7 +76,7 @@ struct ColorView: View, Identifiable {
                 Spacer()
             }
         }
-        .frame(minWidth: self.size.width, maxWidth: self.size.width, minHeight: self.size.height, maxHeight: self.size.height)
+        .frame(minWidth: self.size.width, maxWidth: responsive ? .infinity : self.size.width, minHeight: self.size.height, maxHeight: responsive ? 150 : self.size.height)
         .background(Color(nsColor: colorModel.color))
         .cornerRadius(self.isHeader ? 30 : 10)
         .overlay(content: {

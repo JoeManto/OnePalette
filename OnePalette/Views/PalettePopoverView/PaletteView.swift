@@ -31,7 +31,14 @@ struct PaletteView: View {
                 Spacer()
             }
             
-            ColorGroupGridView(vm: vm.colorGridVm)
+            switch vm.colorGridVm.gridSize {
+            case .small:
+                ColorGroupSmallGridView(vm: vm.colorGridVm)
+            case .medium:
+                ColorGroupMediumGridView(vm: vm.colorGridVm)
+            case .large:
+                ColorGroupLargeGridView(vm: vm.colorGridVm)
+            }
             
             ColorGroupSelectorView(vm: vm.selectionVm)
                 .frame(maxWidth: .infinity, alignment: .center)
