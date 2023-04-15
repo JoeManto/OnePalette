@@ -22,6 +22,8 @@ struct ColorView: View, Identifiable {
     private let textColor: Color
     private let size: CGSize
     
+    @State private var hovered = 0.0
+    
     init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
@@ -90,11 +92,17 @@ struct ColorView: View, Identifiable {
                 .clipShape(Circle())
                 .background(.red, in: Circle())
                 .offset(CGSize(width: 10, height: -12))
+                
+                .opacity(hovered)
+                .animation(.easeIn(duration: 0.3), value: hovered)
                 .onTapGesture {
                     onDelete?()
                 }
             }
         })
+        .onHover { inView in
+            hovered = inView ? 1.0 : 0.0
+        }
     }
 }
 
