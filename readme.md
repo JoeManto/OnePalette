@@ -10,9 +10,7 @@ visit the project listing in my cv for more infomation
 * Full apple design color palette
 * Responsive color groups 
 * Ability to create and manipulate palettes
-
-`Core Data` for palette data and `User Defaults` for general settings
-* Ability to sort and modify color groups and palettes.
+* Ability to sort color groups and palettes
 
 <img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/menuView.png"/>
 <img height = "300" src = "https://github.com/JoeManto/OnePalette/blob/master/MDRes/modifyColorsView.png"/>
