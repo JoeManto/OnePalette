@@ -22,7 +22,7 @@ struct ColorView: View, Identifiable {
     private let textColor: Color
     private let size: CGSize
     
-    @State private var hovered = 0.0
+    @State private var hovered: Bool = false
     
     init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
@@ -93,7 +93,7 @@ struct ColorView: View, Identifiable {
                 .background(.red, in: Circle())
                 .offset(CGSize(width: 10, height: -12))
                 
-                .opacity(hovered)
+                .opacity(hovered ? 1.0 : 0.0)
                 .animation(.easeIn(duration: 0.3), value: hovered)
                 .onTapGesture {
                     onDelete?()
@@ -101,7 +101,7 @@ struct ColorView: View, Identifiable {
             }
         })
         .onHover { inView in
-            hovered = inView ? 1.0 : 0.0
+            hovered = inView
         }
     }
 }
