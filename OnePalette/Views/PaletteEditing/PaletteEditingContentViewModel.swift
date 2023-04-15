@@ -172,4 +172,9 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.groupSelectorVm.groups = newGroups
         self.requestUIUpdate()
     }
+    
+    /// Sets the current selected color as the header color
+    func setHeaderColor() {
+        self.selectedColorGroup.headerColorIndex = self.selectedColorIndex
+    }
 }

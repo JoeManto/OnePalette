@@ -37,13 +37,19 @@ struct PaletteEditingContentView: View {
                     Text("Picker")
                         .font(.standardFontMedium(size: 14, relativeTo: .body))
                     ColorPicker("", selection: $vm.selectedColor)
+                    
                     Text("Hex")
                         .font(.standardFontMedium(size: 14, relativeTo: .body))
                     TextField("", text: $vm.hexFieldValueColor)
                         .textFieldStyle(.roundedBorder)
                         .frame(maxWidth: 100)
+                    
                     Text("Header")
-                    CheckBox(isOn: $vm.isHeader)
+                    CheckBox(isOn: $vm.isHeader, allowUnchecking: false, onChange: { enabled in
+                        if enabled {
+                            self.vm.setHeaderColor()
+                        }
+                    })
                 }
                 .padding([.bottom], 5)
                 

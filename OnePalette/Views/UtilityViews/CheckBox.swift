@@ -11,12 +11,14 @@ import SwiftUI
 
 struct CheckBox: View {
     var isOn: Binding<Bool>
+        
+    private let onChange: ((Bool) -> Void)?
+    private let allowUnchecking: Bool
     
-    @State private var checked: Bool = false
-    
-    init(isOn: Binding<Bool>) {
+    init(isOn: Binding<Bool>, allowUnchecking: Bool = true, onChange: ((Bool) -> Void)? = nil) {
         self.isOn = isOn
-        self.checked = isOn.wrappedValue
+        self.onChange = onChange
+        self.allowUnchecking = allowUnchecking
     }
     
     var body: some View {
@@ -34,8 +36,13 @@ struct CheckBox: View {
         )
         .contentShape(Rectangle())
         .onTapGesture {
-            checked = !checked
-            isOn.wrappedValue = checked
+            if !allowUnchecking, isOn.wrappedValue {
+                return
+            }
+            
+            isOn.wrappedValue = !isOn.wrappedValue
+            self.onChange?(isOn.wrappedValue)
+            
         }
         .frame(width: 15, height: 15)
     }
