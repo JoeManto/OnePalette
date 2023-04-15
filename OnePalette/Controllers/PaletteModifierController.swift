@@ -98,6 +98,12 @@ class PaletteModifierViewController: NSSplitViewController {
         }
         .store(in: &self.subs)
     }
+    
+    override func viewWillDisappear() {
+        let curGroup = self.contentViewModel.selectedColorGroup
+        self.contentViewModel.palette.updateColorGroup(group: curGroup, save: true)
+        super.viewWillDisappear()
+    }
 
     required init?(coder: NSCoder) {
        super.init(coder: coder)
