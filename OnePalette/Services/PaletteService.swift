@@ -110,6 +110,21 @@ class PaletteService {
         return palette
     }
     
+    func delete(palette: Palette) {
+        let palettesToRemove = self.palettes.filter { $0.id == palette.id }
+        self.palettes.removeAll(where: { $0.id == palette.id })
+        for pal in palettesToRemove {
+            context.delete(pal)
+        }
+        
+        do {
+            try context.save()
+        }
+        catch {
+            print("Failed to save after deleting palette(s)")
+        }
+    }
+    
     func getPalette(for name: String) -> [Palette] {
         return self.palettes.filter { $0.paletteName == name }
     }

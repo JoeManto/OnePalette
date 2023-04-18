@@ -68,10 +68,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Selected Color Actions", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Palette Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "New Palette", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem(title: "Delete Palette", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Settings", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Support", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }

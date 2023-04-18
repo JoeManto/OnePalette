@@ -98,7 +98,7 @@ struct PaletteEditingContentView: View {
                     
                     self.sortPaletteByBrightnessField()
                         .padding(.bottom, 10)
-                    self.deletePaletteField(paletteName: vm.palette.paletteName)
+                    self.deletePaletteField(palette: vm.palette)
                         .padding(.bottom, 10)
                     
                 }
@@ -106,6 +106,7 @@ struct PaletteEditingContentView: View {
             }
             .padding(.bottom, 45)
         }
+        .id(vm.scrollViewId)
         .frame(width: 600, height: 500)
         .background(.background)
     }
@@ -163,13 +164,14 @@ struct PaletteEditingContentView: View {
         })))
     }
     
-    @ViewBuilder func deletePaletteField(paletteName: String) -> some View {
+    @ViewBuilder func deletePaletteField(palette: Palette) -> some View {
         ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
             title: "Delete Palette",
-            subtitle: "Removes the current palette (\(paletteName)) including all color groups",
+            subtitle: "Removes the current palette (\(palette.paletteName)) including all color groups",
             type: .action
         ), action: ResponseFieldAction(name: "Delete", destructive: true, onAction: {
-            print("Delete Palette")
+            print("Deleting Palette")
+            vm.requestPaletteRemoval(palette: palette)
         })))
     }
 }

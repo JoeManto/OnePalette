@@ -85,8 +85,18 @@ class PaletteModifierViewController: NSSplitViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        contentViewModel.paletteNameChangePublisher.sink { name in
+        contentViewModel.paletteNameChangePublisher.sink { [unowned self] name in
             self.navViewModel.update(activePalette: name)
+        }
+        .store(in: &self.subs)
+        
+        contentViewModel.paletteDeletePublisher.sink { [unowned self] removedPalette in
+            guard let pal = PaletteService.shared.palettes.first else {
+                return
+            }
+            
+            self.contentViewModel.updatePalette(palette: pal)
+            self.navViewModel.update(activePalette: pal.paletteName)
         }
         .store(in: &self.subs)
         

@@ -28,7 +28,12 @@ class PaletteEditingContentViewModel: ObservableObject {
     /// Determines if the current selected color cell is the header color
     @Published var isHeader: Bool
     
+    /// The id for the scroll view. When changes causes the scroll view to reset and scroll to top
+    @Published var scrollViewId: UUID
+    
     var paletteNameChangePublisher = PassthroughSubject<String, Never>()
+    
+    var paletteDeletePublisher = PassthroughSubject<Palette, Never>()
     
     private(set) var groupSelectorVm: ColorGroupSelectorViewModel!
     
@@ -45,6 +50,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.selectedColor = Color.white
         self.hexFieldValueColor = "#FFFFFF"
         self.isHeader = false
+        self.scrollViewId = UUID()
         
         self.groupSelectorVm = ColorGroupSelectorViewModel(groups: groups, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
@@ -155,6 +161,12 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.selectedColorGroup.addColor(color: newColor)
         
         self.palette.updateColorGroup(group: self.selectedColorGroup, save: true)
+    }
+    
+    func requestPaletteRemoval(palette: Palette) {
+        PaletteService.shared.delete(palette: palette)
+        self.scrollViewId = UUID()
+        paletteDeletePublisher.send(palette)
     }
     
     /// Adds a new group to the current palette and selects the new group
