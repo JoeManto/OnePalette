@@ -5,7 +5,7 @@
                   "orange",
                   "yellow",
                   "green",
-                  "tealblue",
+                  "teal",
                   "blue",
                   "purple",
                   "pink",
@@ -14,14 +14,14 @@
     
     "Names":{
         "values":[
-                  "red",
-                  "orange",
-                  "yellow",
-                  "green",
-                  "tealblue",
-                  "blue",
-                  "purple",
-                  "pink",
+                  "Red",
+                  "Orange",
+                  "Yellow",
+                  "Green",
+                  "Teal",
+                  "Blue",
+                  "Purple",
+                  "Pink",
                   ]
     },
     
@@ -59,7 +59,7 @@
                   "#007aff"
                   ]
     },
-    "tealblue":{
+    "teal":{
         "values":[
                   "#5ac8fa",
                   ]
