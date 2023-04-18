@@ -28,6 +28,14 @@ class PaletteNavigationViewModel: ObservableObject {
         self.navigationPublisher.send(palette)
     }
     
+    /// Requests a new palette to be created.
+    /// Called when user taps on add new palette
+    func addNewPalette() {
+        let palette = PaletteService.shared.installEmptyPalette()
+        self.palettes = PaletteService.shared.palettes
+        self.paletteTapped(palette: palette)
+    }
+    
     /// Updates all the palettes and sets the active palette
     func update(activePalette: String) {
         self.palettes = PaletteService.shared.palettes
@@ -44,25 +52,39 @@ struct PaletteNavigationView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(self.vm.palettes) { palette in
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text(palette.paletteName)
-                            .padding(8)
+        VStack {
+            List {
+                ForEach(self.vm.palettes) { palette in
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text(palette.paletteName)
+                                .padding(8)
+                        }
+                        .background(vm.activePalette == palette.paletteName ? .blue : .clear, in: Rectangle())
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            vm.paletteTapped(palette: palette)
+                        }
+                        Spacer()
                     }
-                    .background(vm.activePalette == palette.paletteName ? .blue : .clear, in: Rectangle())
-                    .cornerRadius(8)
-                    .onTapGesture {
-                        vm.paletteTapped(palette: palette)
-                    }
-                    Spacer()
+                    .listRowInsets(EdgeInsets())
                 }
-                .listRowInsets(EdgeInsets())
+            }
+            .setBackgroundColor(color: Color(nsColor: NSColor.controlBackgroundColor))
+            Spacer()
+            HStack {
+                addPaletteBtn()
             }
         }
-        .setBackgroundColor(color: Color(nsColor: NSColor.controlBackgroundColor))
+    }
+    
+    @ViewBuilder func addPaletteBtn() -> some View {
+        Text("Add Palette")
+            .padding(.bottom, 10)
+            .onTapGesture {
+                vm.addNewPalette()
+            }
     }
 }
 

@@ -72,22 +72,42 @@ class PaletteService {
     
     private func installMaterialDesignPalette() {
         let pal = Palette(name: "Material Design", localFile: "MaterialDesginColors", entity: entity, insertInto: context)
-        self.palettes.append(pal)
-        
-        guard pal.save() else {
-            print("Failed to save material design color palette")
-            return
-        }
+        self.install(palette: pal)
     }
     
     private func installAppleDesignPalette() {
         let pal = Palette(name: "Apple Design", localFile: "AppleDesginColors", entity: entity, insertInto: context)
-        self.palettes.append(pal)
-        
-        guard pal.save() else {
-            print("Failed to save material design color palette")
-            return
+        self.install(palette: pal)
+    }
+    
+    /// Saves an empty palette.
+    /// Returns the newly created palette
+    func installEmptyPalette() -> Palette {
+        var paletteName = "New Palette"
+      
+        while self.isNameTaken(name: paletteName) {
+            let comps = paletteName.split(separator: " ")
+            
+            guard comps.count >= 3, let prevNum = Int(comps[2]) else {
+                paletteName = "\(paletteName) 1"
+                continue
+            }
+            paletteName = "New Palette \(prevNum + 1)"
         }
+        
+        let pal = Palette(name: paletteName, entity: entity, insertInto: context)
+        return self.install(palette: pal)
+    }
+    
+    @discardableResult private func install(palette: Palette) -> Palette{
+        self.palettes.append(palette)
+        
+        guard palette.save() else {
+            print("Failed to save <\(palette.paletteName)> color palette")
+            return palette
+        }
+        
+        return palette
     }
     
     func getPalette(for name: String) -> [Palette] {
@@ -141,6 +161,15 @@ class PaletteService {
             self.installMaterialDesignPalette()
             self.installAppleDesignPalette()
         }
+    }
+    
+    func isNameTaken(name: String) -> Bool {
+        for palette in palettes {
+            if palette.paletteName == name {
+                return true
+            }
+        }
+        return false
     }
     
     func cleanInstall() {
