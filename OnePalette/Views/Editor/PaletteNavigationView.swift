@@ -11,38 +11,6 @@ import SwiftUI
 import Combine
 import AppKit
 
-class PaletteNavigationViewModel: ObservableObject {
-    
-    @Published var palettes: [Palette]
-    @Published var activePalette: String
-    
-    var navigationPublisher = PassthroughSubject<Any, Never>()
-    
-    init(palettes: [Palette]) {
-        self.palettes = palettes
-        self.activePalette = palettes.first?.paletteName ?? ""
-    }
-    
-    func paletteTapped(palette: Palette) {
-        self.activePalette = palette.paletteName
-        self.navigationPublisher.send(palette)
-    }
-    
-    /// Requests a new palette to be created.
-    /// Called when user taps on add new palette
-    func addNewPalette() {
-        let palette = PaletteService.shared.installEmptyPalette()
-        self.palettes = PaletteService.shared.palettes
-        self.paletteTapped(palette: palette)
-    }
-    
-    /// Updates all the palettes and sets the active palette
-    func update(activePalette: String) {
-        self.palettes = PaletteService.shared.palettes
-        self.activePalette = activePalette
-    }
-}
-
 struct PaletteNavigationView: View {
     
     @ObservedObject var vm: PaletteNavigationViewModel
@@ -72,16 +40,21 @@ struct PaletteNavigationView: View {
                 }
             }
             .setBackgroundColor(color: Color(nsColor: NSColor.controlBackgroundColor))
+            
             Spacer()
-            HStack {
-                addPaletteBtn()
-            }
+            addPaletteBtn()
         }
+        .background(Color(nsColor: NSColor.controlBackgroundColor))
     }
     
     @ViewBuilder func addPaletteBtn() -> some View {
-        Text("Add Palette")
-            .padding(.bottom, 10)
+            HStack {
+                Spacer()
+                Text("+")
+                    .padding([.bottom, .top], 10)
+                Spacer()
+            }
+            .background(Color(NSColor.windowBackgroundColor))
             .onTapGesture {
                 vm.addNewPalette()
             }
