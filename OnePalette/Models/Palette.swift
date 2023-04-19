@@ -164,6 +164,18 @@ class Palette: NSManagedObject, Identifiable {
         }
     }
     
+    func removeColorGroup(_ group: OPColorGroup) {
+        self.groupsOrder?.removeAll(where: { $0 == group.identifier })
+            
+        guard let _ = self.paletteData?[group.identifier] else {
+            assert(false, "Attempt to remove color group \(group.identifier) that doesn't exist")
+            return
+        }
+        
+        self.paletteData?[group.identifier] = nil
+        _ = self.save()
+    }
+    
     // MARK:  CoreData Save
     
     /// Turns paletteData to BinaryData so it can be saved as an NSManaged objec in core data

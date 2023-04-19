@@ -86,7 +86,7 @@ struct PaletteEditingContentView: View {
                         .padding(.bottom, 10)
                     self.colorSpaceField()
                         .padding(.bottom, 10)
-                    self.deleteGroupField(groupName: vm.selectedColorGroup.name)
+                    self.deleteGroupField(group: vm.selectedColorGroup)
                         .padding(.bottom, 10)
                     
                     Text("Palette Settings")
@@ -154,13 +154,13 @@ struct PaletteEditingContentView: View {
         })))
     }
     
-    @ViewBuilder func deleteGroupField(groupName: String) -> some View {
+    @ViewBuilder func deleteGroupField(group: OPColorGroup) -> some View {
         ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
             title: "Delete Current Group",
-            subtitle: "Removes the current color group (\(groupName)) from the current palette",
+            subtitle: "Removes the current color group (\(group.name)) from the current palette",
             type: .action
         ), action: ResponseFieldAction(name: "Delete", destructive: true, onAction: {
-            print("Delete Current Group")
+            vm.requestGroupRemoval(group: group)
         })))
     }
     

@@ -164,9 +164,31 @@ class PaletteEditingContentViewModel: ObservableObject {
     }
     
     func requestPaletteRemoval(palette: Palette) {
-        PaletteService.shared.delete(palette: palette)
-        self.scrollViewId = UUID()
-        paletteDeletePublisher.send(palette)
+        // Add a delay so the delete btn animation can be seen
+        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(500))) {
+            PaletteService.shared.delete(palette: palette)
+            self.paletteDeletePublisher.send(palette)
+        
+            self.scrollViewId = UUID()
+        }
+    }
+    
+    func requestGroupRemoval(group: OPColorGroup) {
+        guard palette.groups.count > 1 else {
+            // TODO: Delete but insert empty one
+            print("Not deleting last color group")
+            return
+        }
+        self.palette.removeColorGroup(group)
+        
+        // Add a delay so the delete btn animation can be seen
+        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(500))) {
+            self.selectedColorGroup = self.palette.groups.first ?? OPColorGroup(id: "Empty")
+            self.onColorGroupSelection(id: self.selectedColorGroup.identifier)
+            self.groupSelectorVm.groups = self.palette.groups
+        
+            self.scrollViewId = UUID()
+        }
     }
     
     /// Adds a new group to the current palette and selects the new group
