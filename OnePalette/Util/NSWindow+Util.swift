@@ -90,8 +90,6 @@ extension NSWindow {
                 let yPosition = screen.height - self.frame.height
                 let origin = CGPoint(x: xPosition, y: yPosition)
                 
-                print(origin)
-                print(self.frame)
                 self.setFrameOrigin(origin)
             }
         }

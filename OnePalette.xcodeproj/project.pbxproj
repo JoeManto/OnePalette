@@ -25,6 +25,7 @@
 		706038662946D26600D275B9 /* PaletteModifierController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706038652946D26600D275B9 /* PaletteModifierController.swift */; };
 		7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */; };
 		706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B90B720CAFC9D005E6250 /* OPUtil.swift */; };
+		707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033D729F1BB4E00356D65 /* MainMenu.swift */; };
 		708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */; };
 		708E8B8C29B970B9001363A9 /* ResponseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B8B29B970B9001363A9 /* ResponseField.swift */; };
 		708E8B8F29B9710C001363A9 /* ResponseFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E8B8E29B9710C001363A9 /* ResponseFieldViewModel.swift */; };
@@ -81,6 +82,7 @@
 		706038652946D26600D275B9 /* PaletteModifierController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteModifierController.swift; sourceTree = "<group>"; };
 		7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteNavigationView.swift; sourceTree = "<group>"; };
 		706B90B720CAFC9D005E6250 /* OPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPUtil.swift; sourceTree = "<group>"; };
+		707033D729F1BB4E00356D65 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingContentViewModel.swift; sourceTree = "<group>"; };
 		708E8B8B29B970B9001363A9 /* ResponseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseField.swift; sourceTree = "<group>"; };
 		708E8B8E29B9710C001363A9 /* ResponseFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseFieldViewModel.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		702F38A720E997790099BC87 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				707033D629F1BB4300356D65 /* Menu */,
 				708A494229D79AF100657883 /* ColorGroupSelectorView */,
 				708A494129D79ACC00657883 /* PalettePopoverView */,
 				7060393A294FC02200D275B9 /* Editor */,
@@ -184,6 +187,14 @@
 				7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */,
 			);
 			path = Editor;
+			sourceTree = "<group>";
+		};
+		707033D629F1BB4300356D65 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				707033D729F1BB4E00356D65 /* MainMenu.swift */,
+			);
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		708A494129D79ACC00657883 /* PalettePopoverView */ = {
@@ -422,6 +433,7 @@
 				7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */,
 				7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */,
 				70C3079829D12C5B008C3AC9 /* IntrinsicContentSize.swift in Sources */,
+				707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */,
 				708E8B9129B9A9F1001363A9 /* Font+Standard.swift in Sources */,
 				708E8B9329BC4F26001363A9 /* DropDownView.swift in Sources */,
 				7060385A293D465B00D275B9 /* NSColor+Util.swift in Sources */,

@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let popover = ScreenContainedPopover()
 
-    private let menu = NSMenu()
+    private let menu = MainMenu()
     private var eventMonitor: EventMonitor?
     var colorWindow: OPWindow!
     
@@ -25,19 +25,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         PaletteService.shared.onPalettesFetched {
             self.setup()
+            self.setupNotifications()
         }
-        
-        NotificationCenter.default.addObserver(forName: PaletteService.nextPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
-            self.popover.window?.moveTopRight()
-        })
-        
-        NotificationCenter.default.addObserver(forName: PaletteService.prevPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
-            self.popover.window?.moveTopRight()
-        })
     }
     
+    // MARK: Window and Application Lifecycle
+    
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+    
+    func hideController(window: NSWindow, controller: NSViewController) {
+        window.orderOut(controller)
+    }
+    
+    // MARK: Setup
+    
     func setup() {
-        constructMenu()
+        menu.build()
         statusItem.button?.image = NSImage(named:NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -66,21 +71,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    // MARK: Window & Menu
-    
-    /// Fills the NSMenu with NSMenuitems
-    func constructMenu() {
-        menu.addItem(NSMenuItem(title: "Color Group Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Add/Modify Colors", action: #selector(AppDelegate.openPaletteModifier(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem(title: "Clean Install", action: #selector(AppDelegate.cleanInstall(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Selected Color Actions", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Copy Code For", action: #selector(AppDelegate.placeholder(_:)), keyEquivalent: "P"))
-        menu.addItem(NSMenuItem(title: "Settings", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Support", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(forName: PaletteService.nextPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.popover.window?.moveTopRight()
+        })
+        
+        NotificationCenter.default.addObserver(forName: PaletteService.prevPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.popover.window?.moveTopRight()
+        })
     }
+    
+    // MARK: Popover Controls
+    
+    /// Shows or hides the popover
+    func togglePopover(_ sender: Any?) {
+        if popover.isShown {
+            closePopover(sender: sender)
+            eventMonitor?.stop()
+        }
+        else {
+            eventMonitor?.start()
+            showPopover(sender: sender)
+        }
+    }
+    
+    /// Shows the popover
+    func showPopover(sender: Any?) {
+        self.popover.showNear(statusItem: self.statusItem)
+    }
+    
+    /// Removes the popover
+    func closePopover(sender: Any?) {
+        popover.performClose(sender)
+    }
+    
     
     // MARK: Selectors
     
@@ -104,75 +128,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func iconClicked(sender: NSStatusItem) {
         let wasRightClick = NSApp.currentEvent?.type == NSEvent.EventType.rightMouseUp
         if wasRightClick {
-            self.showMenu()
+            closePopover(sender: nil)
+            menu.showMenu(near: NSEvent.mouseLocation)
         }
         else{
             self.togglePopover(nil)
         }
     }
-    
-    // MARK: Popover Controls
 
-    /// Shows the menu next to the status item
-    func showMenu() {
-        closePopover(sender: nil)
-        statusItem.menu = menu
-        statusItem.popUpMenu(menu)
-        statusItem.menu = nil
-    }
-    
-    /// Shows or hides the popover
-    func togglePopover(_ sender: Any?) {
-        if popover.isShown {
-            closePopover(sender: sender)
-            eventMonitor?.stop()
-        }
-        else {
-            eventMonitor?.start()
-            showPopover(sender: sender)
-        }
-    }
-    
-    /// Shows the popover
-    func showPopover(sender: Any?) {
-        let invisibleWindow = NSWindow(contentRect: NSMakeRect(0, 0, 20, 5), styleMask: .borderless, backing: .buffered, defer: false)
-        invisibleWindow.backgroundColor = .red
-        invisibleWindow.alphaValue = 0
-        
-        if let button = statusItem.button {
-            let buttonRect:NSRect = button.convert(button.bounds, to: nil)
-            let screenRect:NSRect = button.window!.convertToScreen(buttonRect)
-            
-            // calculate the bottom center position (10 is the half of the window width)
-            let posX = screenRect.origin.x + (screenRect.width / 2) - 10
-            let posY = screenRect.origin.y
-
-            // position and show the window
-            invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
-            invisibleWindow.makeKeyAndOrderFront(self)
-            
-            popover.startingOrigin = invisibleWindow.frame.origin
-            popover.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: NSRectEdge.minY)
-            
-            NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-    
-    /// Removes the popover
-    func closePopover(sender: Any?) {
-        popover.performClose(sender)
-    }
-    
-    // MARK: Window and Application Lifecycle
-    
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-    
-    func hideController(window: NSWindow, controller: NSViewController) {
-        window.orderOut(controller)
-    }
-    
     // MARK: - Core Data stack
     
     lazy var persistentContainer: NSPersistentContainer = {
