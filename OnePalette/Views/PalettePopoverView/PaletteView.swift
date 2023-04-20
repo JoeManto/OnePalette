@@ -12,6 +12,17 @@ import SwiftUI
 struct PaletteView: View {
     @ObservedObject var vm: PaletteViewModel
     
+    private var size: CGSize {
+        switch vm.colorGridVm.gridSize {
+        case .small:
+            return CGSize(width: 500, height: 250)
+        case .medium:
+            return CGSize(width: 500, height: 250)
+        case .large:
+            return CGSize(width: 600, height: 400)
+        }
+    }
+    
     var body: some View {
         VStack {
             Spacer()
@@ -46,6 +57,7 @@ struct PaletteView: View {
                 .frame(height: 50)
             Spacer()
         }
+        .frame(width: size.width, height: size.height)
         .fixedSize()
         .padding(10)
     }
