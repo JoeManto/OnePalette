@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import AppSDK
 
 struct PaletteEditingContentView: View {
     
@@ -17,7 +18,9 @@ struct PaletteEditingContentView: View {
     
     var body: some View {
         ScrollView {
-            EditableLabel($vm.palette.paletteName, onEditEnd: {
+            EditableLabel($vm.palette.paletteName,
+                          containingWindow: (NSApplication.shared.delegate as! AppDelegate).colorWindow,
+            onEditEnd: {
                 self.vm.saveChanges()
                 self.vm.paletteNameChangePublisher.send(vm.palette.paletteName)
             })
@@ -25,7 +28,9 @@ struct PaletteEditingContentView: View {
             .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
             .padding([.top, .leading])
             
-            EditableLabel($vm.selectedColorGroup.name, onEditEnd: {
+            EditableLabel($vm.selectedColorGroup.name,
+                          containingWindow: (NSApplication.shared.delegate as! AppDelegate).colorWindow,
+            onEditEnd: {
                 self.vm.saveChanges()
             })
             .frame(maxWidth: .infinity, alignment: .leading)

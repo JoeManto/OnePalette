@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AppSDK
 
 class OPColor: Identifiable, Codable, NSCopying {
 

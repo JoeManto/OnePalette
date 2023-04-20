@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AppSDK
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {

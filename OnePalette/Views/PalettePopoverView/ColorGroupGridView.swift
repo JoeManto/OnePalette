@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import AppSDK
 
 struct ColorGroupLargeGridView: View {
     var vm: ColorGroupGridViewModel

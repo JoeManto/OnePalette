@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import AppSDK
 
 struct PaletteView: View {
     @ObservedObject var vm: PaletteViewModel
