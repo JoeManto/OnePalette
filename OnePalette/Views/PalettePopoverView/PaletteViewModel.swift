@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 
 class PaletteViewModel: ObservableObject {
     @Published var palette: Palette
@@ -24,6 +25,8 @@ class PaletteViewModel: ObservableObject {
             groups: palette.groups,
             onSelection: { [weak self] id in
                 self?.onColorGroupSelection(id: id)
+                
+                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRight()
             }
         )
     }
@@ -40,6 +43,7 @@ class PaletteViewModel: ObservableObject {
         self.selectionVm = ColorGroupSelectorViewModel(groups: self.palette.groups,
             onSelection: { [weak self] id in
                 self?.onColorGroupSelection(id: id)
+                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRight()
             }
         )
         
