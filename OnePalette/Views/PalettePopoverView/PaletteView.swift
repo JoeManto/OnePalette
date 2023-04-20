@@ -17,7 +17,7 @@ struct PaletteView: View {
         case .small:
             return CGSize(width: 500, height: 250)
         case .medium:
-            return CGSize(width: 500, height: 250)
+            return CGSize(width: 600, height: 320)
         case .large:
             return CGSize(width: 600, height: 400)
         }
