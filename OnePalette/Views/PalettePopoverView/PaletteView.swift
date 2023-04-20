@@ -14,6 +14,7 @@ struct PaletteView: View {
     
     var body: some View {
         VStack {
+            Spacer()
             HStack {
                 Button(action: {
                     vm.prevPalette()
@@ -43,7 +44,9 @@ struct PaletteView: View {
             ColorGroupSelectorView(vm: vm.selectionVm)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(height: 50)
+            Spacer()
         }
+        .fixedSize()
         .padding(10)
     }
 }
@@ -59,11 +62,6 @@ struct PaletteView_Previews: PreviewProvider {
     }()
     
     static var previews: some View {
-        PaletteView(vm: PaletteViewModel(palette: Self.palette,
-        onNext: { pal in
-            
-        }, onPrev: { pal in 
-            
-        }))
+        PaletteView(vm: PaletteViewModel(palette: Self.palette))
     }
 }

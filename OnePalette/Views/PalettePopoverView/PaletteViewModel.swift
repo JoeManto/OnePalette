@@ -13,14 +13,12 @@ class PaletteViewModel: ObservableObject {
     private(set) var selectionVm: ColorGroupSelectorViewModel!
     var colorGridVm: ColorGroupGridViewModel
     
-    var onNext: (Palette) -> ()
-    var onPrev: (Palette) -> ()
+    var onNext: ((Palette) -> ())?
+    var onPrev: ((Palette) -> ())?
     
-    init(palette: Palette, onNext: @escaping (Palette) -> (), onPrev: @escaping (Palette) -> ()) {
+    init(palette: Palette) {
         self.palette = palette
         self.colorGridVm = ColorGroupGridViewModel(palette: palette)
-        self.onNext = onNext
-        self.onPrev = onPrev
         
         self.selectionVm = ColorGroupSelectorViewModel(
             groups: palette.groups,
@@ -51,12 +49,12 @@ class PaletteViewModel: ObservableObject {
     func nextPalette() {
         palette = PaletteService.shared.nextPalette()
         updateViewModels()
-        self.onNext(palette)
+        self.onNext?(palette)
     }
     
     func prevPalette() {
         palette = PaletteService.shared.prevPalette()
         updateViewModels()
-        self.onPrev(palette)
+        self.onPrev?(palette)
     }
 }

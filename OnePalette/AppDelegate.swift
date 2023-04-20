@@ -12,7 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    private let popover = NSPopover()
+    let popover = ScreenContainedPopover()
 
     private let menu = NSMenu()
     private var eventMonitor: EventMonitor?
@@ -26,6 +26,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PaletteService.shared.onPalettesFetched {
             self.setup()
         }
+        
+        NotificationCenter.default.addObserver(forName: PaletteService.nextPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.popover.window?.moveTopRight()
+        })
+        
+        NotificationCenter.default.addObserver(forName: PaletteService.prevPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.popover.window?.moveTopRight()
+        })
     }
     
     func setup() {
@@ -143,7 +151,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             invisibleWindow.setFrameOrigin(NSPoint(x: posX, y: posY))
             invisibleWindow.makeKeyAndOrderFront(self)
             
-            popover.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: NSRectEdge.minX)
+            popover.startingOrigin = invisibleWindow.frame.origin
+            popover.show(relativeTo: invisibleWindow.contentView!.frame, of: invisibleWindow.contentView!, preferredEdge: NSRectEdge.minY)
             
             NSApp.activate(ignoringOtherApps: true)
         }

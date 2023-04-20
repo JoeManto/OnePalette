@@ -20,14 +20,19 @@ class ColorViewerController: NSHostingController<PaletteView> {
         self.curPal = curPal
         self.curColorGroup = curPal.paletteData?.first?.value ?? OPColorGroup(id: "empty")
         
-        self.paletteViewModel = PaletteViewModel(palette: curPal,
-        onNext: { pal in
-    
-        }, onPrev: { pal in
-
-        })
+        self.paletteViewModel = PaletteViewModel(palette: curPal)
         
-        super.init(rootView: PaletteView(vm: self.paletteViewModel))
+        let palView = PaletteView(vm: self.paletteViewModel)
+        
+        super.init(rootView: palView)
+        
+        self.paletteViewModel.onNext = { [weak self] pal in
+            
+        }
+        
+        self.paletteViewModel.onPrev = { [weak self] pal in
+            
+        }
     }
     
     override func viewDidLoad() {

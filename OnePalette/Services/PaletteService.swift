@@ -17,6 +17,9 @@ class PaletteService {
     
     private var curPaletteIndex: Int
     
+    static let nextPaletteNavigationNotification = Notification(name: Notification.Name("NextPaletteNavNotification"))
+    static let prevPaletteNavigationNotification = Notification(name: Notification.Name("PrevPaletteNavNotification"))
+    
     /// The current palette being presented in PaletteView
     var lastUsed: Palette? {
         self.palettes[curPaletteIndex]
@@ -143,6 +146,8 @@ class PaletteService {
     
     func nextPalette() -> Palette {
         print("next")
+        NotificationCenter.default.post(Self.nextPaletteNavigationNotification)
+        
         let nextIndex = self.curPaletteIndex + 1
         
         guard nextIndex < self.palettes.count else {
@@ -156,6 +161,8 @@ class PaletteService {
     
     func prevPalette() -> Palette {
         print("prev")
+        NotificationCenter.default.post(Self.prevPaletteNavigationNotification)
+        
         let prevIndex = self.curPaletteIndex - 1
         
         guard prevIndex >= 0 else {

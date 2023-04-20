@@ -13,6 +13,8 @@
 		703F030C297C808C0007152F /* List+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703F030B297C808C0007152F /* List+Modifiers.swift */; };
 		703F030F297C81BD0007152F /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 703F030E297C81BD0007152F /* Introspect */; };
 		704AD01929EF8422000C4F66 /* PaletteNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704AD01829EF8422000C4F66 /* PaletteNavigationViewModel.swift */; };
+		705343EF29F0C0B30070C893 /* NSWindow+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705343EE29F0C0B30070C893 /* NSWindow+Util.swift */; };
+		705343F129F0DB320070C893 /* ScreenContainedPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705343F029F0DB320070C893 /* ScreenContainedPopover.swift */; };
 		70603853293C3BC200D275B9 /* PaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603852293C3BC200D275B9 /* PaletteView.swift */; };
 		70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */; };
 		70603858293D2BA200D275B9 /* PaletteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603857293D2BA200D275B9 /* PaletteService.swift */; };
@@ -67,6 +69,8 @@
 		703F0308297C5CF20007152F /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		703F030B297C808C0007152F /* List+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List+Modifiers.swift"; sourceTree = "<group>"; };
 		704AD01829EF8422000C4F66 /* PaletteNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteNavigationViewModel.swift; sourceTree = "<group>"; };
+		705343EE29F0C0B30070C893 /* NSWindow+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSWindow+Util.swift"; sourceTree = "<group>"; };
+		705343F029F0DB320070C893 /* ScreenContainedPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenContainedPopover.swift; sourceTree = "<group>"; };
 		70603852293C3BC200D275B9 /* PaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteView.swift; sourceTree = "<group>"; };
 		70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorView.swift; sourceTree = "<group>"; };
 		70603857293D2BA200D275B9 /* PaletteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteService.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				702F38A420E9975A0099BC87 /* ClipboardSettingController.swift */,
 				70D690932048D7F30070C99D /* ColorViewerController.swift */,
 				706038652946D26600D275B9 /* PaletteModifierController.swift */,
+				705343F029F0DB320070C893 /* ScreenContainedPopover.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 				70603859293D465B00D275B9 /* NSColor+Util.swift */,
 				708E8B9029B9A9F1001363A9 /* Font+Standard.swift */,
 				7030A92C29C963A000470CFF /* AppColors.swift */,
+				705343EE29F0C0B30070C893 /* NSWindow+Util.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -409,6 +415,7 @@
 				70B64F292098369400D379BC /* OPWindow.swift in Sources */,
 				703F0309297C5CF20007152F /* ColorView.swift in Sources */,
 				70CD485D293C19F9000AF83A /* ColorGroupGridView.swift in Sources */,
+				705343EF29F0C0B30070C893 /* NSWindow+Util.swift in Sources */,
 				70D690952048D7F30070C99D /* ColorViewerController.swift in Sources */,
 				70603853293C3BC200D275B9 /* PaletteView.swift in Sources */,
 				704AD01929EF8422000C4F66 /* PaletteNavigationViewModel.swift in Sources */,
@@ -431,6 +438,7 @@
 				70D69098204BA5360070C99D /* EventMonitor.swift in Sources */,
 				703F030C297C808C0007152F /* List+Modifiers.swift in Sources */,
 				708E8B9629BEBB82001363A9 /* CheckBox.swift in Sources */,
+				705343F129F0DB320070C893 /* ScreenContainedPopover.swift in Sources */,
 				708E8B8F29B9710C001363A9 /* ResponseFieldViewModel.swift in Sources */,
 				708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */,
 				70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */,
