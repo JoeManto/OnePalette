@@ -12,7 +12,6 @@
 		703F0309297C5CF20007152F /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703F0308297C5CF20007152F /* ColorView.swift */; };
 		703F030C297C808C0007152F /* List+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703F030B297C808C0007152F /* List+Modifiers.swift */; };
 		703F030F297C81BD0007152F /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 703F030E297C81BD0007152F /* Introspect */; };
-		704AD01929EF8422000C4F66 /* PaletteNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704AD01829EF8422000C4F66 /* PaletteNavigationViewModel.swift */; };
 		70603853293C3BC200D275B9 /* PaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603852293C3BC200D275B9 /* PaletteView.swift */; };
 		70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */; };
 		70603858293D2BA200D275B9 /* PaletteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603857293D2BA200D275B9 /* PaletteService.swift */; };
@@ -20,11 +19,18 @@
 		7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7060385E293ECDD000D275B9 /* ColorGroupGridViewModel.swift */; };
 		70603861293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */; };
 		706038662946D26600D275B9 /* PaletteModifierController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706038652946D26600D275B9 /* PaletteModifierController.swift */; };
-		7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */; };
 		706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B90B720CAFC9D005E6250 /* OPUtil.swift */; };
 		707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033D729F1BB4E00356D65 /* MainMenu.swift */; };
 		707033DB29F1E52500356D65 /* AppSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 707033DA29F1E52500356D65 /* AppSDK */; };
 		707033DD29F1E84800356D65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033DC29F1E84800356D65 /* AppDelegate.swift */; };
+		707033DF29F20BFA00356D65 /* CopyFormatEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033DE29F20BFA00356D65 /* CopyFormatEditorController.swift */; };
+		707033E229F20CAF00356D65 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033E129F20CAF00356D65 /* NavigationView.swift */; };
+		707033E429F20CD000356D65 /* NavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033E329F20CD000356D65 /* NavigationViewModel.swift */; };
+		707033E629F2146900356D65 /* CopyFormatEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033E529F2146900356D65 /* CopyFormatEditorViewModel.swift */; };
+		707033E829F214D800356D65 /* CopyFormatEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033E729F214D800356D65 /* CopyFormatEditorView.swift */; };
+		707033EA29F217BB00356D65 /* CopyFormatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033E929F217BB00356D65 /* CopyFormatService.swift */; };
+		707033EC29F217C700356D65 /* CopyFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033EB29F217C700356D65 /* CopyFormat.swift */; };
+		707033EE29F221C800356D65 /* String+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033ED29F221C800356D65 /* String+Util.swift */; };
 		708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */; };
 		70B64F23209667B200D379BC /* AppleDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B64F22209667B200D379BC /* AppleDesginColors.json */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
@@ -57,7 +63,6 @@
 		7030A92C29C963A000470CFF /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		703F0308297C5CF20007152F /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		703F030B297C808C0007152F /* List+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "List+Modifiers.swift"; sourceTree = "<group>"; };
-		704AD01829EF8422000C4F66 /* PaletteNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteNavigationViewModel.swift; sourceTree = "<group>"; };
 		70603852293C3BC200D275B9 /* PaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteView.swift; sourceTree = "<group>"; };
 		70603854293C455A00D275B9 /* ColorGroupSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorView.swift; sourceTree = "<group>"; };
 		70603857293D2BA200D275B9 /* PaletteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteService.swift; sourceTree = "<group>"; };
@@ -65,10 +70,17 @@
 		7060385E293ECDD000D275B9 /* ColorGroupGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupGridViewModel.swift; sourceTree = "<group>"; };
 		70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorViewModel.swift; sourceTree = "<group>"; };
 		706038652946D26600D275B9 /* PaletteModifierController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteModifierController.swift; sourceTree = "<group>"; };
-		7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteNavigationView.swift; sourceTree = "<group>"; };
 		706B90B720CAFC9D005E6250 /* OPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPUtil.swift; sourceTree = "<group>"; };
 		707033D729F1BB4E00356D65 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		707033DC29F1E84800356D65 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = OnePalette/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
+		707033DE29F20BFA00356D65 /* CopyFormatEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormatEditorController.swift; sourceTree = "<group>"; };
+		707033E129F20CAF00356D65 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
+		707033E329F20CD000356D65 /* NavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewModel.swift; sourceTree = "<group>"; };
+		707033E529F2146900356D65 /* CopyFormatEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormatEditorViewModel.swift; sourceTree = "<group>"; };
+		707033E729F214D800356D65 /* CopyFormatEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormatEditorView.swift; sourceTree = "<group>"; };
+		707033E929F217BB00356D65 /* CopyFormatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormatService.swift; sourceTree = "<group>"; };
+		707033EB29F217C700356D65 /* CopyFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormat.swift; sourceTree = "<group>"; };
+		707033ED29F221C800356D65 /* String+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Util.swift"; sourceTree = "<group>"; };
 		708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingContentViewModel.swift; sourceTree = "<group>"; };
 		70B64F22209667B200D379BC /* AppleDesginColors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AppleDesginColors.json; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
@@ -118,6 +130,7 @@
 				702F38A420E9975A0099BC87 /* ClipboardSettingController.swift */,
 				70D690932048D7F30070C99D /* ColorViewerController.swift */,
 				706038652946D26600D275B9 /* PaletteModifierController.swift */,
+				707033DE29F20BFA00356D65 /* CopyFormatEditorController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -125,11 +138,13 @@
 		702F38A720E997790099BC87 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				707033E029F20C3700356D65 /* Format */,
 				707033D629F1BB4300356D65 /* Menu */,
 				708A494229D79AF100657883 /* ColorGroupSelectorView */,
-				708A494129D79ACC00657883 /* PalettePopoverView */,
-				7060393A294FC02200D275B9 /* Editor */,
-				708E8B9429BEBB5D001363A9 /* UtilityViews */,
+				708A494129D79ACC00657883 /* PalettePopover */,
+				7060393A294FC02200D275B9 /* PaletteEditor */,
+				707033E129F20CAF00356D65 /* NavigationView.swift */,
+				707033E329F20CD000356D65 /* NavigationViewModel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -146,19 +161,18 @@
 			isa = PBXGroup;
 			children = (
 				70603857293D2BA200D275B9 /* PaletteService.swift */,
+				707033E929F217BB00356D65 /* CopyFormatService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		7060393A294FC02200D275B9 /* Editor */ = {
+		7060393A294FC02200D275B9 /* PaletteEditor */ = {
 			isa = PBXGroup;
 			children = (
 				708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */,
 				70F954F6296B86980035E8E3 /* PaletteEditingContentView.swift */,
-				704AD01829EF8422000C4F66 /* PaletteNavigationViewModel.swift */,
-				7060393B294FC04C00D275B9 /* PaletteNavigationView.swift */,
 			);
-			path = Editor;
+			path = PaletteEditor;
 			sourceTree = "<group>";
 		};
 		707033D629F1BB4300356D65 /* Menu */ = {
@@ -169,7 +183,16 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
-		708A494129D79ACC00657883 /* PalettePopoverView */ = {
+		707033E029F20C3700356D65 /* Format */ = {
+			isa = PBXGroup;
+			children = (
+				707033E529F2146900356D65 /* CopyFormatEditorViewModel.swift */,
+				707033E729F214D800356D65 /* CopyFormatEditorView.swift */,
+			);
+			path = Format;
+			sourceTree = "<group>";
+		};
+		708A494129D79ACC00657883 /* PalettePopover */ = {
 			isa = PBXGroup;
 			children = (
 				7060385E293ECDD000D275B9 /* ColorGroupGridViewModel.swift */,
@@ -178,7 +201,7 @@
 				70603852293C3BC200D275B9 /* PaletteView.swift */,
 				703F0308297C5CF20007152F /* ColorView.swift */,
 			);
-			path = PalettePopoverView;
+			path = PalettePopover;
 			sourceTree = "<group>";
 		};
 		708A494229D79AF100657883 /* ColorGroupSelectorView */ = {
@@ -190,19 +213,13 @@
 			path = ColorGroupSelectorView;
 			sourceTree = "<group>";
 		};
-		708E8B9429BEBB5D001363A9 /* UtilityViews */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UtilityViews;
-			sourceTree = "<group>";
-		};
 		70CD4859293BD087000AF83A /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				70FE689E204F5BF300DA4E76 /* Palette.swift */,
 				70FE68A4204F5DEB00DA4E76 /* OPColor.swift */,
 				70FE68A2204F5C9700DA4E76 /* OPColorGroup.swift */,
+				707033EB29F217C700356D65 /* CopyFormat.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -213,6 +230,7 @@
 				70B64F282098369400D379BC /* OPWindow.swift */,
 				706B90B720CAFC9D005E6250 /* OPUtil.swift */,
 				7030A92C29C963A000470CFF /* AppColors.swift */,
+				707033ED29F221C800356D65 /* String+Util.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -384,13 +402,14 @@
 				70CD485D293C19F9000AF83A /* ColorGroupGridView.swift in Sources */,
 				70D690952048D7F30070C99D /* ColorViewerController.swift in Sources */,
 				70603853293C3BC200D275B9 /* PaletteView.swift in Sources */,
-				704AD01929EF8422000C4F66 /* PaletteNavigationViewModel.swift in Sources */,
-				7060393C294FC04C00D275B9 /* PaletteNavigationView.swift in Sources */,
 				7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */,
 				707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */,
 				70FE689F204F5BF300DA4E76 /* Palette.swift in Sources */,
 				70F954F7296B86980035E8E3 /* PaletteEditingContentView.swift in Sources */,
+				707033E429F20CD000356D65 /* NavigationViewModel.swift in Sources */,
+				707033EE29F221C800356D65 /* String+Util.swift in Sources */,
 				70603858293D2BA200D275B9 /* PaletteService.swift in Sources */,
+				707033E229F20CAF00356D65 /* NavigationView.swift in Sources */,
 				70603861293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift in Sources */,
 				707033DD29F1E84800356D65 /* AppDelegate.swift in Sources */,
 				706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */,
@@ -400,9 +419,14 @@
 				708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */,
 				70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */,
 				70FE68A5204F5DEB00DA4E76 /* OPColor.swift in Sources */,
+				707033EA29F217BB00356D65 /* CopyFormatService.swift in Sources */,
+				707033EC29F217C700356D65 /* CopyFormat.swift in Sources */,
 				70FE68A3204F5C9700DA4E76 /* OPColorGroup.swift in Sources */,
 				7030A92D29C963A000470CFF /* AppColors.swift in Sources */,
+				707033E629F2146900356D65 /* CopyFormatEditorViewModel.swift in Sources */,
+				707033DF29F20BFA00356D65 /* CopyFormatEditorController.swift in Sources */,
 				70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */,
+				707033E829F214D800356D65 /* CopyFormatEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,9 +1,9 @@
 //
-//  PaletteNavigation.swift
+//  NavigationView.swift
 //  OnePalette
 //
-//  Created by Joe Manto on 12/18/22.
-//  Copyright © 2022 Joe Manto. All rights reserved.
+//  Created by Joe Manto on 4/20/23.
+//  Copyright © 2023 Joe Manto. All rights reserved.
 //
 
 import Foundation
@@ -11,28 +11,28 @@ import SwiftUI
 import Combine
 import AppKit
 
-struct PaletteNavigationView: View {
+struct NavigationView: View {
     
-    @ObservedObject var vm: PaletteNavigationViewModel
+    @ObservedObject var vm: NavigationViewModel
     
-    init(vm: PaletteNavigationViewModel) {
+    init(vm: NavigationViewModel) {
         self.vm = vm
     }
     
     var body: some View {
         VStack {
             List {
-                ForEach(self.vm.palettes) { palette in
+                ForEach(self.vm.displayItems, id: \.id) { item in
                     HStack {
                         Spacer()
                         VStack {
-                            Text(palette.paletteName)
+                            Text(LocalizedStringKey(item.displayName))
                                 .padding(8)
                         }
-                        .background(vm.activePalette == palette.paletteName ? .blue : .clear, in: Rectangle())
+                        .background(vm.activeItem == item ? .blue : .clear, in: Rectangle())
                         .cornerRadius(8)
                         .onTapGesture {
-                            vm.paletteTapped(palette: palette)
+                            vm.itemTapped(item: item)
                         }
                         Spacer()
                     }
@@ -56,20 +56,23 @@ struct PaletteNavigationView: View {
             }
             .background(Color(NSColor.windowBackgroundColor))
             .onTapGesture {
-                vm.addNewPalette()
+                vm.onNewItem?()
             }
     }
 }
 
 @available(macOS 13.0, *)
-struct PaletteNavigation_Previews: PreviewProvider {
+struct Navigation_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack {
-            PaletteNavigationView(vm: PaletteNavigationViewModel(palettes: PaletteService.shared.palettes))
+            NavigationView(vm: NavigationViewModel(items: [
+                "item 1",
+                "item 2",
+                "item 3"
+            ]))
                 .frame(width: 125, height: 150)
         }
         .padding(5)
-        .background(.green)
     }
 }

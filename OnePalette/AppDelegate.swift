@@ -17,9 +17,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let menu = MainMenu()
     private var eventMonitor: EventMonitor?
-    var colorWindow: OPWindow!
     
+    var colorWindow: OPWindow!
     private var colorWindowController: NSWindowController!
+    
+    var copyFormatWindow: OPWindow!
+    private var copyFormatWindowController: NSWindowController!
+    
     
     private var optionViewIsConfiged = false
     
@@ -63,6 +67,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.colorWindowController = MainWindowController(window: self.colorWindow)
         self.colorWindow.contentViewController = PaletteModifierViewController()
+        
+        self.copyFormatWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "Copy-Format-Editor")
+        self.copyFormatWindow.isOpaque = false
+        self.copyFormatWindow.isReleasedWhenClosed = true
+        self.copyFormatWindow.title = "Copy Format Editor"
+        self.copyFormatWindow.backgroundColor = NSColor.clear
+        self.copyFormatWindow.invalidateShadow()
+        
+        self.colorWindowController = MainWindowController(window: self.copyFormatWindow)
+        self.colorWindow.contentViewController = CopyFormatEditorViewController()
         
         // Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown], isLocal: false) { [weak self] event in
@@ -115,10 +129,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    @objc func openFormatEditor(_ sender: Any?) {
+        self.copyFormatWindow.contentViewController = CopyFormatEditorViewController()
+        self.copyFormatWindow.makeKeyAndOrderFront(self)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
     @objc func cleanInstall(_ sender: Any?) {
         closePopover(sender: nil)
         self.colorWindow.orderOut(nil)
         PaletteService.shared.cleanInstall()
+        for format in CopyFormatService.shared.formats {
+            CopyFormatService.shared.remove(format: format)
+        }
     }
     
     @objc func placeholder(_ sender: Any?) {

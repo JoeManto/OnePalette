@@ -1,9 +1,9 @@
 //
-//  PaletteModifierController.swift
+//  CopyFormatEditorController.swift
 //  OnePalette
 //
-//  Created by Joe Manto on 12/11/22.
-//  Copyright © 2022 Joe Manto. All rights reserved.
+//  Created by Joe Manto on 4/20/23.
+//  Copyright © 2023 Joe Manto. All rights reserved.
 //
 
 import Foundation
@@ -11,33 +11,19 @@ import AppKit
 import SwiftUI
 import Combine
 
-class NavigationViewController: NSViewController {
-    init() {
-       super.init(nibName: nil, bundle: nil)
-    }
 
-    required init?(coder: NSCoder) {
-       fatalError("init(coder:) has not been implemented")
-    }
-
-    override func loadView() {
-       view = NSView()
-       view.wantsLayer = true
-    }
-}
-
-class PaletteModifierViewController: NSSplitViewController {
+class CopyFormatEditorViewController: NSSplitViewController {
     
     private let splitViewResorationIdentifier = "com.company.restorationId:mainSplitViewController"
     
     private var subs = Set<AnyCancellable>()
         
-    lazy var contentViewModel: PaletteEditingContentViewModel = {
-        PaletteEditingContentViewModel(palette: PaletteService.shared.palettes.first)
+    lazy var contentViewModel: CopyFormatEditorViewModel = {
+        CopyFormatEditorViewModel()
     }()
     
     lazy var navViewModel: NavigationViewModel = {
-        NavigationViewModel(items: PaletteService.shared.palettes.map { $0.paletteName })
+        NavigationViewModel(items: CopyFormatService.shared.formats.map { $0.name })
     }()
 
     lazy var navigationController = {
@@ -60,7 +46,7 @@ class PaletteModifierViewController: NSSplitViewController {
     lazy var contentController = {
         let vc = NavigationViewController()
         
-        let contentView = PaletteEditingContentView(vm: self.contentViewModel)
+        let contentView = CopyFormatEditorView(vm: self.contentViewModel)
         let view = NSHostingView(rootView: contentView)
         
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -85,40 +71,19 @@ class PaletteModifierViewController: NSSplitViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        contentViewModel.paletteNameChangePublisher.sink { [unowned self] name in
-            self.navViewModel.activeItem = NavigationItem(displayName: name)
-        }
-        .store(in: &self.subs)
-        
-        contentViewModel.paletteDeletePublisher.sink { [unowned self] removedPalette in
-            guard let pal = PaletteService.shared.palettes.first else {
-                return
-            }
-            
-            self.contentViewModel.updatePalette(palette: pal)
-            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName)
-        }
-        .store(in: &self.subs)
-        
         navViewModel.onNewItem = { [weak navViewModel] in
-            let newPalette = PaletteService.shared.installEmptyPalette()
-            navViewModel?.items = PaletteService.shared.palettes.map { $0.paletteName }
-            navViewModel?.activeItem = NavigationItem(displayName: newPalette.paletteName)
+            let format = CopyFormat.nameUnique()
+            CopyFormatService.shared.add(format: format)
+            navViewModel?.items = CopyFormatService.shared.formats.map { $0.name }
         }
         
         navViewModel.navigationPublisher.sink { [unowned self] item in
-            guard let palette = PaletteService.shared.palettes.first(where: { $0.paletteName == item.displayName }) else {
-                return
-            }
-            
-            self.contentViewModel.updatePalette(palette: palette)
+
         }
         .store(in: &self.subs)
     }
     
     override func viewWillDisappear() {
-        let curGroup = self.contentViewModel.selectedColorGroup
-        self.contentViewModel.palette.updateColorGroup(group: curGroup, save: true)
         super.viewWillDisappear()
     }
 

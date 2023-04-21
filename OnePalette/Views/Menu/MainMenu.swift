@@ -12,8 +12,11 @@ import AppKit
 class MainMenu: NSMenu {
     
     func build() {
-        self.buildCopyFormat()
         self.buildEditor()
+        self.buildCopyFormat()
+        self.addItem(NSMenuItem.separator())
+        self.buildImport()
+        self.buildExport()
         self.addItem(NSMenuItem.separator())
         self.buildSettings()
         self.buildSupport()
@@ -33,8 +36,8 @@ class MainMenu: NSMenu {
         item1.target = self
         submenu.addItem(item1)
         
-        let item2 = NSMenuItem(title: "Add New Format", action: #selector(MainMenu.openFormatEditor(_:)), keyEquivalent: "")
-        item2.target = self
+        let item2 = NSMenuItem(title: "Add New Format", action: #selector(AppDelegate.openFormatEditor(_:)), keyEquivalent: "")
+
         submenu.addItem(item2)
         
         self.setSubmenu(submenu, for: copy)
@@ -68,6 +71,18 @@ class MainMenu: NSMenu {
         self.setSubmenu(submenu, for: support)
     }
     
+    private func buildImport() {
+        let item = NSMenuItem(title: "Import Palette", action: #selector(self.importPalette(_:)), keyEquivalent: "")
+        item.target = self
+        self.addItem(item)
+    }
+    
+    private func buildExport() {
+        let item = NSMenuItem(title: "Export Palette", action: #selector(self.importPalette(_:)), keyEquivalent: "")
+        item.target = self
+        self.addItem(item)
+    }
+    
     func showMenu(near location: CGPoint) {
         var newLocation = location
         newLocation.y = NSScreen.main!.frame.height - NSStatusBar.system.thickness - 10
@@ -86,6 +101,14 @@ class MainMenu: NSMenu {
     }
     
     @objc func openFormatEditor(_ sender: Any?) {
-        print("sdf")
+        
+    }
+    
+    @objc func importPalette(_ sender: Any?) {
+        
+    }
+    
+    @objc func exportPalette(_ sender: Any?) {
+        
     }
 }
