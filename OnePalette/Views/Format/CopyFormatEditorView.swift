@@ -13,6 +13,8 @@ import AppSDK
 struct CopyFormatEditorView: View {
     
     @ObservedObject var vm: CopyFormatEditorViewModel
+    
+    @State private var pressed: Bool = false
 
     var body: some View {
         ScrollView {

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import AppSDK
 
 struct ColorView: View, Identifiable {
     let id: ObjectIdentifier
@@ -25,6 +26,8 @@ struct ColorView: View, Identifiable {
     private let size: CGSize
     
     @State private var hovered: Bool = false
+    @State private var copying: Bool = false
+    @State private var opacityAnimationValue = 0.0
     
     init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
@@ -56,26 +59,36 @@ struct ColorView: View, Identifiable {
     var body: some View {
         ZStack {
             HStack {
-                VStack {
-                    if !isEmpty {
-                        HStack {
-                            Text("\(self.colorModel.getWeight())")
-                                .foregroundColor(self.textColor)
-                                .font(.system(size: 10))
-                            Spacer()
+                if copying {
+                    Text("Copied")
+                        .opacity(copying ? 1.0 : 0.0)
+                        .foregroundColor(self.textColor)
+                        .font(.standardFontBold(size: 18, relativeTo: .body))
+                }
+                else {
+                    VStack {
+                        if !isEmpty {
+                            HStack {
+                                Text("\(self.colorModel.getWeight())")
+                                    .foregroundColor(self.textColor)
+                                    .font(.system(size: 10))
+                                    .opacity(copying ? 0.0 : 1.0)
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                Text("\(self.colorModel.getHexString())")
+                                    .foregroundColor(self.textColor)
+                                    .font(.system(size: 10))
+                                    .opacity(copying ? 0.0 : 1.0)
+                                Spacer()
+                            }
                         }
-                        
-                        HStack {
-                            Text("\(self.colorModel.getHexString())")
-                                .foregroundColor(self.textColor)
-                                .font(.system(size: 10))
-                            Spacer()
-                        }
+                        Spacer()
                     }
+                    .padding([.leading, .top], isHeader ? 15 : 10)
                     Spacer()
                 }
-                .padding([.leading, .top], isHeader ? 15 : 10)
-                Spacer()
             }
         }
         .frame(minWidth: self.size.width, maxWidth: responsive ? .infinity : self.size.width, minHeight: self.size.height, maxHeight: responsive ? 150 : self.size.height)
@@ -109,7 +122,17 @@ struct ColorView: View, Identifiable {
         }
         .onTapGesture {
             colorModel.copyToPasteboard(groupName: groupName)
+            withAnimation(.easeIn(duration: 0.25)) {
+                self.copying = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .seconds(1))) {
+                withAnimation(.easeIn(duration: 0.25)) {
+                    self.copying = false
+                }
+            }
         }
+        .shake(intensity: self.copying ? .soft : .none)
     }
 }
 

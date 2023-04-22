@@ -74,6 +74,10 @@ class CopyFormatService {
         if let idx = self.formats.firstIndex(where: { $0.id == format.id }) {
             self.formats[idx] = format
             self.saveFormats()
+            
+            if format == currentFormat {
+                self.setCurrent(format: format)
+            }
         }
     }
     
