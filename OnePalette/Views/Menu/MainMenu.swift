@@ -11,7 +11,11 @@ import AppKit
 
 class MainMenu: NSMenu {
     
+    var formatSelectors = [SelectorAction]()
+    
     func build() {
+        self.removeAllItems()
+        
         self.buildEditor()
         self.buildCopyFormat()
         self.addItem(NSMenuItem.separator())
@@ -31,14 +35,32 @@ class MainMenu: NSMenu {
         let submenu = NSMenu(title: "Copy Format")
         submenu.addItem(NSMenuItem(title: "Copy Format", action: nil, keyEquivalent: ""))
         submenu.addItem(NSMenuItem.separator())
-                
-        let item1 = NSMenuItem(title: "Hex", action: #selector(MainMenu.selectFormat(_:)), keyEquivalent: "")
-        item1.target = self
-        submenu.addItem(item1)
         
         let item2 = NSMenuItem(title: "Add New Format", action: #selector(AppDelegate.openFormatEditor(_:)), keyEquivalent: "")
-
         submenu.addItem(item2)
+        
+        let cur = CopyFormatService.shared.currentFormat
+        
+        self.formatSelectors.removeAll()
+                
+        for format in CopyFormatService.shared.formats {
+            let selectedImg = NSImage(systemSymbolName: "checkmark", accessibilityDescription: "checkmark")
+            
+            let action1 = SelectorAction {
+                CopyFormatService.shared.setCurrent(format: format)
+            }
+            
+            self.formatSelectors.append(action1)
+    
+            let item1 = NSMenuItem(title: format.name, action: #selector(action1.action), keyEquivalent: "")
+            
+            if format.id == cur.id {
+                item1.image = selectedImg
+            }
+            
+            item1.target = action1
+            submenu.addItem(item1)
+        }
         
         self.setSubmenu(submenu, for: copy)
     }
@@ -112,3 +134,21 @@ class MainMenu: NSMenu {
         
     }
 }
+
+
+class SelectorAction: NSObject {
+
+    private let _action: () -> ()
+
+    init(action: @escaping () -> ()) {
+        _action = action
+        super.init()
+    }
+
+    @objc func action() {
+        _action()
+    }
+
+}
+
+

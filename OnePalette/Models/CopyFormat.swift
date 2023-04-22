@@ -16,6 +16,32 @@ struct CopyFormat: Identifiable, Codable, Equatable {
     static func == (lhs: CopyFormat, rhs: CopyFormat) -> Bool {
         return lhs.id == rhs.id
     }
+    
+    func value(color: OPColor, groupName: String) -> String {
+        let nscolor = color.saveableColor
+        let rgb = (red: nscolor.red, green: nscolor.green, blue: nscolor.blue)
+        let rgbf = (red: nscolor.red / 255, green: nscolor.green / 255, blue: nscolor.blue / 255)
+        var hex = color.hexValue
+        
+        while hex.first == "#" {
+            hex.removeFirst()
+        }
+        
+        var output = format
+        
+        output = output.replacingOccurrences(of: "@r", with: "\(rgb.red)")
+        output = output.replacingOccurrences(of: "@g", with: "\(rgb.green)")
+        output = output.replacingOccurrences(of: "@b", with: "\(rgb.blue)")
+        
+        output = output.replacingOccurrences(of: "@r-float", with: "\(rgbf.red)")
+        output = output.replacingOccurrences(of: "@g-float", with: "\(rgbf.green)")
+        output = output.replacingOccurrences(of: "@b-float", with: "\(rgbf.blue)")
+        
+        output = output.replacingOccurrences(of: "@hex", with: "\(hex)")
+        output = output.replacingOccurrences(of: "@group", with: "\(groupName)")
+        
+        return output
+    }
 }
 
 extension CopyFormat {

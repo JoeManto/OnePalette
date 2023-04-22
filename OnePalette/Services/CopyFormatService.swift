@@ -24,6 +24,7 @@ class CopyFormatService {
         self.currentFormat = CopyFormat.default()
         
         self.formats = self.getFormats()
+        self.currentFormat = self.getCurrentFormat()
     }
     
     private func getFormats() -> [CopyFormat] {

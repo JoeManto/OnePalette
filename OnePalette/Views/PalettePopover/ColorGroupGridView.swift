@@ -25,12 +25,12 @@ struct ColorGroupLargeGridView: View {
                             .bold()
                         Spacer()
                     }
-                    ColorView(colorModel: vm.header, isHeader: true)
+                    ColorView(colorModel: vm.header, groupName: vm.group.name, isHeader: true)
                         .padding(.trailing, 20)
                 }
                 LazyVGrid(columns: gridItems, content: {
                     ForEach(vm.nonHeaderColors) { row in
-                        ColorView(colorModel: row)
+                        ColorView(colorModel: row, groupName: vm.group.name)
                     }
                 })
             }
@@ -54,12 +54,12 @@ struct ColorGroupMediumGridView: View {
                             .bold()
                         Spacer()
                     }
-                    ColorView(colorModel: vm.header, isHeader: true)
+                    ColorView(colorModel: vm.header, groupName: vm.group.name, isHeader: true)
                         .padding(.trailing, 20)
                 }
                 LazyVGrid(columns: gridItems, content: {
                     ForEach(vm.nonHeaderColors) { row in
-                        ColorView(colorModel: row)
+                        ColorView(colorModel: row, groupName: vm.group.name)
                     }
                 })
             }
@@ -82,7 +82,7 @@ struct ColorGroupSmallGridView: View {
             
             HStack {
                 ForEach(vm.allColors) { row in
-                    ColorView(colorModel: row, responsive: true)
+                    ColorView(colorModel: row, groupName: vm.group.name, responsive: true)
                 }
             }
             

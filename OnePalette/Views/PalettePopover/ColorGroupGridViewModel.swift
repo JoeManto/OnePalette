@@ -17,7 +17,7 @@ class ColorGroupGridViewModel: ObservableObject {
     }
     
     private let palette: Palette
-    private var group: OPColorGroup
+    var group: OPColorGroup
     
     var nonHeaderColors: [OPColor] {
         return group.colorsArray.filter { $0.id != group.headerColor.id }

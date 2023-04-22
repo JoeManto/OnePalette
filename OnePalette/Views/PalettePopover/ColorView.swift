@@ -13,6 +13,7 @@ struct ColorView: View, Identifiable {
     let id: ObjectIdentifier
     
     let colorModel: OPColor
+    let groupName: String
     let isHeader: Bool
     let isEmpty: Bool
     let isSelected: Bool
@@ -25,7 +26,7 @@ struct ColorView: View, Identifiable {
     
     @State private var hovered: Bool = false
     
-    init(colorModel: OPColor, isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil) {
+    init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
         self.isEmpty = isEmpty
@@ -34,6 +35,7 @@ struct ColorView: View, Identifiable {
         self.isEditing = isEditing
         self.onDelete = onDelete
         self.responsive = responsive
+        self.groupName = groupName
         
         if isHeader {
             self.size = CGSize(width: 150, height: 150)
@@ -104,6 +106,9 @@ struct ColorView: View, Identifiable {
         })
         .onHover { inView in
             hovered = inView
+        }
+        .onTapGesture {
+            colorModel.copyToPasteboard(groupName: groupName)
         }
     }
 }

@@ -47,8 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: Setup
     
     func setup() {
-        menu.build()
-        statusItem.button?.image = NSImage(named:NSImage.Name("StatusBar"))
+        statusItem.button?.image = NSImage(named: NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         
@@ -153,6 +152,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let wasRightClick = NSApp.currentEvent?.type == NSEvent.EventType.rightMouseUp
         if wasRightClick {
             closePopover(sender: nil)
+            menu.build()
             menu.showMenu(near: NSEvent.mouseLocation)
         }
         else{

@@ -84,6 +84,17 @@ class OPColor: Identifiable, Codable, NSCopying {
     func shallowCopy() -> OPColor {
         return self.copy() as! OPColor
     }
+    
+    func copyToPasteboard(using format: CopyFormat = CopyFormatService.shared.currentFormat, groupName: String) {
+        print("Copy")
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string, .color], owner: nil)
+        
+        let copyValue = format.value(color: self, groupName: groupName)
+        
+        pasteboard.setString(copyValue, forType: .string)
+        pasteboard.setString(copyValue, forType: .color)
+    }
 }
 
 // MARK: OPColor Factory
