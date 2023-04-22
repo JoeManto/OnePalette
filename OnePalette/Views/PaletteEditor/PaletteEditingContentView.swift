@@ -164,7 +164,7 @@ struct PaletteEditingContentView: View {
             title: "Delete Current Group",
             subtitle: "Removes the current color group (\(group.name)) from the current palette",
             type: .action
-        ), action: ResponseFieldAction(name: "Delete", destructive: true, onAction: {
+        ), action: ResponseFieldAction(name: "Delete", destructive: true, dur: 2, onAction: {
             vm.requestGroupRemoval(group: group)
         })))
     }

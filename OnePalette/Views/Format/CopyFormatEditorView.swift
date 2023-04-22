@@ -174,7 +174,7 @@ struct CopyFormatEditorView: View {
             title: "Delete Current Format",
             subtitle: "Removes the current format from saved formats",
             type: .action
-        ), action: ResponseFieldAction(name: "Delete", destructive: true, onAction: {
+        ), action: ResponseFieldAction(name: "Delete", destructive: true, dur: 2, onAction: {
             vm.removeCurrentFormat()
         })))
     }
