@@ -31,7 +31,7 @@ class PaletteEditingContentViewModel: ObservableObject {
     /// The id for the scroll view. When changes causes the scroll view to reset and scroll to top
     @Published var scrollViewId: UUID
     
-    var paletteNameChangePublisher = PassthroughSubject<String, Never>()
+    var paletteNameChangePublisher = PassthroughSubject<Palette, Never>()
     
     var paletteDeletePublisher = PassthroughSubject<Palette, Never>()
     

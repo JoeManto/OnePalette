@@ -10,18 +10,23 @@ import Foundation
 import Combine
 
 struct NavigationItem: Identifiable, Equatable {
-    let id: String
+    let id = UUID()
     let displayName: String
+    let value: Any
     
-    init(displayName: String) {
-        self.id = displayName
+    init(displayName: String, value: Any) {
         self.displayName = displayName
+        self.value = value
+    }
+    
+    static func == (lhs: NavigationItem, rhs: NavigationItem) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
 class NavigationViewModel: ObservableObject {
     
-    @Published var items: [String]
+    @Published var items: [NavigationItem]
     @Published var activeItem: NavigationItem
     
     var navigationPublisher = PassthroughSubject<NavigationItem, Never>()
@@ -29,13 +34,9 @@ class NavigationViewModel: ObservableObject {
     var onNewItem: (() -> Void)?
     var onItemTap: (() -> Void)?
     
-    var displayItems: [NavigationItem] {
-        self.items.map { NavigationItem(displayName: $0) }
-    }
-    
-    init(items: [String], onItemTap: (() -> Void)? = nil, onNewItem: (() -> Void)? = nil) {
+    init(items: [NavigationItem], onItemTap: (() -> Void)? = nil, onNewItem: (() -> Void)? = nil) {
         self.items = items
-        self.activeItem = NavigationItem(displayName: items.first ?? "")
+        self.activeItem = items.first ?? NavigationItem(displayName: "", value: "")
         self.onNewItem = onNewItem
         self.onItemTap = onItemTap
     }

@@ -69,6 +69,13 @@ class CopyFormatService {
         saveFormats()
     }
     
+    func update(format: CopyFormat) {
+        if let idx = self.formats.firstIndex(where: { $0.id == format.id }) {
+            self.formats[idx] = format
+            self.saveFormats()
+        }
+    }
+    
     func setCurrent(format: CopyFormat) {
         if !self.formats.contains(where: { $0.id == format.id }) {
             self.add(format: format)
@@ -77,14 +84,5 @@ class CopyFormatService {
         self.currentFormat = format
         
         UserDefaults.standard.set(format.id.uuidString, forKey: Self.curFormatKey)
-    }
-    
-    func isNameTaken(name: String) -> Bool {
-        for format in formats {
-            if format.name == name {
-                return true
-            }
-        }
-        return false
     }
 }

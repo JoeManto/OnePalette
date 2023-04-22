@@ -37,7 +37,9 @@ class PaletteModifierViewController: NSSplitViewController {
     }()
     
     lazy var navViewModel: NavigationViewModel = {
-        NavigationViewModel(items: PaletteService.shared.palettes.map { $0.paletteName })
+        NavigationViewModel(items: PaletteService.shared.palettes.map {
+            NavigationItem(displayName: $0.paletteName, value: $0)
+        })
     }()
 
     lazy var navigationController = {
@@ -85,8 +87,8 @@ class PaletteModifierViewController: NSSplitViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        contentViewModel.paletteNameChangePublisher.sink { [unowned self] name in
-            self.navViewModel.activeItem = NavigationItem(displayName: name)
+        contentViewModel.paletteNameChangePublisher.sink { [unowned self] pal in
+            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName, value: pal)
         }
         .store(in: &self.subs)
         
@@ -96,14 +98,18 @@ class PaletteModifierViewController: NSSplitViewController {
             }
             
             self.contentViewModel.updatePalette(palette: pal)
-            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName)
+            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName, value: pal)
         }
         .store(in: &self.subs)
         
         navViewModel.onNewItem = { [weak navViewModel] in
             let newPalette = PaletteService.shared.installEmptyPalette()
-            navViewModel?.items = PaletteService.shared.palettes.map { $0.paletteName }
-            navViewModel?.activeItem = NavigationItem(displayName: newPalette.paletteName)
+            
+            navViewModel?.items = PaletteService.shared.palettes.map {
+                NavigationItem(displayName: $0.paletteName, value: $0)
+            }
+            
+            navViewModel?.activeItem = NavigationItem(displayName: newPalette.paletteName, value: newPalette)
         }
         
         navViewModel.navigationPublisher.sink { [unowned self] item in

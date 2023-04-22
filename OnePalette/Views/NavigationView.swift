@@ -22,7 +22,7 @@ struct NavigationView: View {
     var body: some View {
         VStack {
             List {
-                ForEach(self.vm.displayItems, id: \.id) { item in
+                ForEach(self.vm.items, id: \.id) { item in
                     HStack {
                         Spacer()
                         VStack {
@@ -67,9 +67,9 @@ struct Navigation_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             NavigationView(vm: NavigationViewModel(items: [
-                "item 1",
-                "item 2",
-                "item 3"
+                NavigationItem(displayName: "Item 1", value: ""),
+                NavigationItem(displayName: "Item 2", value: ""),
+                NavigationItem(displayName: "Item 1", value: "")
             ]))
                 .frame(width: 125, height: 150)
         }

@@ -19,11 +19,17 @@ class CopyFormatEditorViewController: NSSplitViewController {
     private var subs = Set<AnyCancellable>()
         
     lazy var contentViewModel: CopyFormatEditorViewModel = {
-        CopyFormatEditorViewModel()
+        if CopyFormatService.shared.formats.isEmpty {
+            CopyFormatService.shared.add(format: .default())
+        }
+        
+        return CopyFormatEditorViewModel(currentformatId: CopyFormatService.shared.formats.first!.id)
     }()
     
     lazy var navViewModel: NavigationViewModel = {
-        NavigationViewModel(items: CopyFormatService.shared.formats.map { $0.name })
+        NavigationViewModel(items: CopyFormatService.shared.formats.map {
+            NavigationItem(displayName: $0.name, value: $0)
+        })
     }()
 
     lazy var navigationController = {
@@ -74,16 +80,35 @@ class CopyFormatEditorViewController: NSSplitViewController {
         navViewModel.onNewItem = { [weak navViewModel] in
             let format = CopyFormat.nameUnique()
             CopyFormatService.shared.add(format: format)
-            navViewModel?.items = CopyFormatService.shared.formats.map { $0.name }
+            
+            navViewModel?.items = CopyFormatService.shared.formats.map {
+                NavigationItem(displayName: $0.name, value: $0)
+            }
         }
         
         navViewModel.navigationPublisher.sink { [unowned self] item in
-
+            guard let format = item.value as? CopyFormat else {
+                return
+            }
+            contentViewModel.update(formatId: format.id)
+        }
+        .store(in: &self.subs)
+        
+        contentViewModel.formatDeletePublisher.sink { [unowned self] _ in
+            navViewModel.items = CopyFormatService.shared.formats.map {
+                NavigationItem(displayName: $0.name, value: $0)
+            }
+            
+            if let format = CopyFormatService.shared.formats.first {
+                contentViewModel.update(formatId: format.id)
+                navViewModel.activeItem = self.navViewModel.items.first ?? NavigationItem(displayName: format.name, value: format)
+            }
         }
         .store(in: &self.subs)
     }
     
     override func viewWillDisappear() {
+        contentViewModel.saveFormat()
         super.viewWillDisappear()
     }
 

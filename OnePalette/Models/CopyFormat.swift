@@ -10,7 +10,7 @@ import Foundation
 
 struct CopyFormat: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
-    let name: String
+    var name: String
     let format: String
     
     static func == (lhs: CopyFormat, rhs: CopyFormat) -> Bool {

@@ -22,7 +22,7 @@ struct PaletteEditingContentView: View {
                           containingWindow: (NSApplication.shared.delegate as! AppDelegate).colorWindow,
             onEditEnd: {
                 self.vm.saveChanges()
-                self.vm.paletteNameChangePublisher.send(vm.palette.paletteName)
+                self.vm.paletteNameChangePublisher.send(vm.palette)
             })
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
