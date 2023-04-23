@@ -87,11 +87,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupNotifications() {
         NotificationCenter.default.addObserver(forName: PaletteService.nextPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
-            self.popover.window?.moveTopRight()
+            self.popover.window?.moveTopRightRepeatedly()
         })
         
         NotificationCenter.default.addObserver(forName: PaletteService.prevPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
-            self.popover.window?.moveTopRight()
+            self.popover.window?.moveTopRightRepeatedly()
         })
     }
     

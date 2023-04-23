@@ -61,17 +61,11 @@ struct PaletteEditingContentView: View {
                 HStack {
                     ForEach(0..<5) { i in
                         vm.colorArray[i]
-                            .onTapGesture {
-                                vm.onColorTap(index: i)
-                            }
                     }
                 }
                 HStack {
                     ForEach(5..<10) { i in
                         vm.colorArray[i]
-                            .onTapGesture {
-                                vm.onColorTap(index: i)
-                            }
                     }
                 }
                 

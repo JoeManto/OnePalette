@@ -22,6 +22,8 @@ struct ColorView: View, Identifiable {
     let onDelete: (() -> Void)?
     let responsive: Bool
     
+    var onTap: (() -> Void)?
+    
     private let textColor: Color
     private let size: CGSize
     
@@ -29,7 +31,7 @@ struct ColorView: View, Identifiable {
     @State private var copying: Bool = false
     @State private var opacityAnimationValue = 0.0
     
-    init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil) {
+    init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil, onTap: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
         self.isEmpty = isEmpty
@@ -39,6 +41,7 @@ struct ColorView: View, Identifiable {
         self.onDelete = onDelete
         self.responsive = responsive
         self.groupName = groupName
+        self.onTap = onTap
         
         if isHeader {
             self.size = CGSize(width: 150, height: 150)
@@ -59,7 +62,7 @@ struct ColorView: View, Identifiable {
     var body: some View {
         ZStack {
             HStack {
-                if copying {
+                if !isEditing, !isEmpty, copying {
                     Text("Copied")
                         .opacity(copying ? 1.0 : 0.0)
                         .foregroundColor(self.textColor)
@@ -121,6 +124,11 @@ struct ColorView: View, Identifiable {
             hovered = inView
         }
         .onTapGesture {
+            self.onTap?()
+            guard !isEditing else {
+                return
+            }
+            
             colorModel.copyToPasteboard(groupName: groupName)
             withAnimation(.easeIn(duration: 0.25)) {
                 self.copying = true

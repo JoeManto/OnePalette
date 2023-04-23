@@ -41,6 +41,7 @@ struct PaletteView: View {
                 })
                 
                 Text(vm.palette.paletteName)
+                    .font(.standardFontBold(size: 14, relativeTo: .title))
                 Spacer()
             }
             

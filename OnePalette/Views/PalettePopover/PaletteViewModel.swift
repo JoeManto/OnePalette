@@ -26,7 +26,7 @@ class PaletteViewModel: ObservableObject {
             onSelection: { [weak self] id in
                 self?.onColorGroupSelection(id: id)
                 
-                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRight()
+                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRightRepeatedly()
             }
         )
     }
@@ -43,7 +43,7 @@ class PaletteViewModel: ObservableObject {
         self.selectionVm = ColorGroupSelectorViewModel(groups: self.palette.groups,
             onSelection: { [weak self] id in
                 self?.onColorGroupSelection(id: id)
-                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRight()
+                (NSApplication.shared.delegate as? AppDelegate)?.popover.window?.moveTopRightRepeatedly()
             }
         )
         

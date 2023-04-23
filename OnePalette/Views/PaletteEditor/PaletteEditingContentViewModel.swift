@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import Cocoa
 
 class PaletteEditingContentViewModel: ObservableObject {
     @Published var palette: Palette
@@ -119,6 +120,8 @@ class PaletteEditingContentViewModel: ObservableObject {
                 self.selectedColorGroup.colorsArray.remove(at: i)
                 self.colorArray = self.getPaddedColorGroupView()
                 self.saveChanges()
+            }, onTap: { [unowned self] in
+                self.onColorTap(index: i)
             }))
         }
         
@@ -128,7 +131,10 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
         
         for _ in 0..<remainder {
-            views.append(ColorView(colorModel: OPColor.empty(), isEmpty: true))
+            let idx = views.count
+            views.append(ColorView(colorModel: OPColor.empty(), isEmpty: true, isEditing: true, onTap: { [unowned self] in
+                self.onColorTap(index: idx)
+            }))
         }
         
         return views

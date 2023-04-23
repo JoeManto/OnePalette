@@ -19,8 +19,8 @@ struct CopyFormat: Identifiable, Codable, Equatable {
     
     func value(color: OPColor, groupName: String) -> String {
         let nscolor = color.saveableColor
-        let rgb = (red: nscolor.red, green: nscolor.green, blue: nscolor.blue)
-        let rgbf = (red: nscolor.red / 255, green: nscolor.green / 255, blue: nscolor.blue / 255)
+        let rgb = (red: Int(nscolor.red * 255), green: Int(nscolor.green * 255), blue: Int(nscolor.blue * 255))
+        let rgbf = (red: nscolor.red, green: nscolor.green, blue: nscolor.blue)
         var hex = color.hexValue
         
         while hex.first == "#" {
@@ -29,9 +29,6 @@ struct CopyFormat: Identifiable, Codable, Equatable {
         
         var output = format
         
-        output = output.replacingOccurrences(of: "@r", with: "\(rgb.red)")
-        output = output.replacingOccurrences(of: "@g", with: "\(rgb.green)")
-        output = output.replacingOccurrences(of: "@b", with: "\(rgb.blue)")
         
         output = output.replacingOccurrences(of: "@r-float", with: "\(rgbf.red)")
         output = output.replacingOccurrences(of: "@g-float", with: "\(rgbf.green)")
@@ -40,6 +37,10 @@ struct CopyFormat: Identifiable, Codable, Equatable {
         output = output.replacingOccurrences(of: "@hex", with: "\(hex)")
         output = output.replacingOccurrences(of: "@group", with: "\(groupName)")
         
+        output = output.replacingOccurrences(of: "@r", with: "\(rgb.red)")
+        output = output.replacingOccurrences(of: "@g", with: "\(rgb.green)")
+        output = output.replacingOccurrences(of: "@b", with: "\(rgb.blue)")
+
         return output
     }
 }
