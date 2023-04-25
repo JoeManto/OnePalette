@@ -32,6 +32,7 @@
 		707033EC29F217C700356D65 /* CopyFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033EB29F217C700356D65 /* CopyFormat.swift */; };
 		707033EE29F221C800356D65 /* String+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033ED29F221C800356D65 /* String+Util.swift */; };
 		707033F029F4612F00356D65 /* Shake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033EF29F4612F00356D65 /* Shake.swift */; };
+		707033F329F6283C00356D65 /* OnePaletteSettingsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033F229F6283C00356D65 /* OnePaletteSettingsProvider.swift */; };
 		708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */; };
 		70B64F23209667B200D379BC /* AppleDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B64F22209667B200D379BC /* AppleDesginColors.json */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
@@ -83,6 +84,7 @@
 		707033EB29F217C700356D65 /* CopyFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFormat.swift; sourceTree = "<group>"; };
 		707033ED29F221C800356D65 /* String+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Util.swift"; sourceTree = "<group>"; };
 		707033EF29F4612F00356D65 /* Shake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shake.swift; sourceTree = "<group>"; };
+		707033F229F6283C00356D65 /* OnePaletteSettingsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnePaletteSettingsProvider.swift; sourceTree = "<group>"; };
 		708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingContentViewModel.swift; sourceTree = "<group>"; };
 		70B64F22209667B200D379BC /* AppleDesginColors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AppleDesginColors.json; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
@@ -195,6 +197,14 @@
 			path = Format;
 			sourceTree = "<group>";
 		};
+		707033F129F6282C00356D65 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				707033F229F6283C00356D65 /* OnePaletteSettingsProvider.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		708A494129D79ACC00657883 /* PalettePopover */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,6 +269,7 @@
 		70D690712048CED70070C99D /* OnePalette */ = {
 			isa = PBXGroup;
 			children = (
+				707033F129F6282C00356D65 /* Settings */,
 				70603856293D2B8500D275B9 /* Services */,
 				70CD4859293BD087000AF83A /* Models */,
 				702F38A720E997790099BC87 /* Views */,
@@ -430,6 +441,7 @@
 				707033E629F2146900356D65 /* CopyFormatEditorViewModel.swift in Sources */,
 				707033DF29F20BFA00356D65 /* CopyFormatEditorController.swift in Sources */,
 				70603855293C455A00D275B9 /* ColorGroupSelectorView.swift in Sources */,
+				707033F329F6283C00356D65 /* OnePaletteSettingsProvider.swift in Sources */,
 				707033E829F214D800356D65 /* CopyFormatEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

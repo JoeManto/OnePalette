@@ -8,6 +8,7 @@
 
 import Foundation
 import AppKit
+import AppSDK
 
 class MainMenu: NSMenu {
     
@@ -25,6 +26,7 @@ class MainMenu: NSMenu {
         self.buildSettings()
         self.buildSupport()
         self.addItem(NSMenuItem.separator())
+        self.buildTrial()
         self.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
     
@@ -93,6 +95,10 @@ class MainMenu: NSMenu {
         self.setSubmenu(submenu, for: support)
     }
     
+    private func buildTrial() {
+        self.addItem(NSMenuItem(title: "Purchase", action: #selector(AppDelegate.openTrial(_:)), keyEquivalent: ""))
+    }
+    
     private func buildImport() {
         let item = NSMenuItem(title: "Import Palette", action: #selector(self.importPalette(_:)), keyEquivalent: "")
         item.target = self
@@ -133,22 +139,5 @@ class MainMenu: NSMenu {
     @objc func exportPalette(_ sender: Any?) {
         
     }
-}
-
-
-class SelectorAction: NSObject {
-
-    private let _action: () -> ()
-
-    init(action: @escaping () -> ()) {
-        _action = action
-        super.init()
-    }
-
-    @objc func action() {
-        _action()
-    }
 
 }
-
-

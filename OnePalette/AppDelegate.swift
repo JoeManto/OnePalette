@@ -8,6 +8,7 @@
 
 import Cocoa
 import AppSDK
+import SwiftUI
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,6 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var copyFormatWindow: OPWindow!
     private var copyFormatWindowController: NSWindowController!
     
+    var trialWindow: NSWindow!
+    private var trialWindowController: NSWindowController!
     
     private var optionViewIsConfiged = false
     
@@ -76,7 +79,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.colorWindowController = MainWindowController(window: self.copyFormatWindow)
         self.colorWindow.contentViewController = CopyFormatEditorViewController()
-        
+    
         // Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown], isLocal: false) { [weak self] event in
             if let strongSelf = self, strongSelf.popover.isShown {
@@ -128,6 +131,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    @objc func openTrial(_ sender: Any?) {
+        self.showTrialWindow()
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
     @objc func openFormatEditor(_ sender: Any?) {
         self.copyFormatWindow.contentViewController = CopyFormatEditorViewController()
         self.copyFormatWindow.makeKeyAndOrderFront(self)
@@ -158,6 +166,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         else{
             self.togglePopover(nil)
         }
+    }
+    
+    private func showTrialWindow() {
+        let img = NSImage(named: NSImage.Name("AppIcon"))
+        
+        guard trialWindow == nil else {
+            trialWindow.makeKeyAndOrderFront(self)
+            return
+        }
+        
+        let controller = TrialViewController(rootView: TrialWallView(vm:
+                TrialWallViewModel(productModel: TrialProduct(name: "One Palette Trial", options: [
+                    PaymentOption(type: .yearly, price: 9.99, recommended: true, trialLength: 7),
+                    PaymentOption(type: .monthy, price: 2.99, recommended: false, trialLength: 7),
+                    PaymentOption(type: .onetime, price: 30.0, recommended: false, trialLength: 7)
+                ], image: img)),
+                actionHandler: TrialWallActionHandler(onRestore: {}, onTerms: {}, onContinue: { _ in }
+        )))
+    
+        self.trialWindow = controller.pushToWindow(title: "One Palette Trial", display: true)
     }
 
     // MARK: - Core Data stack
