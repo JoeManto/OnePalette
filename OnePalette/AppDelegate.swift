@@ -96,6 +96,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NotificationCenter.default.addObserver(forName: PaletteService.prevPaletteNavigationNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
             self.popover.window?.moveTopRightRepeatedly()
         })
+        
+        NotificationCenter.default.addObserver(forName: PaletteService.paletteInstalledNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.closePopover(sender: nil)
+        })
     }
     
     // MARK: Popover Controls
@@ -108,6 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         else {
             eventMonitor?.start()
+            closePaletteEditor(sender: sender)
             showPopover(sender: sender)
         }
     }
@@ -122,6 +127,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.performClose(sender)
     }
     
+    func closePaletteEditor(sender: Any?) {
+        self.colorWindow.performClose(sender)
+    }
     
     // MARK: Selectors
     

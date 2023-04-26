@@ -135,11 +135,11 @@ class MainMenu: NSMenu {
     }
     
     @objc func importPalette(_ sender: Any?) {
-        
+        PaletteService.shared.importPalette()
     }
     
     @objc func exportPalette(_ sender: Any?) {
-        
+        PaletteService.shared.exportPalette()
     }
 
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import AppKit
+import Combine
 
 class PaletteService {
     
@@ -19,6 +20,7 @@ class PaletteService {
     
     static let nextPaletteNavigationNotification = Notification(name: Notification.Name("NextPaletteNavNotification"))
     static let prevPaletteNavigationNotification = Notification(name: Notification.Name("PrevPaletteNavNotification"))
+    static let paletteInstalledNotification = Notification(name: Notification.Name("PaletteInstalled"))
     
     /// The current palette being presented in PaletteView
     var lastUsed: Palette? {
@@ -39,10 +41,22 @@ class PaletteService {
     private let context: NSManagedObjectContext
     private let entity: NSEntityDescription
     
+    private let importer: PaletteImporter
+    
+    private var subs = Set<AnyCancellable>()
+    
     private init() {
         self.context = (NSApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
         self.entity = NSEntityDescription.entity(forEntityName: "Pal", in: context)!
         self.curPaletteIndex = 0 // TODO update search for value from userdefaults if not found default to first palette
+        
+        self.importer = PaletteImporter(onCancel: {}, entity: entity, insertInto: context)
+        self.importer.$importedPalette.sink { pal in
+            if let pal = pal {
+                self.install(palette: pal)
+            }
+        }
+        .store(in: &subs)
                           
         onOperationQueue {
             if self.fetchAllPalettes() == 0 {
@@ -102,13 +116,15 @@ class PaletteService {
         return self.install(palette: pal)
     }
     
-    @discardableResult private func install(palette: Palette) -> Palette{
+    @discardableResult private func install(palette: Palette) -> Palette {
         self.palettes.append(palette)
         
         guard palette.save() else {
             print("Failed to save <\(palette.paletteName)> color palette")
             return palette
         }
+        
+        NotificationCenter.default.post(Self.paletteInstalledNotification)
         
         return palette
     }
@@ -200,6 +216,14 @@ class PaletteService {
             self.installMaterialDesignPalette()
             self.installAppleDesignPalette()
         }
+    }
+    
+    func importPalette() {
+        self.importer.import()
+    }
+    
+    func exportPalette() {
+        
     }
     
     func onPalettesFetched(_ block: @escaping () -> ()) {

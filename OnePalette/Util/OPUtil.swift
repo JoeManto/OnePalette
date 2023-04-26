@@ -58,4 +58,14 @@ class OPUtil {
             print("Failed to remove data")
         }
     }
+    
+    static func showErrorAlert(title: String, msg: String) {
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.informativeText = title
+            alert.messageText = msg
+            alert.addButton(withTitle: NSLocalizedString("Ok", comment: ""))
+            alert.runModal()
+        }
+    }
 }

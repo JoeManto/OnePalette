@@ -98,6 +98,9 @@ class PaletteModifierViewController: NSSplitViewController {
             }
             
             self.contentViewModel.updatePalette(palette: pal)
+            self.navViewModel.items = PaletteService.shared.palettes.map {
+                NavigationItem(displayName: $0.paletteName, value: $0)
+            }
             self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName, value: pal)
         }
         .store(in: &self.subs)
@@ -120,6 +123,12 @@ class PaletteModifierViewController: NSSplitViewController {
             self.contentViewModel.updatePalette(palette: palette)
         }
         .store(in: &self.subs)
+        
+        NotificationCenter.default.addObserver(forName: PaletteService.paletteInstalledNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
+            self.navViewModel.items = PaletteService.shared.palettes.map {
+                NavigationItem(displayName: $0.paletteName, value: $0)
+            }
+        })
     }
     
     override func viewWillDisappear() {

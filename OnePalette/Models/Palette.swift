@@ -67,59 +67,29 @@ class Palette: NSManagedObject, Identifiable {
     /// Inits a palette object from an import from a local json file that contains palette data
     /// This method is used when the user first runs the application so it can intital install
     /// pre installed palettes
-    convenience init(name: String, localFile: String, entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+    convenience init(name: String, localFile: String, entity: NSEntityDescription, insertInto context: NSManagedObjectContext) {
         self.init(name: name, entity: entity, insertInto: context)
-        let path = Bundle.main.url(forResource: localFile, withExtension: "json")
-        let content = try? String(contentsOf: path!)
         
-        let jsonWithObjectRoot = content!
-        let data = jsonWithObjectRoot.data(using:.utf8)!
-        do {
-            let json = try JSONSerialization.jsonObject(with:data)
-            if let dictionary = json as? [String: Any] {
-                if let nestDictionary = dictionary["keys"] as? [String: Any] {
-                    let keys:NSArray = nestDictionary["values"] as! NSArray
-                    self.paletteKey = Array(repeating: "", count: keys.count)
-                    for (index, i) in keys.enumerated(){
-                        let stringVal:String = i as! String
-                        self.paletteKey![index] = stringVal
-                    }
-                }
-                
-                if let nestDictionary = dictionary["weights"] as? [String: Any] {
-                    let weights:NSArray = nestDictionary["values"] as! NSArray
-                    for (index, i) in weights.enumerated() {
-                        let stringVal:String = i as! String
-                        self.paletteWeights![index] = Int(stringVal)!
-                    }
-                }
-                for palKey in self.paletteKey! {
-                    self.groupsOrder?.append(palKey)
-                    if let nestDictionary = dictionary[palKey] as? [String: Any] {
-                        let colorGroup:NSArray = nestDictionary["values"] as! NSArray
-
-                        self.paletteData![palKey] = OPColorGroup.init(id: palKey)
-                        for (index, i) in colorGroup.enumerated(){
-                            self.paletteData![palKey]?.addColor(color: OPColor.init(hexString: i as! String, alpha: 1.0, weight: self.paletteWeights![index]))
-                        }
-                        let group = self.paletteData![palKey]
-                        self.paletteData![palKey]?.headerColorIndex = (group?.colorsArray.count ?? 0) / 2
-                    }
-                }
-                
-                if let nestDictionary = dictionary["Names"] as? [String:Any] {
-                    let names: NSArray = nestDictionary["values"] as! NSArray
-                    for (index, i) in (self.paletteKey?.enumerated())! {
-                        let name = names[index] as! String
-                        self.paletteData?[i]?.name = name
-                    }
-                }
-            }
-            
-            self.curGroupId = (self.paletteData?.first?.value.identifier) ?? ""
-        } catch {
-            print("Error parsing Json")
+        guard let path = Bundle.main.url(forResource: localFile, withExtension: "json") else {
+            return
         }
+        
+        guard let content = try? Data(contentsOf: path) else {
+            return
+        }
+        
+        let importer = PaletteImporter(onCancel: {}, entity: entity, insertInto: context)
+        guard let palette = importer.parsePaletteData(data: content) else {
+            return
+        }
+        
+        self.paletteData = palette.paletteData
+        self.paletteName = palette.paletteName
+        self.paletteWeights = palette.paletteWeights
+        self.paletteKey = palette.paletteKey
+        self.groupsOrder = palette.groupsOrder
+        self.curGroupId = (palette.paletteData?.first?.value.identifier) ?? ""
+        self.dateCreated = palette.dateCreated
     }
     
     // MARK: Group Methods
