@@ -28,9 +28,7 @@ struct PaletteEditingContentView: View {
             .font(.standardFontMedium(size: 14.0, relativeTo: .subheadline))
             .padding([.top, .leading])
             
-            EditableLabel($vm.selectedColorGroup.name,
-                          containingWindow: (NSApplication.shared.delegate as! AppDelegate).colorWindow,
-            onEditEnd: {
+            EditableLabel($vm.selectedColorGroup.name, containingWindow: vm.containingWindow, onEditEnd: {
                 self.vm.saveChanges()
             })
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,10 +42,11 @@ struct PaletteEditingContentView: View {
                     ColorPicker("", selection: $vm.selectedColor)
                     
                     Text("Hex")
-                        .font(.standardFontMedium(size: 14, relativeTo: .body))
-                    TextField("", text: $vm.hexFieldValueColor)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(maxWidth: 100)
+                        .font(.standardFontMedium(size: 14, relativeTo: .caption))
+                    
+                    EditableLabel($vm.hexFieldValueColor, containingWindow: vm.containingWindow, onEditEnd: {
+                        self.vm.saveChanges()
+                    })
                     
                     Text("Header")
                     CheckBox(isOn: $vm.isHeader, allowUnchecking: false, onChange: { enabled in

@@ -35,11 +35,8 @@ class MainMenu: NSMenu {
         self.addItem(copy)
         
         let submenu = NSMenu(title: "Copy Format")
-        submenu.addItem(NSMenuItem(title: "Copy Format", action: nil, keyEquivalent: ""))
+        submenu.addItem(NSMenuItem(title: "Selected Format", action: nil, keyEquivalent: ""))
         submenu.addItem(NSMenuItem.separator())
-        
-        let item2 = NSMenuItem(title: "Add New Format", action: #selector(AppDelegate.openFormatEditor(_:)), keyEquivalent: "")
-        submenu.addItem(item2)
         
         let cur = CopyFormatService.shared.currentFormat
         
@@ -63,6 +60,11 @@ class MainMenu: NSMenu {
             item1.target = action1
             submenu.addItem(item1)
         }
+        
+        submenu.addItem(NSMenuItem.separator())
+        
+        let item2 = NSMenuItem(title: "Add New Format", action: #selector(AppDelegate.openFormatEditor(_:)), keyEquivalent: "")
+        submenu.addItem(item2)
         
         self.setSubmenu(submenu, for: copy)
     }

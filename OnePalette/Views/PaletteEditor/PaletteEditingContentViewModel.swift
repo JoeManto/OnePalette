@@ -27,7 +27,16 @@ class PaletteEditingContentViewModel: ObservableObject {
     }
     
     /// Determines if the current selected color cell is the header color
-    @Published var isHeader: Bool
+    var isHeader: Bool {
+        set {
+            if newValue {
+                self.selectedColorGroup.headerColorIndex = self.selectedColorIndex
+            }
+        }
+        get {
+            self.selectedColorGroup.headerColorIndex == self.selectedColorIndex
+        }
+    }
     
     /// The id for the scroll view. When changes causes the scroll view to reset and scroll to top
     @Published var scrollViewId: UUID
@@ -42,6 +51,8 @@ class PaletteEditingContentViewModel: ObservableObject {
     
     private var subs = Set<AnyCancellable>()
     
+    let containingWindow: NSWindow
+    
     init(palette: Palette!) {
         self.palette = palette
         
@@ -50,8 +61,8 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.selectedColorGroup = groups.first ?? OPColorGroup(id: "EmptyGroup")
         self.selectedColor = Color.white
         self.hexFieldValueColor = "#FFFFFF"
-        self.isHeader = false
         self.scrollViewId = UUID()
+        self.containingWindow = (NSApplication.shared.delegate as! AppDelegate).colorWindow
         
         self.groupSelectorVm = ColorGroupSelectorViewModel(groups: groups, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
@@ -101,7 +112,6 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
         
         self.selectedColorIndex = index
-        self.isHeader = self.selectedColorGroup.headerColorIndex == index
     }
     
     /// Selects the same color group to trigger an update
