@@ -17,7 +17,7 @@ class ColorGroupGridViewModel: ObservableObject {
     }
     
     private let palette: Palette
-    var group: OPColorGroup
+    @Published var group: OPColorGroup
     
     var nonHeaderColors: [OPColor] {
         return group.colorsArray.filter { $0.id != group.headerColor.id }
@@ -42,14 +42,14 @@ class ColorGroupGridViewModel: ObservableObject {
         
         let lastUsedGroup = palette.paletteData?[palette.curGroupId]
         let firstGroup = palette.paletteData?.first?.value
+        let group = lastUsedGroup ?? firstGroup ?? OPColorGroup(id: "Empty")
         
-        self.group = lastUsedGroup ?? firstGroup ?? OPColorGroup(id: "Empty")
-        
+        self.group = group
         self.gridSize = gridSize ?? GridSize(size: group.colorsArray.count) ?? .small
     }
     
-    func updateToGroup(name: String) {
-        if let group = palette.paletteData?[name] {
+    func updateToGroup(id: String) {
+        if let group = palette.paletteData?[id] {
             self.group = group
         }
     }

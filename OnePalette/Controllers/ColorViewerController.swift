@@ -13,13 +13,10 @@ import SwiftUI
 class ColorViewerController: NSHostingController<PaletteView> {
     
     var curPal: Palette
-    var curColorGroup: OPColorGroup
     var paletteViewModel: PaletteViewModel
     
     init(curPal: Palette) {
         self.curPal = curPal
-        self.curColorGroup = curPal.paletteData?.first?.value ?? OPColorGroup(id: "empty")
-        
         self.paletteViewModel = PaletteViewModel(palette: curPal)
         
         let palView = PaletteView(vm: self.paletteViewModel)
@@ -41,8 +38,9 @@ class ColorViewerController: NSHostingController<PaletteView> {
     
     override func viewWillAppear() {
         self.addBackgroundBlur()
+        self.paletteViewModel.updateViewModels()
+        
         super.viewWillAppear()
-       
     }
     
     @MainActor required dynamic init?(coder: NSCoder) {
