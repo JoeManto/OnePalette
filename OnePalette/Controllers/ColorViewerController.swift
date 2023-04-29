@@ -39,7 +39,7 @@ class ColorViewerController: NSHostingController<PaletteView> {
     override func viewWillAppear() {
         self.addBackgroundBlur()
         self.paletteViewModel.updateViewModels()
-        
+                
         super.viewWillAppear()
     }
     

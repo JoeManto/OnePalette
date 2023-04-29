@@ -53,12 +53,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.image = NSImage(named: NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
-        
-        guard let palette = PaletteService.shared.lastUsed else {
-            return
-        }
-      
-        self.popover.contentViewController = ColorViewerController(curPal: palette)
                 
         self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "ModifyColorsWindow")
         self.colorWindow.isOpaque = false
@@ -68,7 +62,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.colorWindow.invalidateShadow()
         
         self.colorWindowController = MainWindowController(window: self.colorWindow)
-        self.colorWindow.contentViewController = PaletteModifierViewController()
         
         self.copyFormatWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "Copy-Format-Editor")
         self.copyFormatWindow.isOpaque = false
@@ -77,9 +70,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.copyFormatWindow.backgroundColor = NSColor.clear
         self.copyFormatWindow.invalidateShadow()
         
-        self.colorWindowController = MainWindowController(window: self.copyFormatWindow)
-        self.colorWindow.contentViewController = CopyFormatEditorViewController()
-    
+        self.copyFormatWindowController = MainWindowController(window: self.copyFormatWindow)
+      
         // Tracks left and right clicks on status item
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown], isLocal: false) { [weak self] event in
             if let strongSelf = self, strongSelf.popover.isShown {
@@ -119,6 +111,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     /// Shows the popover
     func showPopover(sender: Any?) {
+        guard let palette = PaletteService.shared.lastUsed else {
+            return
+        }
+        
+        self.popover.contentViewController = ColorViewerController(curPal: palette)
         self.popover.showNear(statusItem: self.statusItem)
     }
     

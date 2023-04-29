@@ -31,6 +31,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         set {
             if newValue {
                 self.selectedColorGroup.headerColorIndex = self.selectedColorIndex
+                self.objectWillChange.send()
             }
         }
         get {
@@ -92,6 +93,10 @@ class PaletteEditingContentViewModel: ObservableObject {
             self.palette.updateColorGroup(group: self.selectedColorGroup, for: self.selectedColorGroup.identifier)
             self.selectedColorGroup = group
             self.colorArray = self.getPaddedColorGroupView()
+            
+            if let color = self.selectedColorGroup.colorsArray.first {
+                selectedColor = Color(color.color)
+            }
         }
     }
     
