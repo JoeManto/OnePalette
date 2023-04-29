@@ -24,7 +24,10 @@ class PaletteService {
     
     /// The current palette being presented in PaletteView
     var lastUsed: Palette? {
-        self.palettes[curPaletteIndex]
+        guard curPaletteIndex < self.palettes.count else {
+            return nil
+        }
+        return self.palettes[curPaletteIndex]
     }
     
     private lazy var postSetupQueue: DispatchQueue = {
@@ -62,7 +65,7 @@ class PaletteService {
             if self.fetchAllPalettes() == 0 {
                 // If the user has no saved palettes install the default palettes
                 self.installMaterialDesignPalette()
-                self.installAppleDesignPalette()
+                //self.installAppleDesignPalette()
             }
             
             // Continue with execution after palettes have been installed
@@ -113,6 +116,8 @@ class PaletteService {
         }
         
         let pal = Palette(name: paletteName, entity: entity, insertInto: context)
+        pal.addColorGroup(group: OPColorGroup.newGroup(), save: false)
+        
         return self.install(palette: pal)
     }
     
@@ -190,15 +195,10 @@ class PaletteService {
         return self.palettes[prevIndex]
     }
     
-    func removeAllPalettes() {
-        self.onOperationQueue {
-            self.palettes = []
-            self.curPaletteIndex = 0
-            OPUtil.flushData(entity: self.entity, insertInto: self.context)
-            
-            self.installMaterialDesignPalette()
-            self.installAppleDesignPalette()
-        }
+    private func removeAllPalettes() {
+        self.palettes = []
+        self.curPaletteIndex = 0
+        OPUtil.flushData(entity: self.entity, insertInto: self.context)
     }
     
     func isNameTaken(name: String) -> Bool {
@@ -214,7 +214,7 @@ class PaletteService {
         self.onOperationQueue {
             self.removeAllPalettes()
             self.installMaterialDesignPalette()
-            self.installAppleDesignPalette()
+            //self.installAppleDesignPalette()
         }
     }
     

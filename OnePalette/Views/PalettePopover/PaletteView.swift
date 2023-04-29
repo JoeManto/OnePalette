@@ -15,6 +15,8 @@ struct PaletteView: View {
     
     private var size: CGSize {
         switch vm.colorGridVm.gridSize {
+        case .empty:
+            return CGSize(width: 500, height: 250)
         case .small:
             return CGSize(width: 500, height: 250)
         case .medium:
@@ -46,6 +48,8 @@ struct PaletteView: View {
             }
             
             switch vm.colorGridVm.gridSize {
+            case .empty:
+                ColorGroupEmptyGridView(vm: vm.colorGridVm)
             case .small:
                 ColorGroupSmallGridView(vm: vm.colorGridVm)
             case .medium:

@@ -18,7 +18,17 @@ class PaletteEditingContentViewModel: ObservableObject {
     
     @Published var colorArray = [ColorView]()
     
-    @Published var selectedColor: Color
+    @Published var selectedColor: Color {
+        didSet {
+            if selectedColorIndex == selectedColorGroup.headerColorIndex,
+               let idx = groupSelectorVm.groups.firstIndex(where: { $0.identifier == self.selectedColorGroup.identifier }) {
+                groupSelectorVm.groups[idx].colorsArray[groupSelectorVm.groups[idx].headerColorIndex].color = NSColor(selectedColor)
+                
+                // Reset the group id to
+                groupSelectorVm.updateUI()
+            }
+        }
+    }
     
     @Published var hexFieldValueColor: String {
         didSet {

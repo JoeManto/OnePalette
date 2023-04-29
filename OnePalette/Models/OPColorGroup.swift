@@ -55,6 +55,7 @@ class OPColorGroup: Identifiable, Codable {
 extension OPColorGroup {
     static func newGroup() -> OPColorGroup {
         let group = OPColorGroup(id: UUID().uuidString)
+        group.headerColorIndex = 0
         group.name = "New Group"
         
         group.addColor(color: OPColor.randomGray(weight: 100))

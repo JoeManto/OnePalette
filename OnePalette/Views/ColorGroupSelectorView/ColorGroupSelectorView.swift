@@ -38,7 +38,7 @@ struct ColorGroupSelectorView: View {
     
     var body: some View {
         HStack {
-            ForEach(vm.groups) { group in
+            ForEach(vm.headers) { group in
                 ColorGroupSelectorButton(group: group, vm: vm)
             }
             .padding([.trailing, .leading], -4)

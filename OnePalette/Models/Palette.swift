@@ -26,7 +26,9 @@ class Palette: NSManagedObject, Identifiable {
         var groups = [OPColorGroup]()
         
         for id in groupsOrder ?? [] {
-            groups.append(self.paletteData?[id] ?? OPColorGroup(id: "empty"))
+            if let group = self.paletteData?[id], group.colorsArray.count > 0 {
+                groups.append(group)
+            }
         }
         
         return groups

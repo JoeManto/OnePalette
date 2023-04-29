@@ -19,6 +19,7 @@
 		7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7060385E293ECDD000D275B9 /* ColorGroupGridViewModel.swift */; };
 		70603861293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */; };
 		706038662946D26600D275B9 /* PaletteModifierController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706038652946D26600D275B9 /* PaletteModifierController.swift */; };
+		7061E99329FD8FCD005B529F /* MaterialDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 7061E99229FD8FCD005B529F /* MaterialDesginColors.json */; };
 		706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B90B720CAFC9D005E6250 /* OPUtil.swift */; };
 		707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033D729F1BB4E00356D65 /* MainMenu.swift */; };
 		707033DB29F1E52500356D65 /* AppSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 707033DA29F1E52500356D65 /* AppSDK */; };
@@ -72,6 +73,7 @@
 		7060385E293ECDD000D275B9 /* ColorGroupGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupGridViewModel.swift; sourceTree = "<group>"; };
 		70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorViewModel.swift; sourceTree = "<group>"; };
 		706038652946D26600D275B9 /* PaletteModifierController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteModifierController.swift; sourceTree = "<group>"; };
+		7061E99229FD8FCD005B529F /* MaterialDesginColors.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MaterialDesginColors.json; sourceTree = SOURCE_ROOT; };
 		706B90B720CAFC9D005E6250 /* OPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPUtil.swift; sourceTree = "<group>"; };
 		707033D729F1BB4E00356D65 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		707033DC29F1E84800356D65 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = OnePalette/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
@@ -280,6 +282,7 @@
 				703F030A297C80650007152F /* ViewModifiers */,
 				707033DC29F1E84800356D65 /* AppDelegate.swift */,
 				70D690792048CED70070C99D /* Assets.xcassets */,
+				7061E99229FD8FCD005B529F /* MaterialDesginColors.json */,
 				70D6907B2048CED70070C99D /* Main.storyboard */,
 				70D6907E2048CED70070C99D /* Info.plist */,
 				70D6907F2048CED70070C99D /* OnePalette.entitlements */,
@@ -390,6 +393,7 @@
 			files = (
 				70D6907A2048CED70070C99D /* Assets.xcassets in Resources */,
 				70D6907D2048CED70070C99D /* Main.storyboard in Resources */,
+				7061E99329FD8FCD005B529F /* MaterialDesginColors.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

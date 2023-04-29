@@ -11,6 +11,7 @@ import Foundation
 class ColorGroupGridViewModel: ObservableObject {
     
     enum GridSize: Int {
+        case empty
         case small
         case medium
         case large
@@ -23,7 +24,10 @@ class ColorGroupGridViewModel: ObservableObject {
         return group.colorsArray.filter { $0.id != group.headerColor.id }
     }
     
-    var header: OPColor {
+    var header: OPColor? {
+        guard group.headerColorIndex < group.colorsArray.count else {
+            return nil
+        }
         return group.headerColor
     }
     
@@ -57,7 +61,10 @@ class ColorGroupGridViewModel: ObservableObject {
 
 extension ColorGroupGridViewModel.GridSize {
     init?(size: Int) {
-        if size <= 5 {
+        if size == 0 {
+            self.init(rawValue: Self.empty.rawValue)
+        }
+        else if size <= 5 {
             self.init(rawValue: Self.small.rawValue)
         }
         else if size < 8 {

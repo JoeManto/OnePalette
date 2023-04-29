@@ -25,8 +25,10 @@ struct ColorGroupLargeGridView: View {
                             .bold()
                         Spacer()
                     }
-                    ColorView(colorModel: vm.header, groupName: vm.group.name, isHeader: true)
-                        .padding(.trailing, 20)
+                    if let header = vm.header {
+                        ColorView(colorModel: header, groupName: vm.group.name, isHeader: true)
+                            .padding(.trailing, 20)
+                    }
                 }
                 LazyVGrid(columns: gridItems, content: {
                     ForEach(vm.nonHeaderColors) { row in
@@ -54,8 +56,10 @@ struct ColorGroupMediumGridView: View {
                             .bold()
                         Spacer()
                     }
-                    ColorView(colorModel: vm.header, groupName: vm.group.name, isHeader: true)
-                        .padding(.trailing, 20)
+                    if let header = vm.header {
+                        ColorView(colorModel: header, groupName: vm.group.name, isHeader: true)
+                            .padding(.trailing, 20)
+                    }
                 }
                 LazyVGrid(columns: gridItems, content: {
                     ForEach(vm.nonHeaderColors) { row in
@@ -84,6 +88,32 @@ struct ColorGroupSmallGridView: View {
                 ForEach(vm.allColors) { row in
                     ColorView(colorModel: row, groupName: vm.group.name, responsive: true)
                 }
+            }
+            
+        }
+        .padding(10)
+    }
+}
+
+struct ColorGroupEmptyGridView: View {
+    var vm: ColorGroupGridViewModel
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(vm.name)
+                    .font(.title)
+                    .bold()
+                Spacer()
+            }
+            
+            HStack {
+                Spacer()
+                Text("Empty Group")
+                /*ForEach(vm.allColors) { row in
+                    ColorView(colorModel: row, groupName: vm.group.name, responsive: true)
+                }*/
+                Spacer()
             }
             
         }
