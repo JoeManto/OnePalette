@@ -148,12 +148,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func cleanInstall(_ sender: Any?) {
-        closePopover(sender: nil)
-        self.colorWindow.orderOut(nil)
-        PaletteService.shared.cleanInstall()
-        for format in CopyFormatService.shared.formats {
-            CopyFormatService.shared.remove(format: format)
-        }
+        let vc = ConfirmationViewController(confirm: Confirmation(title: "Confirm", subtitle: "All previously added and modified palettes will be removed"),
+            onContinue: {
+                self.closePopover(sender: nil)
+                self.colorWindow.orderOut(nil)
+                PaletteService.shared.cleanInstall()
+                for format in CopyFormatService.shared.formats {
+                    CopyFormatService.shared.remove(format: format)
+                }
+            },
+            onCancel: {}
+        )
+        vc.pushToWindow()
     }
     
     @objc func placeholder(_ sender: Any?) {
