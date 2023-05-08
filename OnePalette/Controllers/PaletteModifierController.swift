@@ -109,6 +109,7 @@ class PaletteModifierViewController: NSSplitViewController {
             
             navViewModel?.updateItems()
             navViewModel?.setActivePalette(newPalette)
+            self.contentViewModel.updatePalette(palette: newPalette)
         }
         
         navViewModel.navigationPublisher.sink { [unowned self] item in
