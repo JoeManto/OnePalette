@@ -46,4 +46,16 @@ class NavigationViewModel: ObservableObject {
         self.onItemTap?()
         self.navigationPublisher.send(item)
     }
+    
+    func updateItems() {
+        self.items = PaletteService.shared.palettes.map {
+            NavigationItem(displayName: $0.paletteName, value: $0)
+        }
+    }
+    
+    func setActivePalette(_ palette: Palette) {
+        if let cur = self.items.first(where: { $0.value as? Palette == palette }) {
+            self.activeItem = cur
+        }
+    }
 }

@@ -88,7 +88,8 @@ class PaletteModifierViewController: NSSplitViewController {
         super.viewWillAppear()
         
         contentViewModel.paletteNameChangePublisher.sink { [unowned self] pal in
-            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName, value: pal)
+            self.navViewModel.updateItems()
+            self.navViewModel.setActivePalette(pal)
         }
         .store(in: &self.subs)
         
@@ -98,21 +99,16 @@ class PaletteModifierViewController: NSSplitViewController {
             }
             
             self.contentViewModel.updatePalette(palette: pal)
-            self.navViewModel.items = PaletteService.shared.palettes.map {
-                NavigationItem(displayName: $0.paletteName, value: $0)
-            }
-            self.navViewModel.activeItem = NavigationItem(displayName: pal.paletteName, value: pal)
+            self.navViewModel.updateItems()
+            self.navViewModel.setActivePalette(pal)
         }
         .store(in: &self.subs)
         
         navViewModel.onNewItem = { [weak navViewModel] in
             let newPalette = PaletteService.shared.installEmptyPalette()
             
-            navViewModel?.items = PaletteService.shared.palettes.map {
-                NavigationItem(displayName: $0.paletteName, value: $0)
-            }
-            
-            navViewModel?.activeItem = NavigationItem(displayName: newPalette.paletteName, value: newPalette)
+            navViewModel?.updateItems()
+            navViewModel?.setActivePalette(newPalette)
         }
         
         navViewModel.navigationPublisher.sink { [unowned self] item in
@@ -125,9 +121,7 @@ class PaletteModifierViewController: NSSplitViewController {
         .store(in: &self.subs)
         
         NotificationCenter.default.addObserver(forName: PaletteService.paletteInstalledNotification.name, object: nil, queue: .main, using: { [unowned self] _ in
-            self.navViewModel.items = PaletteService.shared.palettes.map {
-                NavigationItem(displayName: $0.paletteName, value: $0)
-            }
+            self.navViewModel.updateItems()
         })
     }
     
