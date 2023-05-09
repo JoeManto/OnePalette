@@ -107,12 +107,10 @@ struct ColorGroupEmptyGridView: View {
                 Spacer()
             }
             
+            Spacer()
             HStack {
                 Spacer()
                 Text("Empty Group")
-                /*ForEach(vm.allColors) { row in
-                    ColorView(colorModel: row, groupName: vm.group.name, responsive: true)
-                }*/
                 Spacer()
             }
             
