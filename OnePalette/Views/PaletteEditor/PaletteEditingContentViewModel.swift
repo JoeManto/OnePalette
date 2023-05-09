@@ -41,7 +41,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         set {
             if newValue {
                 self.selectedColorGroup.headerColorIndex = self.selectedColorIndex
-                self.objectWillChange.send()
+                self.requestUIUpdate()
             }
         }
         get {
