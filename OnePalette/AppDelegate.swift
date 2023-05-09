@@ -148,7 +148,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func cleanInstall(_ sender: Any?) {
-        let vc = ConfirmationViewController(confirm: Confirmation(title: "Confirm", subtitle: "All previously added and modified palettes will be removed"),
+        let vc = ConfirmationViewController(confirm: Confirmation(title: "Remove all data", subtitle: "All palettes, selection formats and settings will be removed / reset"),
             onContinue: {
                 self.closePopover(sender: nil)
                 self.colorWindow.orderOut(nil)
