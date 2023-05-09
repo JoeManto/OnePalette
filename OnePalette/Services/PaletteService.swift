@@ -90,12 +90,12 @@ class PaletteService {
         }
     }
     
-    private func installMaterialDesignPalette() {
+    func installMaterialDesignPalette() {
         let pal = Palette(name: "Material Design", localFile: "MaterialDesginColors", entity: entity, insertInto: context)
         self.install(palette: pal)
     }
     
-    private func installAppleDesignPalette() {
+    func installAppleDesignPalette() {
         let pal = Palette(name: "Apple Design", localFile: "AppleDesginColors", entity: entity, insertInto: context)
         self.install(palette: pal)
     }
@@ -125,7 +125,7 @@ class PaletteService {
         self.palettes.append(palette)
         
         guard palette.save() else {
-            print("Failed to save <\(palette.paletteName)> color palette")
+            assert(false, "Failed to save <\(palette.paletteName)> color palette")
             return palette
         }
         
@@ -145,7 +145,7 @@ class PaletteService {
             try context.save()
         }
         catch {
-            print("Failed to save after deleting palette(s)")
+            assert(false, "Failed to save after deleting palette(s)")
         }
     }
     
@@ -158,7 +158,7 @@ class PaletteService {
         let groupExists = curPal.paletteData?.contains(where: { (key, value) in value.identifier == groupId }) ?? false
         
         guard groupExists else {
-            print("Provided groupId doesn't exist")
+            assert(false, "Provided groupId doesn't exist")
             return
         }
         

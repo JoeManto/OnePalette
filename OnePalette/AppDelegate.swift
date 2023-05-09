@@ -162,6 +162,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         vc.pushToWindow()
     }
     
+    @objc func installDefaultPalettes(_ sender: Any?) {
+        let vc = ConfirmationViewController(confirm: Confirmation(title: "Install Default Palettes", subtitle: "Installs the material and apple design color palettes. \nCustom palettes are maintained"),
+            onContinue: {
+                self.closePopover(sender: nil)
+                self.colorWindow.orderOut(nil)
+            
+                PaletteService.shared.installMaterialDesignPalette()
+                //PaletteService.shared.installAppleDesignPalette()
+            },
+            onCancel: {}
+        )
+        vc.pushToWindow()
+    }
+    
     @objc func placeholder(_ sender: Any?) {
         print("Place Holder")
     }

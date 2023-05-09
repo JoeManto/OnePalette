@@ -19,7 +19,7 @@ class OPUtil {
                 try context.save()
             }
         } catch {
-            print("Failed to remove data")
+            assert(false, "Failed to remove data")
         }
     }
     
@@ -34,7 +34,7 @@ class OPUtil {
                 }
             }
         } catch {
-            print("Failed to remove data")
+            assert(false, "Failed to remove data")
         }
     }
     
@@ -43,7 +43,7 @@ class OPUtil {
         do {
             try context.save()
         } catch {
-            print("failed to remove data object")
+            assert(false, "failed to remove data object")
         }
     }
     
@@ -55,7 +55,7 @@ class OPUtil {
                 print(data)
             }
         } catch {
-            print("Failed to remove data")
+            assert(false, "Failed to remove data")
         }
     }
     

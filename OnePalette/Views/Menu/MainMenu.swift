@@ -82,6 +82,7 @@ class MainMenu: NSMenu {
         submenu.addItem(NSMenuItem.separator())
         
         submenu.addItem(NSMenuItem(title: "Clean Install", action: #selector(AppDelegate.cleanInstall(_:)), keyEquivalent: ""))
+        submenu.addItem(NSMenuItem(title: "Install Default Palettes", action: #selector(AppDelegate.installDefaultPalettes(_:)), keyEquivalent: ""))
         
         self.setSubmenu(submenu, for: settings)
     }
