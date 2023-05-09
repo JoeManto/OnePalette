@@ -29,4 +29,19 @@ extension String {
         
         return curName
     }
+    
+    /// Ensures each hex string only contains 6 color indicating values and one prefixed '#'
+    func normalisedHexString() -> Self {
+        var hex = self
+        
+        if hex.first != "#" {
+            hex.insert("#", at: hex.startIndex)
+        }
+        
+        while hex.count > 7 {
+            hex.removeLast()
+        }
+        
+        return hex
+    }
 }

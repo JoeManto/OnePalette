@@ -19,6 +19,12 @@ class PaletteEditingContentViewModel: ObservableObject {
     @Published var colorArray = [ColorView]()
     
     @Published var selectedColor: Color {
+        willSet {
+            if self.hexFieldValueColor.normalisedHexString() != NSColor(selectedColor).toHexString.normalisedHexString() {
+                hexFieldValueColor = NSColor(self.selectedColor).toHexString.normalisedHexString()
+            }
+        }
+        
         didSet {
             if selectedColorIndex == selectedColorGroup.headerColorIndex,
                let idx = groupSelectorVm.groups.firstIndex(where: { $0.identifier == self.selectedColorGroup.identifier }) {
@@ -30,11 +36,7 @@ class PaletteEditingContentViewModel: ObservableObject {
         }
     }
     
-    @Published var hexFieldValueColor: String {
-        didSet {
-            self.selectedColor = Color(nsColor: NSColor.hex(hexFieldValueColor, alpha: 1.0))
-        }
-    }
+    @Published var hexFieldValueColor: String
     
     /// Determines if the current selected color cell is the header color
     var isHeader: Bool {
@@ -69,9 +71,11 @@ class PaletteEditingContentViewModel: ObservableObject {
         
         let groups = palette.groups
         
-        self.selectedColorGroup = groups.first ?? OPColorGroup(id: "EmptyGroup")
-        self.selectedColor = Color.white
-        self.hexFieldValueColor = "#FFFFFF"
+        let group = groups.first ?? OPColorGroup(id: "EmptyGroup")
+        self.selectedColorGroup = group
+        let color = group.colorsArray.first?.color ?? .white
+        self.selectedColor = Color(color)
+        self.hexFieldValueColor = color.toHexString.normalisedHexString()
         self.scrollViewId = UUID()
         self.containingWindow = (NSApplication.shared.delegate as! AppDelegate).colorWindow
         
@@ -91,6 +95,13 @@ class PaletteEditingContentViewModel: ObservableObject {
             self.colorArray = self.getPaddedColorGroupView()
         })
         .store(in: &subs)
+        
+        self.$hexFieldValueColor.sink(receiveValue: { [unowned self] value in
+            if value.normalisedHexString() != NSColor(self.selectedColor).toHexString.normalisedHexString() {
+                self.selectedColor = Color(nsColor: NSColor.hex(value, alpha: 1.0))
+            }
+        })
+        .store(in: &subs)
     }
     
     /// Sets the selected color group and changes color cells and fields to reflect the new selection
@@ -106,6 +117,7 @@ class PaletteEditingContentViewModel: ObservableObject {
             
             if let color = self.selectedColorGroup.colorsArray.first {
                 selectedColor = Color(color.color)
+                hexFieldValueColor = color.color.toHexString.normalisedHexString()
             }
         }
     }
@@ -170,10 +182,13 @@ class PaletteEditingContentViewModel: ObservableObject {
         self.palette = palette
         self.selectedColorGroup = palette.groups.first ?? OPColorGroup(id: "Empty")
         self.colorArray = self.getPaddedColorGroupView()
-        
         self.groupSelectorVm = ColorGroupSelectorViewModel(groups: palette.groups, isVertical: true, onSelection: { [weak self] id in
             self?.onColorGroupSelection(id: id)
         })
+        
+        if let firstGroup = palette.groups.first {
+            self.onColorGroupSelection(id: firstGroup.identifier)
+        }
     }
     
     /// Updates the current palette with the current changes in the selected group
