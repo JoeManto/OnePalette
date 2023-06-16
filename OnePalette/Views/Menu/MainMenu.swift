@@ -91,10 +91,7 @@ class MainMenu: NSMenu {
         let support = NSMenuItem(title: "Support", action: nil, keyEquivalent: "")
         self.addItem(support)
         
-        let submenu = NSMenu(title: "Support")
-        submenu.addItem(NSMenuItem(title: "Support", action: nil, keyEquivalent: ""))
-        submenu.addItem(NSMenuItem.separator())
-        
+        let submenu = SupportMenu(parent: support)
         self.setSubmenu(submenu, for: support)
     }
     

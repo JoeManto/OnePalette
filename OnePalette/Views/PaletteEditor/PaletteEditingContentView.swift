@@ -68,9 +68,8 @@ struct PaletteEditingContentView: View {
                     }
                 }
                 
-                ColorGroupSelectorView(vm: vm.groupSelectorVm)
-                
                 self.addNewGroupButton()
+                ColorGroupSelectorView(vm: vm.groupSelectorVm)
                 
                 VStack {
                     Text("Color Group Settings")
@@ -112,64 +111,81 @@ struct PaletteEditingContentView: View {
     @ViewBuilder func addNewGroupButton() -> some View {
         HStack {
             Spacer()
-            Button(action: {
-                vm.addNewGroup()
-            }, label: {
-                Text("New Group")
-            })
+            Image(systemName: "plus")
+                .onTapGesture(perform: vm.addNewGroup)
+                .font(.standardFontBold(size: 18, relativeTo: .title))
         }
-        .padding(.trailing, 65)
+        .padding(.trailing, 15)
     }
     
     @ViewBuilder func colorSpaceField() -> some View {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Palette Color Space",
-            subtitle: "Determines how colors are rendered in palette view",
-            type: .selection
-        ), selection: ResponseFieldSelection(options: ["sRGB (Default)"], onSelection: { idx, selection in
-            print("Selection \(selection)")
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+                ResponseFieldSelection(
+                    name: "Palette Color Space",
+                    subtitle: "Determines how colors are rendered in palette view",
+                    options: ["sRGB (Default)"],
+                    onSelection: { idx, selection in
+                        print("Selection \(selection)")
+                    }
+                )
+        ))
     }
     
     @ViewBuilder func sortPaletteByBrightnessField() -> some View  {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Sort Palette Groups",
-            subtitle: "Reorders the color groups of the current palette in rainbow order",
-            type: .action
-        ), action: ResponseFieldAction(name: "Sort", onAction: {
-            vm.sortPalette()
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+              ResponseFieldAction(
+                name: "Sort Palette Groups",
+                btnTitle: "Sort",
+                subtitle: "Reorders the color groups of the current palette in rainbow order",
+                onAction: {
+                    vm.sortPalette()
+                }
+              )
+        ))
     }
     
     @ViewBuilder func sortGroupByBrightnessField() -> some View {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Sort group by brightness",
-            subtitle: "Reorders the color cells in the current group\nby the brightness",
-            type: .action
-        ), action: ResponseFieldAction(name: "Sort", onAction: {
-            vm.selectedColorGroup.sortColorGroupByBrightness()
-            vm.requestUIUpdate()
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+              ResponseFieldAction(
+                name: "Sort group by brightness",
+                btnTitle: "Sort",
+                subtitle: "Reorders the color cells in the current group\nby the brightness",
+                onAction: {
+                    vm.selectedColorGroup.sortColorGroupByBrightness()
+                    vm.requestUIUpdate()
+                }
+              )
+        ))
     }
     
     @ViewBuilder func deleteGroupField(group: OPColorGroup) -> some View {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Delete Current Group",
-            subtitle: "Removes the current color group (\(group.name)) from the current palette",
-            type: .action
-        ), action: ResponseFieldAction(name: "Delete", destructive: true, dur: 2, onAction: {
-            vm.requestGroupRemoval(group: group)
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+              ResponseFieldAction(
+                name: "Delete Current Group",
+                btnTitle: "Delete",
+                subtitle: "Removes the current color group (\(group.name)) from the current palette",
+                destructive: true,
+                dur: 2,
+                onAction: {
+                    vm.requestGroupRemoval(group: group)
+                }
+              )
+        ))
     }
     
     @ViewBuilder func deletePaletteField(palette: Palette) -> some View {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Delete Palette",
-            subtitle: "Removes the current palette (\(palette.paletteName)) including all color groups",
-            type: .action
-        ), action: ResponseFieldAction(name: "Delete", destructive: true, onAction: {
-            print("Deleting Palette")
-            vm.requestPaletteRemoval(palette: palette)
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+              ResponseFieldAction(
+                name: "Delete Palette",
+                btnTitle: "Delete",
+                subtitle: "Removes the current palette (\(palette.paletteName)) including all color groups",
+                destructive: true,
+                dur: 2,
+                onAction: {
+                    print("Deleting Palette")
+                    vm.requestPaletteRemoval(palette: palette)
+                }
+              )
+        ))
     }
 }

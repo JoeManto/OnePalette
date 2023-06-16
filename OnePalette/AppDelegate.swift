@@ -50,6 +50,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: Setup
     
     func setup() {
+        if #available(macOS 14.0, *) {
+            NSApplication.shared.activate()
+        } else {
+            // Fallback on earlier versions
+        }
+        
         statusItem.button?.image = NSImage(named: NSImage.Name("StatusBar"))
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -163,7 +169,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func installDefaultPalettes(_ sender: Any?) {
-        let vc = ConfirmationViewController(confirm: Confirmation(title: "Install Default Palettes", subtitle: "Installs the material and apple design color palettes. \nCustom palettes are maintained"),
+        let vc = ConfirmationViewController(confirm: Confirmation(title: "Install Default Palettes", subtitle: "Installs the material and apple design color palettes. \nCustom palettes are not removed"),
             onContinue: {
                 self.closePopover(sender: nil)
                 self.colorWindow.orderOut(nil)

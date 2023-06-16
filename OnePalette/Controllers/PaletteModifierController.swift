@@ -41,6 +41,14 @@ class PaletteModifierViewController: NSSplitViewController {
             NavigationItem(displayName: $0.paletteName, value: $0)
         })
     }()
+    
+    lazy var detailsViewModel: PaletteEditingDetailsViewModel = {
+        PaletteEditingDetailsViewModel()
+    }()
+    
+    lazy var colorDetailsViewModel: ColorDetailsViewModel = {
+        ColorDetailsViewModel()
+    }()
 
     lazy var navigationController = {
         let vc = NavigationViewController()
@@ -77,11 +85,42 @@ class PaletteModifierViewController: NSSplitViewController {
 
         return vc
     }()
+    
+    lazy var detailsController = {
+        let vc = NavigationViewController()
+        
+        let contentView = PaletteEditingDetailsView(vm: self.detailsViewModel)
+        let view = NSHostingView(rootView: contentView)
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        vc.view.addSubview(view)
+        
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor),
+            view.topAnchor.constraint(equalTo: vc.view.topAnchor),
+            view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
+        ])
+
+        return vc
+    }()
+
+    lazy var colorDetailsController = {
+        let vc = ColorDetailsViewController(vm: self.colorDetailsViewModel)
+        
+        return vc
+    }()
 
     override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
-       super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        let v = NoDividerSeparatorSplitView()
+        v.isVertical = true
+        v.dividerStyle = .thin
+        self.splitView = v
+        
         setupUI()
         setupLayout()
+        self.splitView.delegate = self
     }
     
     override func viewWillAppear() {
@@ -133,15 +172,20 @@ class PaletteModifierViewController: NSSplitViewController {
     }
 
     required init?(coder: NSCoder) {
-       super.init(coder: coder)
+        super.init(coder: coder)
+        
+        let v = NoDividerSeparatorSplitView()
+        v.isVertical = true
+        v.dividerStyle = .thin
+        self.splitView = v
     }
     
     private func setupUI() {
-       view.wantsLayer = true
-
-       splitView.dividerStyle = .paneSplitter
-       splitView.autosaveName = NSSplitView.AutosaveName(rawValue: splitViewResorationIdentifier)
-       splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: splitViewResorationIdentifier)
+        view.wantsLayer = true
+        splitView.delegate = self
+  
+        splitView.autosaveName = NSSplitView.AutosaveName(rawValue: splitViewResorationIdentifier)
+        splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: splitViewResorationIdentifier)
     }
 
     private func setupLayout() {
@@ -152,7 +196,17 @@ class PaletteModifierViewController: NSSplitViewController {
         self.addSplitViewItem(itemA)
 
         let itemB = NSSplitViewItem(contentListWithViewController: self.contentController)
-        itemB.minimumThickness = 100
+        
         addSplitViewItem(itemB)
+
+        let itemC = NSSplitViewItem(contentListWithViewController: self.colorDetailsController)
+        itemC.minimumThickness = 150
+        addSplitViewItem(itemC)
+    }
+}
+
+class NoDividerSeparatorSplitView: NSSplitView {
+    override var dividerThickness: CGFloat {
+        0.0
     }
 }

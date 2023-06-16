@@ -170,12 +170,17 @@ struct CopyFormatEditorView: View {
     }
     
     @ViewBuilder func deleteField() -> some View {
-        ResponseField(vm: ResponseFieldViewModel(content: ResponseFieldContent(
-            title: "Delete Current Format",
-            subtitle: "Removes the current format from saved formats",
-            type: .action
-        ), action: ResponseFieldAction(name: "Delete", destructive: true, dur: 2, onAction: {
-            vm.removeCurrentFormat()
-        })))
+        ResponseField(vm: ResponseFieldViewModel(content:
+                ResponseFieldAction(
+                    name: "Delete Current Format",
+                    btnTitle: "Delete",
+                    subtitle: "Removes the current format from saved formats",
+                    destructive: true,
+                    dur: 2,
+                    onAction: {
+                        vm.removeCurrentFormat()
+                    }
+                )
+        ))
     }
 }

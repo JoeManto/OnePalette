@@ -11,7 +11,6 @@ import AppKit
 import SwiftUI
 import Combine
 
-
 class CopyFormatEditorViewController: NSSplitViewController {
     
     private let splitViewResorationIdentifier = "com.company.restorationId:mainSplitViewController"
@@ -113,15 +112,15 @@ class CopyFormatEditorViewController: NSSplitViewController {
     }
 
     required init?(coder: NSCoder) {
-       super.init(coder: coder)
+        super.init(coder: coder)
     }
     
     private func setupUI() {
-       view.wantsLayer = true
+        view.wantsLayer = true
 
-       splitView.dividerStyle = .paneSplitter
-       splitView.autosaveName = NSSplitView.AutosaveName(rawValue: splitViewResorationIdentifier)
-       splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: splitViewResorationIdentifier)
+        splitView.dividerStyle = .paneSplitter
+        splitView.autosaveName = NSSplitView.AutosaveName(rawValue: splitViewResorationIdentifier)
+        splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: splitViewResorationIdentifier)
     }
 
     private func setupLayout() {
