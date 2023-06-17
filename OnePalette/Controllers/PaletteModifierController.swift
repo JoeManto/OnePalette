@@ -42,10 +42,6 @@ class PaletteModifierViewController: NSSplitViewController {
         })
     }()
     
-    lazy var detailsViewModel: PaletteEditingDetailsViewModel = {
-        PaletteEditingDetailsViewModel()
-    }()
-    
     lazy var colorDetailsViewModel: ColorDetailsViewModel = {
         ColorDetailsViewModel()
     }()
@@ -71,25 +67,6 @@ class PaletteModifierViewController: NSSplitViewController {
         let vc = NavigationViewController()
         
         let contentView = PaletteEditingContentView(vm: self.contentViewModel)
-        let view = NSHostingView(rootView: contentView)
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        vc.view.addSubview(view)
-        
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor),
-            view.topAnchor.constraint(equalTo: vc.view.topAnchor),
-            view.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)
-        ])
-
-        return vc
-    }()
-    
-    lazy var detailsController = {
-        let vc = NavigationViewController()
-        
-        let contentView = PaletteEditingDetailsView(vm: self.detailsViewModel)
         let view = NSHostingView(rootView: contentView)
         
         view.translatesAutoresizingMaskIntoConstraints = false

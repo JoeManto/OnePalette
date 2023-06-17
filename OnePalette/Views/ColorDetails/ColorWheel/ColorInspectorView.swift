@@ -18,9 +18,9 @@ class ColorInspectorView: NSView {
         super.init(frame: NSRect(x: 0, y: 0, width: 44, height: 44))
     
         self.wantsLayer = true
-        self.layer?.borderColor = NSColor.gray.cgColor
+        self.layer?.borderColor = NSColor.darkGray.cgColor
         self.layer?.borderWidth = 2
-        self.layer?.backgroundColor = NSColor.white.cgColor
+        self.layer?.backgroundColor = NSColor.lightGray.cgColor
         
         let pan = NSPanGestureRecognizer(target: self, action: #selector(self.onPanGesture(_:)))
         self.addGestureRecognizer(pan)

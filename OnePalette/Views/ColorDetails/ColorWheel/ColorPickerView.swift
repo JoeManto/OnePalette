@@ -21,15 +21,6 @@ class ColorPickerView: NSView {
         })
     }()
     
-    private(set) var saturationSlider = ColorComponentSliderView(title: "Saturation")
-    private(set) var brightnessSlider = ColorComponentSliderView(title: "Brightness")
-    
-    private(set) var optionsView: NSHostingView<ColorOptionSelector> = {
-        let view = NSHostingView(rootView: ColorOptionSelector())
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     let vm: ColorDetailsViewModel
     
     var xConstraint: NSLayoutConstraint!
@@ -51,9 +42,6 @@ class ColorPickerView: NSView {
         self.colorView.translatesAutoresizingMaskIntoConstraints = false
         
         self.inspector.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.saturationSlider.translatesAutoresizingMaskIntoConstraints = false
-        self.brightnessSlider.translatesAutoresizingMaskIntoConstraints = false
       
         xConstraint = inspector.centerXAnchor.constraint(equalTo: self.colorView.leadingAnchor, constant: self.wheelSize.width / 2)
         yConstraint = inspector.centerYAnchor.constraint(equalTo: self.colorView.topAnchor, constant: self.wheelSize.height / 2)
@@ -64,31 +52,24 @@ class ColorPickerView: NSView {
         
         self.addSubview(self.colorView)
         self.addSubview(self.inspector)
-        self.addSubview(self.saturationSlider)
-        self.addSubview(self.brightnessSlider)
-        self.addSubview(self.optionsView)
         
         self.setConstraints()
         
-        self.saturationSlider.$componentPercentage
-            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
-            .sink { [unowned self] percentage in
-                self.vm.wheel.update(saturation: percentage)
-                self.colorView.image = self.vm.hsvWheelImage(size: self.wheelSize)
-                self.setNeedsDisplay(self.frame)
-                self.updateInspectorBackground()
-            }
-            .store(in: &subs)
-        
-        self.brightnessSlider.$componentPercentage
+        self.vm.$brightnessComponent
             .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .sink { [unowned self] percentage in
                 self.vm.wheel.update(brightness: percentage)
-                self.colorView.image = self.vm.hsvWheelImage(size: self.wheelSize)
-                self.setNeedsDisplay(self.frame)
-                self.updateInspectorBackground()
+                self.updateWheelImage()
             }
-            .store(in: &self.subs)
+            .store(in: &subs)
+        
+        self.vm.$saturationComponent
+            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+            .sink { [unowned self] percentage in
+                self.vm.wheel.update(saturation: percentage)
+                self.updateWheelImage()
+            }
+            .store(in: &subs)
     }
 
     func setConstraints() {
@@ -109,25 +90,12 @@ class ColorPickerView: NSView {
             inspector.widthAnchor.constraint(equalToConstant: 24),
             inspector.heightAnchor.constraint(equalToConstant: 24),
         ])
-        
-        NSLayoutConstraint.activate([
-            brightnessSlider.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 10),
-            brightnessSlider.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 10),
-            brightnessSlider.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -10),
-        ])
-        
-        NSLayoutConstraint.activate([
-            saturationSlider.topAnchor.constraint(equalTo: brightnessSlider.bottomAnchor, constant: 10),
-            saturationSlider.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 10),
-            saturationSlider.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -10),
-       
-        ])
-        
-        NSLayoutConstraint.activate([
-            optionsView.topAnchor.constraint(equalTo: saturationSlider.bottomAnchor, constant: 10),
-            optionsView.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 10),
-            optionsView.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -10),
-        ])
+    }
+    
+    func updateWheelImage() {
+        self.colorView.image = self.vm.hsvWheelImage(size: self.wheelSize)
+        self.setNeedsDisplay(self.frame)
+        self.updateInspectorBackground()
     }
     
     @objc func onInspectorChange(_ gesture: NSGestureRecognizer?) {

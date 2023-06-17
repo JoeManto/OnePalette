@@ -25,6 +25,8 @@ class ColorDetailsViewController: NSViewController {
     
     override func loadView() {
         self.view = NSView()
+        self.view.wantsLayer = true
+        self.view.layer?.backgroundColor = NSColor.controlBackgroundColor.cgColor
     }
     
     override func viewDidLoad() {
@@ -32,7 +34,7 @@ class ColorDetailsViewController: NSViewController {
         picker.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(picker)
         
-        let detailsView = NSHostingView(rootView: ColorPickerDetailsView())
+        let detailsView = NSHostingView(rootView: ColorDetailsView(vm: self.vm))
         detailsView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(detailsView)
         
@@ -40,7 +42,7 @@ class ColorDetailsViewController: NSViewController {
             picker.topAnchor.constraint(equalTo: self.view.topAnchor),
             picker.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             picker.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            picker.heightAnchor.constraint(equalToConstant: 500),
+            picker.heightAnchor.constraint(equalToConstant: 200),
             
             detailsView.topAnchor.constraint(equalTo: picker.bottomAnchor),
             detailsView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),

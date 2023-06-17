@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		70290AEA2A26C3880080D055 /* PaletteEditingDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70290AE92A26C3880080D055 /* PaletteEditingDetailsView.swift */; };
-		70290AEC2A26C3ED0080D055 /* PaletteEditingDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70290AEB2A26C3ED0080D055 /* PaletteEditingDetailsViewModel.swift */; };
 		70290AEE2A26D6F40080D055 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70290AED2A26D6F40080D055 /* ColorPickerView.swift */; };
 		70290B0B2A29882C0080D055 /* BitmapUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70290B0A2A29882C0080D055 /* BitmapUtil.swift */; };
 		70290B0D2A2997560080D055 /* HSVColorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70290B0C2A2997560080D055 /* HSVColorWheel.swift */; };
@@ -25,7 +23,7 @@
 		70603861293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */; };
 		706038662946D26600D275B9 /* PaletteModifierController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706038652946D26600D275B9 /* PaletteModifierController.swift */; };
 		7061E99329FD8FCD005B529F /* MaterialDesginColors.json in Resources */ = {isa = PBXBuildFile; fileRef = 7061E99229FD8FCD005B529F /* MaterialDesginColors.json */; };
-		706B2A402A3BDC8300FA560C /* ColorPickerDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B2A3F2A3BDC8300FA560C /* ColorPickerDetailsView.swift */; };
+		706B2A402A3BDC8300FA560C /* ColorDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B2A3F2A3BDC8300FA560C /* ColorDetailsView.swift */; };
 		706B2A422A3BDE0100FA560C /* ColorDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B2A412A3BDE0100FA560C /* ColorDetailsViewController.swift */; };
 		706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706B90B720CAFC9D005E6250 /* OPUtil.swift */; };
 		707033D829F1BB4E00356D65 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033D729F1BB4E00356D65 /* MainMenu.swift */; };
@@ -45,7 +43,7 @@
 		707033F729F8B56900356D65 /* PaletteImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707033F629F8B56900356D65 /* PaletteImporter.swift */; };
 		70709C212A2E9BEB0048B0AE /* ColorInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70709C202A2E9BEB0048B0AE /* ColorInspectorView.swift */; };
 		70709C232A3296450048B0AE /* ColorComponentSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70709C222A3296450048B0AE /* ColorComponentSliderView.swift */; };
-		70709C252A32969F0048B0AE /* ColorPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70709C242A32969F0048B0AE /* ColorPickerViewModel.swift */; };
+		70709C252A32969F0048B0AE /* ColorDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70709C242A32969F0048B0AE /* ColorDetailsViewModel.swift */; };
 		708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */; };
 		70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F262096C2B200D379BC /* MainWindowController.swift */; };
 		70B64F292098369400D379BC /* OPWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B64F282098369400D379BC /* OPWindow.swift */; };
@@ -72,8 +70,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		70290AE92A26C3880080D055 /* PaletteEditingDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingDetailsView.swift; sourceTree = "<group>"; };
-		70290AEB2A26C3ED0080D055 /* PaletteEditingDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingDetailsViewModel.swift; sourceTree = "<group>"; };
 		70290AED2A26D6F40080D055 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 		70290B0A2A29882C0080D055 /* BitmapUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapUtil.swift; sourceTree = "<group>"; };
 		70290B0C2A2997560080D055 /* HSVColorWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSVColorWheel.swift; sourceTree = "<group>"; };
@@ -89,7 +85,7 @@
 		70603860293ECE0800D275B9 /* ColorGroupSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGroupSelectorViewModel.swift; sourceTree = "<group>"; };
 		706038652946D26600D275B9 /* PaletteModifierController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteModifierController.swift; sourceTree = "<group>"; };
 		7061E99229FD8FCD005B529F /* MaterialDesginColors.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MaterialDesginColors.json; sourceTree = SOURCE_ROOT; };
-		706B2A3F2A3BDC8300FA560C /* ColorPickerDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerDetailsView.swift; sourceTree = "<group>"; };
+		706B2A3F2A3BDC8300FA560C /* ColorDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorDetailsView.swift; sourceTree = "<group>"; };
 		706B2A412A3BDE0100FA560C /* ColorDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorDetailsViewController.swift; sourceTree = "<group>"; };
 		706B90B720CAFC9D005E6250 /* OPUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPUtil.swift; sourceTree = "<group>"; };
 		707033D729F1BB4E00356D65 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
@@ -108,7 +104,7 @@
 		707033F629F8B56900356D65 /* PaletteImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteImporter.swift; sourceTree = "<group>"; };
 		70709C202A2E9BEB0048B0AE /* ColorInspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorInspectorView.swift; sourceTree = "<group>"; };
 		70709C222A3296450048B0AE /* ColorComponentSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponentSliderView.swift; sourceTree = "<group>"; };
-		70709C242A32969F0048B0AE /* ColorPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewModel.swift; sourceTree = "<group>"; };
+		70709C242A32969F0048B0AE /* ColorDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorDetailsViewModel.swift; sourceTree = "<group>"; };
 		708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEditingContentViewModel.swift; sourceTree = "<group>"; };
 		70B64F262096C2B200D379BC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		70B64F282098369400D379BC /* OPWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OPWindow.swift; sourceTree = "<group>"; };
@@ -155,7 +151,7 @@
 				70290AED2A26D6F40080D055 /* ColorPickerView.swift */,
 				70709C202A2E9BEB0048B0AE /* ColorInspectorView.swift */,
 				70709C222A3296450048B0AE /* ColorComponentSliderView.swift */,
-				70709C242A32969F0048B0AE /* ColorPickerViewModel.swift */,
+				70709C242A32969F0048B0AE /* ColorDetailsViewModel.swift */,
 			);
 			path = ColorWheel;
 			sourceTree = "<group>";
@@ -212,8 +208,6 @@
 			children = (
 				708A493F29D79A5200657883 /* PaletteEditingContentViewModel.swift */,
 				70F954F6296B86980035E8E3 /* PaletteEditingContentView.swift */,
-				70290AE92A26C3880080D055 /* PaletteEditingDetailsView.swift */,
-				70290AEB2A26C3ED0080D055 /* PaletteEditingDetailsViewModel.swift */,
 			);
 			path = PaletteEditor;
 			sourceTree = "<group>";
@@ -222,7 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				70290B092A2988160080D055 /* ColorWheel */,
-				706B2A3F2A3BDC8300FA560C /* ColorPickerDetailsView.swift */,
+				706B2A3F2A3BDC8300FA560C /* ColorDetailsView.swift */,
 			);
 			path = ColorDetails;
 			sourceTree = "<group>";
@@ -470,7 +464,7 @@
 				70B64F292098369400D379BC /* OPWindow.swift in Sources */,
 				703F0309297C5CF20007152F /* ColorView.swift in Sources */,
 				70CD485D293C19F9000AF83A /* ColorGroupGridView.swift in Sources */,
-				706B2A402A3BDC8300FA560C /* ColorPickerDetailsView.swift in Sources */,
+				706B2A402A3BDC8300FA560C /* ColorDetailsView.swift in Sources */,
 				70D690952048D7F30070C99D /* ColorViewerController.swift in Sources */,
 				70603853293C3BC200D275B9 /* PaletteView.swift in Sources */,
 				7060385F293ECDD000D275B9 /* ColorGroupGridViewModel.swift in Sources */,
@@ -491,13 +485,11 @@
 				706B90B820CAFC9D005E6250 /* OPUtil.swift in Sources */,
 				702F38A520E9975A0099BC87 /* ClipboardSettingController.swift in Sources */,
 				70D690782048CED70070C99D /* OnePalette.xcdatamodeld in Sources */,
-				70290AEC2A26C3ED0080D055 /* PaletteEditingDetailsViewModel.swift in Sources */,
-				70709C252A32969F0048B0AE /* ColorPickerViewModel.swift in Sources */,
+				70709C252A32969F0048B0AE /* ColorDetailsViewModel.swift in Sources */,
 				703F030C297C808C0007152F /* List+Modifiers.swift in Sources */,
 				708A494029D79A5200657883 /* PaletteEditingContentViewModel.swift in Sources */,
 				70709C232A3296450048B0AE /* ColorComponentSliderView.swift in Sources */,
 				70B64F272096C2B200D379BC /* MainWindowController.swift in Sources */,
-				70290AEA2A26C3880080D055 /* PaletteEditingDetailsView.swift in Sources */,
 				707033F729F8B56900356D65 /* PaletteImporter.swift in Sources */,
 				70FE68A5204F5DEB00DA4E76 /* OPColor.swift in Sources */,
 				707033EA29F217BB00356D65 /* CopyFormatService.swift in Sources */,

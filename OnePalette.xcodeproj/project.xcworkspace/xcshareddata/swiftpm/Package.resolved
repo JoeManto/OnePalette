@@ -6,7 +6,7 @@
       "location" : "https://github.com/JoeManto/app-sdk.git",
       "state" : {
         "branch" : "main",
-        "revision" : "0ff7bd3590c6db34f8643d46918cbfc157a01eb0"
+        "revision" : "887d57611a4302f8955d2591162dfc3e1ba88fda"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
-        "revision" : "c18951c747ab62af7c15e17a81bd37d4fd5a9979",
-        "version" : "0.2.3"
+        "revision" : "84196bab1c7f05ad8c3c2a5bfb3058b1211e189f",
+        "version" : "0.6.1"
       }
     }
   ],
