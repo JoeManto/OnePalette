@@ -70,8 +70,6 @@ struct ColorDetailsView: View {
                 Spacer()
                 
                 ColorComponentSlider(initalValue: 1.0, percentage: $vm.saturationSliderValue)
-                    
-                
             }
         }
         .padding(5)

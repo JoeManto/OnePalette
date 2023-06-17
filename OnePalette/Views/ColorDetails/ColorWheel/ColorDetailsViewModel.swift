@@ -29,9 +29,10 @@ class ColorDetailsViewModel: ObservableObject {
     @Published var saturationTextValue: String {
         willSet {
             if newValue != String(format: "%.0f", saturationComponent * 100) {
-                if let percentage = Double(saturationTextValue), 0.0...1.0 ~= percentage {
-                    saturationComponent = percentage
-                    brightnessSliderValue = percentage
+                if let percentage = Double(saturationTextValue), 0.0...100.0 ~= percentage {
+                    let percent = percentage / 100
+                    saturationComponent = percent
+                    saturationSliderValue = percent
                 }
             }
         }
@@ -51,9 +52,10 @@ class ColorDetailsViewModel: ObservableObject {
     @Published var brightnessTextValue: String {
         willSet {
             if newValue != String(format: "%.0f", brightnessComponent * 100) {
-                if let percentage = Double(brightnessTextValue), 0.0...1.0 ~= percentage {
-                    brightnessComponent = percentage
-                    brightnessSliderValue = percentage
+                if let percentage = Double(saturationTextValue), 0.0...100.0 ~= percentage {
+                    let percent = percentage / 100
+                    brightnessComponent = percent
+                    brightnessSliderValue = percent
                 }
             }
         }
