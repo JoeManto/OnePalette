@@ -28,7 +28,7 @@ import Cocoa
         self.identifier = NSUserInterfaceItemIdentifier(id)
     }
     
-    func windowWillMove(_ notification: Notification) {
+    func windowDidMove(_ notification: Notification) {
         let x = self.frame.origin.x
         let y = self.frame.origin.y
             
