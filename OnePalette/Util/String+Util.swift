@@ -32,7 +32,7 @@ extension String {
     
     /// Ensures each hex string only contains 6 color indicating values and one prefixed '#'
     func normalisedHexString() -> Self {
-        var hex = self
+        var hex = self.uppercased()
         
         if hex.first != "#" {
             hex.insert("#", at: hex.startIndex)
