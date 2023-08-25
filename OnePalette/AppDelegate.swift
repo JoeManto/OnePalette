@@ -32,8 +32,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         PaletteService.shared.onPalettesFetched {
-            self.setup()
-            self.setupNotifications()
+            Task { @MainActor in
+                self.setup()
+            }
         }
     }
     
@@ -49,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // MARK: Setup
     
-    func setup() {
+    @MainActor func setup() {
         if #available(macOS 14.0, *) {
             NSApplication.shared.activate()
         } else {
@@ -60,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.action = #selector(iconClicked(sender:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
                 
-        self.colorWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "ModifyColorsWindow")
+        self.colorWindow = OPWindow(contentSize: CGSize(width: 450, height: 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "ModifyColorsWindow")
         self.colorWindow.isOpaque = false
         self.colorWindow.isReleasedWhenClosed = true
         self.colorWindow.title = "Modify Colors"
@@ -69,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.colorWindowController = MainWindowController(window: self.colorWindow)
         
-        self.copyFormatWindow = OPWindow(contentRect: NSMakeRect(0, 0, 450, 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "Copy-Format-Editor")
+        self.copyFormatWindow = OPWindow(contentSize: CGSize(width: 450, height: 500), styleMask: [.closable, .miniaturizable, .titled], backing: .buffered, defer: false, id: "Copy-Format-Editor")
         self.copyFormatWindow.isOpaque = false
         self.copyFormatWindow.isReleasedWhenClosed = true
         self.copyFormatWindow.title = "Copy Format Editor"
@@ -84,6 +85,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 strongSelf.closePopover(sender: event)
             }
         }
+        
+        self.setupNotifications()
     }
     
     func setupNotifications() {

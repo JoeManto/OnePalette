@@ -70,6 +70,15 @@ class ColorPickerView: NSView {
                 self.updateWheelImage()
             }
             .store(in: &subs)
+        
+        self.vm.colorUpdatePublisher
+            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+            .sink { [unowned self] (color, source) in
+                if source != .inspectorChange {
+                    self.updateInspector(color)
+                }
+            }
+            .store(in: &subs)
     }
 
     func setConstraints() {
@@ -98,6 +107,32 @@ class ColorPickerView: NSView {
         self.updateInspectorBackground()
     }
     
+    func updateInspector(_ color: NSColor) {
+        self.inspector.layer?.backgroundColor = color.cgColor
+        
+        self.vm.wheel.update(saturation: color.saturationComponent)
+        self.vm.wheel.update(brightness: color.brightnessComponent)
+        
+        self.vm.updateSaturation(component: color.saturationComponent)
+        self.vm.udpateBrightness(component: color.brightnessComponent)
+        
+        updateWheelImage()
+        guard let pos = self.vm.wheel.getPosition(of: color) else {
+            print("Unable to find color position")
+            return
+        }
+        
+        let x = (pos.x / 2)
+        let y = (pos.y / 2)
+        
+        xConstraint.constant = x
+        yConstraint.constant = y
+        
+        updateInspectorBackground()
+        
+        print("updated pos")
+    }
+    
     @objc func onInspectorChange(_ gesture: NSGestureRecognizer?) {
         let location = gesture?.location(in: self.colorView) ?? CGPoint(x: xConstraint.constant, y: yConstraint.constant)
 
@@ -107,17 +142,23 @@ class ColorPickerView: NSView {
         xConstraint.constant = x
         yConstraint.constant = y
         
-        updateInspectorBackground()
+        if let color = updateInspectorBackground() {
+            vm.onColorChange(to: color, from: .inspectorChange)
+        }
     }
     
-    func updateInspectorBackground() {
+    @discardableResult func updateInspectorBackground() -> NSColor? {
         guard let img = colorView.image else {
-            return
+            return nil
         }
         
-        if let color = vm.wheel.getColor(in: img, imgX: Int(xConstraint.constant), imgY: Int(yConstraint.constant)) {
-            self.inspector.layer?.backgroundColor = color.cgColor
+        guard let color = vm.wheel.getColor(in: img, imgX: Int(xConstraint.constant), imgY: Int(yConstraint.constant)) else {
+            return nil
         }
+        
+        self.inspector.layer?.backgroundColor = color.cgColor
+        
+        return color
     }
     
     required init?(coder: NSCoder) {

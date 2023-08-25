@@ -16,6 +16,10 @@ struct ColorDetailsView: View {
         
     var body: some View {
         VStack {
+            EditableLabel($vm.hexStringTextValue, containingWindow: vm.window, onEditEnd: {
+                vm.onHexTextEditEnd()
+            })
+            
             brightnessControl()
             saturationControl()
             Spacer()
