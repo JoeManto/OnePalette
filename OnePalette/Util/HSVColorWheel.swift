@@ -136,6 +136,33 @@ class HSVColorWheel {
         return color
     }
     
+    func getPosition(of color: NSColor) -> CGPoint? {
+        let color = NSColor(calibratedRed: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
+        
+        for y in 0...self.data.pixelsHigh {
+            for x in 0...self.data.pixelsWide {
+                
+                guard let foundColor = self.data.colorAt(x: x, y: y) else {
+                    continue
+                }
+                
+                guard foundColor.saturationComponent == color.saturationComponent, foundColor.brightnessComponent == color.brightnessComponent else {
+                    continue
+                }
+                
+                guard abs(foundColor.redComponent - color.redComponent) < 0.01,
+                      abs(foundColor.blueComponent - color.blueComponent) < 0.01,
+                      abs(foundColor.greenComponent - color.greenComponent) < 0.01 else {
+                    continue
+                }
+                
+                return CGPoint(x: x, y: y)
+            }
+        }
+        
+        return nil
+    }
+    
     /// Distance from center
     private func distance(x: Int, y: Int) -> CGFloat {
         let prod = pow(CGFloat(x), 2) + pow(CGFloat(y), 2)
