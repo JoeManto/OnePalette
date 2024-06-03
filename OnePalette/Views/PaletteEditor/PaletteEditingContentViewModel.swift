@@ -167,9 +167,9 @@ class PaletteEditingContentViewModel: ObservableObject {
             return views
         }
         
-        for _ in 0..<remainder {
+        for i in 0..<remainder {
             let idx = views.count
-            views.append(ColorView(colorModel: OPColor.empty(), isEmpty: true, isEditing: true, onTap: { [unowned self] in
+            views.append(ColorView(colorModel: OPColor.empty(), isEmpty: true, isEditing: true, firstEmpty: i == 0, onTap: { [unowned self] in
                 self.onColorTap(index: idx)
             }))
         }

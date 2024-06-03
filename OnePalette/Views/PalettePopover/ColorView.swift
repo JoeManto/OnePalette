@@ -21,7 +21,8 @@ struct ColorView: View, Identifiable {
     let isEditing: Bool
     let onDelete: (() -> Void)?
     let responsive: Bool
-    
+    let firstEmpty: Bool
+
     var onTap: (() -> Void)?
     
     private let textColor: Color
@@ -31,7 +32,7 @@ struct ColorView: View, Identifiable {
     @State private var copying: Bool = false
     @State private var opacityAnimationValue = 0.0
     
-    init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, onDelete: (() -> Void)? = nil, onTap: (() -> Void)? = nil) {
+    init(colorModel: OPColor, groupName: String = "", isHeader: Bool = false, isEmpty: Bool = false, isSelected: Bool = false, isEditing: Bool = false, responsive: Bool = false, firstEmpty: Bool = false, onDelete: (() -> Void)? = nil, onTap: (() -> Void)? = nil) {
         self.colorModel = colorModel
         self.isHeader = isHeader
         self.isEmpty = isEmpty
@@ -40,6 +41,7 @@ struct ColorView: View, Identifiable {
         self.isEditing = isEditing
         self.onDelete = onDelete
         self.responsive = responsive
+        self.firstEmpty = firstEmpty
         self.groupName = groupName
         self.onTap = onTap
         
@@ -84,6 +86,11 @@ struct ColorView: View, Identifiable {
                                     .foregroundColor(self.textColor)
                                     .font(.system(size: 10))
                                     .opacity(copying ? 0.0 : 1.0)
+                                Spacer()
+                            }
+                        } else if firstEmpty {
+                            HStack {
+                                Image(systemName: "plus")
                                 Spacer()
                             }
                         }
